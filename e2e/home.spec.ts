@@ -28,3 +28,36 @@ test.describe('Home', () => {
     await expect(page).toHaveURL(/\/fr\/|\/pl\//);
   });
 });
+
+test.describe('Interior pages (FR)', () => {
+  test('sportifs renders a single h1 and the offer blocks', async ({ page }) => {
+    await page.goto('/fr/sportifs/');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Et si votre mental devenait votre plus grand atout ?',
+    );
+    await expect(
+      page.getByRole('heading', { name: 'Accompagnement individuel du sportif' }),
+    ).toBeVisible();
+  });
+
+  test('a-propos renders the parcours and formations', async ({ page }) => {
+    await page.goto('/fr/a-propos/');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Mon parcours — entre terrain, humain et performance',
+    );
+    await expect(page.getByRole('heading', { name: 'Mes formations' })).toBeVisible();
+  });
+
+  test('contact page shows the form and real coordinates', async ({ page }) => {
+    await page.goto('/fr/contact/');
+    await expect(page.locator('form')).toBeVisible();
+    await expect(page.getByLabel(/Prénom/)).toBeVisible();
+    await expect(page.locator('.contact__info').getByText('+32 473 85 24 65')).toBeVisible();
+  });
+
+  test('mentions légales contain the BCE number', async ({ page }) => {
+    await page.goto('/fr/mentions-legales/');
+    await expect(page.getByText('BE 1012.449.376')).toBeVisible();
+  });
+});
