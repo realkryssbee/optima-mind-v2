@@ -4,6 +4,8 @@ import '@fontsource-variable/caveat/index.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
 
+import montserratLatin from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
+
 import type { Locale } from '../lib/i18n';
 import { localeToOgLocale } from '../lib/i18n';
 import { withLocale } from '../lib/locale';
@@ -55,6 +57,13 @@ const schema = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="preload"
+      href={montserratLatin}
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
     <link rel="alternate" hreflang="x-default" href={`${SITE.domain}/`} />
     {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
     <meta property="og:type" content="website" />

@@ -88,5 +88,5 @@ src/
 | 4   | Bilingue FR/PL                              | ✅ Livré |
 | 5   | Formulaires (Brevo) + réservation (Cal.com) | ✅ Livré |
 | 6   | SEO + données structurées + redirections    | ✅ Livré |
-| 7   | Accessibilité + performance                 | —        |
+| 7   | Accessibilité + performance                 | ✅ Livré |
 | 8   | CI/CD Vercel + guides + rapports            | —        |

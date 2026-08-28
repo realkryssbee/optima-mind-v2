@@ -15,6 +15,10 @@ module.exports = {
         'categories:accessibility': ['error', { minScore: 0.95 }],
         'categories:best-practices': ['error', { minScore: 0.95 }],
         'categories:seo': ['error', { minScore: 0.95 }],
+        // Métriques clés (LCP CI avec marge pour éviter la flakiness des runners).
+        'cumulative-layout-shift': ['error', { maxNumericValue: 0.05 }],
+        'total-blocking-time': ['error', { maxNumericValue: 200 }],
+        'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
       },
     },
     upload: {

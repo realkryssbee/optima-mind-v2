@@ -100,8 +100,9 @@ const topics = [
     </div>
   </div>
 
-  <!-- Honeypot anti-spam (masqué) -->
-  <div class="contact-form__honeypot" aria-hidden="true">
+  <!-- Honeypot anti-spam (masqué visuellement, non focusable, sans aria-hidden
+       pour éviter les fausses alertes d'accessibilité) -->
+  <div class="contact-form__honeypot">
     <label for={`${id}-website`}>Ce champ doit rester vide</label>
     <input id={`${id}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
   </div>
