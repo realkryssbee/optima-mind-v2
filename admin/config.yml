@@ -1,0 +1,447 @@
+# ============================================================
+# Optima Mind — Decap CMS (interface d'édition en français)
+# Le contenu est stocké en Markdown dans le dépôt (src/content/).
+# Déploiement : Vercel + GitHub. Voir README.md (section CMS)
+# pour la configuration OAuth GitHub (proxy) à mettre en place.
+# ============================================================
+
+backend:
+  name: github
+  # ⟨À FOURNIR : dépôt GitHub (org/repo) une fois créé par la cliente ⟩
+  repo: optima-mind/optima-mind.com
+  branch: main
+  # Proxy OAuth GitHub (déploiement Vercel) — à configurer :
+  base_url: https://oauth.optima-mind.com
+  auth_endpoint: api/auth
+
+# Publication par pull request → preview Vercel de la branche.
+publish_mode: editorial_workflow
+
+# Images : uploadées dans le dépôt, optimisées automatiquement au build
+# (Astro/sharp : AVIF/WebP, srcset) — aucun redimensionnement manuel.
+media_folder: src/assets/uploads
+public_folder: /src/assets/uploads
+
+locale: fr
+
+i18n:
+  structure: multiple_files
+  locales: [fr, pl]
+  default_locale: fr
+
+collections:
+  # ----------------------------------------------------------
+  # Réglages globaux (NAP, réseaux, SEO par défaut, réservation)
+  # ----------------------------------------------------------
+  - name: settings
+    label: Réglages
+    folder: src/content/settings
+    create: false
+    delete: false
+    fields:
+      - { name: name, label: Nom du site, widget: string }
+      - { name: legalName, label: Nom légal (éditeur), widget: string }
+      - { name: legalStatus, label: Statut juridique, widget: string }
+      - { name: bce, label: Numéro d'entreprise (BCE), widget: string }
+      - label: Adresse
+        name: address
+        widget: object
+        fields:
+          - { name: street, label: Rue, widget: string }
+          - { name: zip, label: Code postal, widget: string }
+          - { name: city, label: Ville, widget: string }
+          - { name: country, label: Pays, widget: string }
+      - { name: phone, label: Téléphone, widget: string }
+      - { name: email, label: Email public, widget: string }
+      - { name: rgpdEmail, label: Email RGPD, widget: string }
+      - { name: openingHours, label: Horaires, widget: string, hint: '⟨À FOURNIR⟩' }
+      - label: Réseaux sociaux
+        name: social
+        widget: object
+        required: false
+        fields:
+          - { name: facebook, label: Facebook, widget: string, required: false }
+          - { name: linkedin, label: LinkedIn, widget: string, required: false }
+          - { name: instagram, label: Instagram, widget: string, required: false }
+      - label: Valeurs SEO par défaut
+        name: seoDefaults
+        widget: object
+        fields:
+          - { name: title, label: Titre (max 60 car.), widget: string }
+          - { name: description, label: Description (max 160 car.), widget: text }
+      - label: Réservation
+        name: booking
+        widget: object
+        fields:
+          - { name: calUrl, label: Lien Cal.com, widget: string, required: false }
+          - { name: note, label: Note, widget: text, required: false }
+      - label: Lieux de séance
+        name: lieux
+        widget: list
+        required: false
+        fields:
+          - { name: name, label: Nom du lieu, widget: string }
+          - { name: address, label: Adresse, widget: string }
+
+  # ----------------------------------------------------------
+  # Pages (une entrée par page et par langue)
+  # ----------------------------------------------------------
+  - name: pages
+    label: Pages
+    folder: src/content/pages
+    create: true
+    delete: true
+    i18n: true
+    slug: '{{pageType}}'
+    fields:
+      - label: Type de page
+        name: pageType
+        widget: select
+        i18n: false
+        options:
+          - { label: Accueil, value: home }
+          - { label: Sportifs, value: sportifs }
+          - { label: Entreprises, value: entreprises }
+          - { label: À propos, value: apropos }
+          - { label: Contact, value: contact }
+          - { label: Mentions légales, value: mentions }
+          - { label: Politique de confidentialité, value: privacy }
+          - { label: Prise de rendez-vous, value: rdv }
+      - { name: title, label: Titre de la page (H1), widget: string, i18n: true }
+      - label: Hero
+        name: hero
+        widget: object
+        i18n: true
+        collapsed: true
+        fields:
+          - { name: eyebrow, label: Sur-titre, widget: string, required: false }
+          - { name: title, label: Titre, widget: string, required: false }
+          - { name: lead, label: Accroche, widget: text, required: false }
+          - { name: intro, label: Introduction, widget: text, required: false }
+      - label: 'Accueil — proposition de valeur'
+        name: valueProp
+        widget: text
+        i18n: true
+        required: false
+        condition: { field: pageType, value: home }
+      - label: 'Accueil — les deux univers'
+        name: univers
+        widget: list
+        i18n: true
+        required: false
+        condition: { field: pageType, value: home }
+        fields:
+          - { name: eyebrow, label: Sur-titre, widget: string }
+          - { name: title, label: Titre, widget: string }
+          - { name: text, label: Texte, widget: text }
+          - label: Lien
+            name: link
+            widget: object
+            required: false
+            fields:
+              - { name: label, label: Libellé, widget: string }
+              - { name: href, label: Destination, widget: string }
+      - label: 'Accueil — Libérez votre potentiel'
+        name: aboutTeaser
+        widget: object
+        i18n: true
+        required: false
+        condition: { field: pageType, value: home }
+        fields:
+          - { name: eyebrow, label: Sur-titre, widget: string }
+          - { name: title, label: Titre, widget: string }
+          - {
+              name: paragraphs,
+              label: Paragraphes,
+              widget: list,
+              field: { label: Paragraphe, name: paragraph, widget: text },
+            }
+      - label: 'Accueil — témoignages mis en avant'
+        name: featuredTestimonials
+        widget: list
+        i18n: true
+        required: false
+        condition: { field: pageType, value: home }
+        field:
+          label: Témoignage
+          name: author
+          widget: relation
+          collection: testimonials
+          value_field: author
+          search_fields: [author, role]
+          display_fields: [author, role]
+      - label: 'Accueil — afficher les références'
+        name: showReferences
+        widget: boolean
+        i18n: false
+        required: false
+        condition: { field: pageType, value: home }
+      - label: 'Sportifs — citation'
+        name: quote
+        widget: object
+        i18n: true
+        required: false
+        condition: { field: pageType, value: sportifs }
+        fields:
+          - { name: text, label: Citation, widget: text }
+          - { name: source, label: Source, widget: string }
+      - label: 'Sportifs — enjeux'
+        name: enjeux
+        widget: object
+        i18n: true
+        required: false
+        condition: { field: pageType, value: sportifs }
+        fields:
+          - { name: title, label: Titre, widget: string }
+          - {
+              name: items,
+              label: Situations,
+              widget: list,
+              field: { label: Situation, name: item, widget: text },
+            }
+      - label: 'Sportifs — offres'
+        name: offers
+        widget: list
+        i18n: true
+        required: false
+        condition: { field: pageType, value: sportifs }
+        fields:
+          - { name: title, label: Titre, widget: string }
+          - { name: intro, label: Introduction, widget: text }
+          - {
+              name: items,
+              label: Points clés,
+              widget: list,
+              field: { label: Point, name: item, widget: string },
+            }
+      - label: 'Sportifs — témoignages'
+        name: testimonials
+        widget: list
+        i18n: true
+        required: false
+        condition: { field: pageType, value: sportifs }
+        field:
+          label: Témoignage
+          name: author
+          widget: relation
+          collection: testimonials
+          value_field: author
+          search_fields: [author, role]
+          display_fields: [author, role]
+      - label: 'Entreprises — bénéfices'
+        name: benefices
+        widget: object
+        i18n: true
+        required: false
+        condition: { field: pageType, value: entreprises }
+        fields:
+          - { name: title, label: Titre, widget: string }
+          - { name: subtitle, label: Sous-titre, widget: string }
+          - {
+              name: items,
+              label: Bénéfices,
+              widget: list,
+              field: { label: Bénéfice, name: item, widget: text },
+            }
+      - label: 'Entreprises — mission'
+        name: mission
+        widget: object
+        i18n: true
+        required: false
+        condition: { field: pageType, value: entreprises }
+        fields:
+          - { name: eyebrow, label: Sur-titre, widget: string }
+          - { name: title, label: Titre, widget: string }
+          - {
+              name: paragraphs,
+              label: Paragraphes,
+              widget: list,
+              field: { label: Paragraphe, name: paragraph, widget: text },
+            }
+      - label: 'Entreprises — public cible'
+        name: publicCible
+        widget: object
+        i18n: true
+        required: false
+        condition: { field: pageType, value: entreprises }
+        fields:
+          - { name: title, label: Titre, widget: string }
+          - {
+              name: items,
+              label: Publics,
+              widget: list,
+              field: { label: Public, name: item, widget: text },
+            }
+      - label: 'Entreprises — thématiques'
+        name: thematiques
+        widget: object
+        i18n: true
+        required: false
+        condition: { field: pageType, value: entreprises }
+        fields:
+          - { name: title, label: Titre, widget: string }
+          - { name: subtitle, label: Sous-titre, widget: string }
+          - {
+              name: items,
+              label: Thématiques,
+              widget: list,
+              field: { label: Thématique, name: item, widget: text },
+            }
+      - label: 'À propos — sections'
+        name: sections
+        widget: list
+        i18n: true
+        required: false
+        condition: { field: pageType, value: apropos }
+        fields:
+          - { name: title, label: Titre, widget: string }
+          - {
+              name: paragraphs,
+              label: Paragraphes,
+              widget: list,
+              field: { label: Paragraphe, name: paragraph, widget: text },
+            }
+      - label: 'À propos — formations'
+        name: formations
+        widget: object
+        i18n: true
+        required: false
+        condition: { field: pageType, value: apropos }
+        fields:
+          - { name: title, label: Titre, widget: string }
+          - label: Groupes
+            name: groups
+            widget: list
+            fields:
+              - { name: name, label: Nom du groupe, widget: string }
+              - {
+                  name: items,
+                  label: Formations,
+                  widget: list,
+                  field: { label: Formation, name: item, widget: string },
+                }
+      - label: 'Pages légales — corps du texte'
+        name: body
+        widget: markdown
+        i18n: true
+        required: false
+        condition:
+          field: pageType
+          value: mentions
+      - label: 'Pages légales — corps du texte'
+        name: body
+        widget: markdown
+        i18n: true
+        required: false
+        condition:
+          field: pageType
+          value: privacy
+      - label: Appel à l'action
+        name: cta
+        widget: object
+        i18n: true
+        required: false
+        fields:
+          - { name: title, label: Titre, widget: string, required: false }
+          - { name: lead, label: Accroche, widget: text, required: false }
+      - label: SEO (laisser vide pour les valeurs par défaut)
+        name: seo
+        widget: object
+        i18n: true
+        required: false
+        fields:
+          - { name: title, label: Titre (max 60 car.), widget: string, required: false }
+          - { name: description, label: Description (max 160 car.), widget: text, required: false }
+      - { name: updatedAt, label: Mis à jour, widget: datetime, i18n: false, required: false }
+
+  # ----------------------------------------------------------
+  # Témoignages
+  # ----------------------------------------------------------
+  - name: testimonials
+    label: Témoignages
+    folder: src/content/testimonials
+    create: true
+    delete: true
+    i18n: true
+    slug: '{{author}}'
+    fields:
+      - { name: author, label: Auteur, widget: string, i18n: false }
+      - { name: role, label: Rôle / club / entreprise, widget: string, i18n: true, required: false }
+      - { name: photo, label: Photo (optionnelle), widget: image, i18n: false, required: false }
+      - { name: quote, label: Témoignage, widget: text, i18n: true }
+      - {
+          name: category,
+          label: Catégorie,
+          widget: select,
+          i18n: false,
+          options: [{ label: Sport, value: sport }, { label: Entreprise, value: entreprise }],
+        }
+      - {
+          name: featured,
+          label: Mis en avant (accueil),
+          widget: boolean,
+          i18n: false,
+          required: false,
+        }
+      - { name: consent, label: Accord écrit de publication, widget: boolean, i18n: false }
+      - {
+          name: publishedAt,
+          label: Date de publication,
+          widget: datetime,
+          i18n: false,
+          required: false,
+        }
+
+  # ----------------------------------------------------------
+  # FAQ (affichage + données structurées FAQPage)
+  # ----------------------------------------------------------
+  - name: faq
+    label: FAQ
+    folder: src/content/faq
+    create: true
+    delete: true
+    i18n: true
+    slug: '{{question}}'
+    fields:
+      - { name: question, label: Question, widget: string, i18n: true }
+      - { name: answer, label: Réponse, widget: text, i18n: true }
+      - {
+          name: category,
+          label: Catégorie,
+          widget: select,
+          i18n: false,
+          required: false,
+          options:
+            [
+              { label: Sportifs, value: sportifs },
+              { label: Entreprises, value: entreprises },
+              { label: Général, value: general },
+            ],
+        }
+
+  # ----------------------------------------------------------
+  # Blog (prêt pour une future version — routes et modèle existent)
+  # ----------------------------------------------------------
+  - name: blog
+    label: Articles
+    folder: src/content/blog
+    create: true
+    delete: true
+    i18n: true
+    slug: '{{slug}}'
+    fields:
+      - { name: title, label: Titre, widget: string, i18n: true }
+      - { name: slug, label: Identifiant (URL), widget: string, i18n: false }
+      - { name: excerpt, label: Extrait, widget: text, i18n: true, required: false }
+      - { name: cover, label: Image de couverture, widget: image, i18n: false, required: false }
+      - { name: publishedAt, label: Date de publication, widget: datetime, i18n: false }
+      - { name: draft, label: Brouillon, widget: boolean, i18n: false, required: false }
+      - label: SEO
+        name: seo
+        widget: object
+        i18n: true
+        required: false
+        fields:
+          - { name: title, label: Titre (max 60 car.), widget: string, required: false }
+          - { name: description, label: Description (max 160 car.), widget: text, required: false }
+      - { name: body, label: Contenu, widget: markdown, i18n: true }
