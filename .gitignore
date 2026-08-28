@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Environment (never commit secrets)
+.env
+.env.*
+!.env.example
+
+# Tests
+test-results/
+playwright-report/
+.lhci/
+.lighthouseci/
+
+# Vercel
+.vercel/
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db
+
+# Working files (audit captures, local scripts)
+_research/
