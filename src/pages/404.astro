@@ -1,0 +1,72 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { getNav } from '../data/nav';
+
+// Page 404 utile (brief §7) : liens vers les pages principales.
+const lang = 'fr';
+const path = '/404';
+const nav = getNav(lang);
+
+const title = 'Page introuvable — Optima Mind';
+const description = 'La page demandée n’existe pas ou a été déplacée.';
+---
+
+<PageLayout lang={lang} title={title} description={description} path={path} noindex>
+  <section class="notfound">
+    <div class="container notfound__inner">
+      <p class="eyebrow">Erreur 404</p>
+      <h1>Cette page n’existe pas ou a été déplacée.</h1>
+      <p class="notfound__lead">
+        Le contenu a peut-être changé d’adresse lors de la refonte du site. Voici les pages
+        principales pour repartir du bon pied :
+      </p>
+      <ul class="notfound__links">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={`/${lang}/prise-de-rendez-vous/`}>Prendre RDV</a>
+        </li>
+      </ul>
+      <p>
+        Ou contactez-nous directement :{' '}
+        <a href="mailto:info@optima-mind.com">info@optima-mind.com</a>
+      </p>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .notfound {
+    padding-block: var(--section-y);
+  }
+
+  .notfound__inner {
+    max-width: var(--container-narrow);
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .notfound__lead {
+    color: var(--color-ink-soft);
+  }
+
+  .notfound__links {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-3) 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .notfound__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+    font-weight: 600;
+  }
+</style>

@@ -65,6 +65,15 @@ const server = createServer(async (req, res) => {
       res.end();
       return;
     }
+    // Page 404 personnalisée (Astro génère dist/client/404.html).
+    try {
+      const notFound = await readFile(join(root, '404.html'));
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(notFound);
+      return;
+    } catch {
+      // ignore — serve plain 404 below
+    }
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Not Found');
   }

@@ -49,5 +49,77 @@
       ]
     }
   ],
-  "redirects": []
+  "redirects": [
+    {
+      "source": "/sportifs(/.*)?",
+      "destination": "/fr/sportifs$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/entreprises(/.*)?",
+      "destination": "/fr/entreprises$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/a-propos(/.*)?",
+      "destination": "/fr/a-propos$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/contact(/.*)?",
+      "destination": "/fr/contact$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/mentions-legales(/.*)?",
+      "destination": "/fr/mentions-legales$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/prise-de-rendez-vous(/.*)?",
+      "destination": "/fr/prise-de-rendez-vous$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/reservation-recue(/.*)?",
+      "destination": "/fr/prise-de-rendez-vous$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/politique-de-confidentialite(/.*)?",
+      "destination": "/fr/politique-de-confidentialite$1",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "p" }],
+      "destination": "/fr/",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "page_id" }],
+      "destination": "/fr/",
+      "statusCode": 301
+    },
+    {
+      "source": "/index.php(.*)",
+      "destination": "/fr/",
+      "statusCode": 301
+    },
+    { "source": "/news(/.*)?", "statusCode": 410 },
+    { "source": "/our-news(/.*)?", "statusCode": 410 },
+    { "source": "/class(/.*)?", "statusCode": 410 },
+    { "source": "/class-category(/.*)?", "statusCode": 410 },
+    { "source": "/category(/.*)?", "statusCode": 410 },
+    { "source": "/tag(/.*)?", "statusCode": 410 },
+    { "source": "/author(/.*)?", "statusCode": 410 },
+    { "source": "/2018/(.*)", "statusCode": 410 },
+    { "source": "/2019/(.*)", "statusCode": 410 },
+    { "source": "/2025/(.*)", "statusCode": 410 },
+    { "source": "/wp-(.*)", "statusCode": 410 },
+    { "source": "/feed", "statusCode": 410 },
+    { "source": "/comments/feed", "statusCode": 410 },
+    { "source": "/xmlrpc.php", "statusCode": 410 }
+  ]
 }
