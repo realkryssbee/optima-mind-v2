@@ -27,14 +27,14 @@ Traductions FR/PL gérées dans Decap (fichiers `_fr`/`_pl`). Schémas Zod dans
 
 Palette (contrastes WCAG 2.2 vérifiés par calcul) :
 
-| Token | Valeur | Usage | Contraste |
-|---|---|---|---|
-| `--color-brand` | `#00B2E7` | identité graphique (logo) | décor seul |
-| `--color-primary` | `#0A5C73` | actions, liens, titres | 7,5:1 |
-| `--color-ink` | `#2C2E3D` | texte principal | 13,4:1 |
-| `--color-ink-soft` | `#55686F` | texte secondaire | ≈4,8:1 |
-| `--color-accent-strong` | `#8A5A00` | texte ambre | 5,9:1 |
-| `--color-focus` | `#0B6E93` | focus visible | 5,7:1 |
+| Token                   | Valeur    | Usage                     | Contraste  |
+| ----------------------- | --------- | ------------------------- | ---------- |
+| `--color-brand`         | `#00B2E7` | identité graphique (logo) | décor seul |
+| `--color-primary`       | `#0A5C73` | actions, liens, titres    | 7,5:1      |
+| `--color-ink`           | `#2C2E3D` | texte principal           | 13,4:1     |
+| `--color-ink-soft`      | `#55686F` | texte secondaire          | ≈4,8:1     |
+| `--color-accent-strong` | `#8A5A00` | texte ambre               | 5,9:1      |
+| `--color-focus`         | `#0B6E93` | focus visible             | 5,7:1      |
 
 Typographies auto-hébergées : **Montserrat** (texte, latin-ext pour le polonais)
 et **Caveat** (accent manuscrit, remplace Permanent Marker sans couverture polonaise).
