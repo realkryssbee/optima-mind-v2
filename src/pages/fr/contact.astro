@@ -3,11 +3,13 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import ContactForm from '../../components/forms/ContactForm.astro';
 import { getPage, getSettings } from '../../lib/content';
-import { SITE_FALLBACK, telHref } from '../../lib/site';
+import { SITE, SITE_FALLBACK, telHref } from '../../lib/site';
+import { withLocale } from '../../lib/locale';
 
 const lang = 'fr';
 const path = '/contact/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const entry = await getPage(lang, 'contact');
 if (!entry) throw new Error(`Contenu introuvable : contact.${lang}`);
@@ -30,6 +32,7 @@ const mapsUrl =
   description={description}
   path={path}
   usedFallback={usedFallback}
+  canonicalHref={canonicalHref}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} />
 

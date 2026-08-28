@@ -18,6 +18,11 @@ interface Props {
   noindex?: boolean;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   ogImage?: string;
+  /**
+   * URL canonique à utiliser telle quelle (pages servies en fallback :
+   * contenu FR sous une URL /pl/ → canonical vers la version FR).
+   */
+  canonicalHref?: string;
 }
 
 const {
@@ -28,9 +33,10 @@ const {
   noindex = false,
   jsonLd,
   ogImage = '/og-default.png',
+  canonicalHref,
 } = Astro.props;
 
-const canonical = `${SITE.domain}${withLocale(lang, path)}`;
+const canonical = canonicalHref ?? `${SITE.domain}${withLocale(lang, path)}`;
 const otherLocale: Locale = lang === 'fr' ? 'pl' : 'fr';
 const alternates = [
   { hreflang: 'fr', href: `${SITE.domain}${withLocale('fr', path)}` },

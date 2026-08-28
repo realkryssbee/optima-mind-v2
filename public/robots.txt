@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://www.optima-mind.com/sitemap-index.xml
+Sitemap: https://www.optima-mind.com/sitemap.xml

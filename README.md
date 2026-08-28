@@ -78,13 +78,13 @@ src/
 
 ## Statut des incréments
 
-| #   | Incrément                                   | Statut   |
-| --- | ------------------------------------------- | -------- |
-| 1   | Socle Astro 5 + design system + CI          | En cours |
-| 2   | Pages statiques FR                          | —        |
-| 3   | CMS Decap + branchement du contenu          | —        |
-| 4   | Bilingue FR/PL                              | —        |
-| 5   | Formulaires (Brevo) + réservation (Cal.com) | —        |
-| 6   | SEO + données structurées + redirections    | —        |
-| 7   | Accessibilité + performance                 | —        |
-| 8   | CI/CD Vercel + guides + rapports            | —        |
+| #   | Incrément                                   | Statut      |
+| --- | ------------------------------------------- | ----------- |
+| 1   | Socle Astro 5 + design system + CI          | ✅ Livré    |
+| 2   | Pages statiques FR                          | ✅ Livré    |
+| 3   | CMS Decap + branchement du contenu          | ✅ Livré    |
+| 4   | Bilingue FR/PL                              | ✅ Livré    |
+| 5   | Formulaires (Brevo) + réservation (Cal.com) | —           |
+| 6   | SEO + données structurées + redirections    | —           |
+| 7   | Accessibilité + performance                 | —           |
+| 8   | CI/CD Vercel + guides + rapports            | —           |

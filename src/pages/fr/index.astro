@@ -8,10 +8,14 @@ import References from '../../components/sections/References.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
 import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 import { references } from '../../data/references';
+import { withLocale } from '../../lib/locale';
+import { SITE } from '../../lib/site';
 
 const lang = 'fr';
 const path = '/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+// Fallback (/pl/) : le contenu est FR → canonical vers la version française.
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const entry = await getPage(lang, 'home');
 if (!entry) throw new Error(`Contenu introuvable : home.${lang}`);
@@ -39,6 +43,7 @@ const featured = await getTestimonialsByAuthor(d.featuredTestimonials ?? [], lan
   description={description}
   path={path}
   usedFallback={usedFallback}
+  canonicalHref={canonicalHref}
 >
   <Hero
     eyebrow={d.hero?.eyebrow}

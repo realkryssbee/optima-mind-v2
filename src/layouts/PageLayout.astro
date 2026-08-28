@@ -18,6 +18,8 @@ interface Props {
   ogImage?: string;
   /** true quand la page est servie en fallback (contenu FR sous une URL /pl/). */
   usedFallback?: boolean;
+  /** URL canonique explicite (fallback → version FR). */
+  canonicalHref?: string;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   jsonLd,
   ogImage,
   usedFallback = false,
+  canonicalHref,
 } = Astro.props;
 
 const nav = getNav(lang);
@@ -49,6 +52,7 @@ const siteName = settings.name;
   noindex={noindex}
   jsonLd={jsonLd}
   ogImage={ogImage}
+  canonicalHref={canonicalHref}
 >
   <a class="skip-link" href="#main">{t(lang, 'skip-link')}</a>
 

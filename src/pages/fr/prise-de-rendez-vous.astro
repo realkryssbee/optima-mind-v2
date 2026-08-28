@@ -3,11 +3,13 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import Button from '../../components/ui/Button.astro';
 import { getPage, getSettings } from '../../lib/content';
-import { SITE_FALLBACK } from '../../lib/site';
+import { SITE, SITE_FALLBACK } from '../../lib/site';
+import { withLocale } from '../../lib/locale';
 
 const lang = 'fr';
 const path = '/prise-de-rendez-vous/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const entry = await getPage(lang, 'rdv');
 if (!entry) throw new Error(`Contenu introuvable : rdv.${lang}`);
@@ -31,6 +33,7 @@ const types = [
   description={description}
   path={path}
   usedFallback={usedFallback}
+  canonicalHref={canonicalHref}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} />
 

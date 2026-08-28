@@ -7,10 +7,13 @@ import Offers from '../../components/sections/Offers.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
 import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
+import { withLocale } from '../../lib/locale';
+import { SITE } from '../../lib/site';
 
 const lang = 'fr';
 const path = '/sportifs/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const entry = await getPage(lang, 'sportifs');
 if (!entry) throw new Error(`Contenu introuvable : sportifs.${lang}`);
@@ -30,6 +33,7 @@ const testimonials = await getTestimonialsByAuthor(d.testimonials ?? [], lang);
   description={description}
   path={path}
   usedFallback={usedFallback}
+  canonicalHref={canonicalHref}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} />
 
