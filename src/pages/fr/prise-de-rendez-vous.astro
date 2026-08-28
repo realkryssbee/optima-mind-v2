@@ -6,6 +6,7 @@ import CalEmbed from '../../components/booking/CalEmbed.astro';
 import { getPage, getSettings } from '../../lib/content';
 import { SITE, SITE_FALLBACK } from '../../lib/site';
 import { withLocale } from '../../lib/locale';
+import { breadcrumbJsonLd } from '../../lib/seo';
 
 const lang = 'fr';
 const path = '/prise-de-rendez-vous/';
@@ -19,6 +20,14 @@ const settings = (await getSettings())?.data ?? SITE_FALLBACK;
 
 const title = d.seo?.title ?? 'Prendre rendez-vous — Optima Mind';
 const description = d.seo?.description ?? '';
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Accueil', href: `/${lang}/` },
+    { name: 'Prendre rendez-vous', href: path },
+  ]),
+];
+const ogImage = '/og/prise-de-rendez-vous.png';
 
 const types = [
   { name: 'Sportif individuel', duration: '60 min', href: `/${lang}/sportifs/` },
@@ -35,6 +44,8 @@ const types = [
   path={path}
   usedFallback={usedFallback}
   canonicalHref={canonicalHref}
+  jsonLd={jsonLd}
+  ogImage={ogImage}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} />
 

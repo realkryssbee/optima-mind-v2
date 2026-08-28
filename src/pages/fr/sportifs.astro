@@ -5,10 +5,13 @@ import Quote from '../../components/sections/Quote.astro';
 import IconList from '../../components/sections/IconList.astro';
 import Offers from '../../components/sections/Offers.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
+import FaqSection from '../../components/sections/FaqSection.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
+import { getCollection } from 'astro:content';
 import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 import { withLocale } from '../../lib/locale';
 import { SITE } from '../../lib/site';
+import { breadcrumbJsonLd, faqPageJsonLd, reviewJsonLd, serviceJsonLd } from '../../lib/seo';
 
 const lang = 'fr';
 const path = '/sportifs/';
@@ -25,6 +28,32 @@ const description = d.seo?.description ?? settings?.seoDefaults.description ?? '
 const ctas = [{ label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` }];
 
 const testimonials = await getTestimonialsByAuthor(d.testimonials ?? [], lang);
+
+// FAQ (catégorie sportifs) — affichée et balisée FAQPage seulement si
+// des entrées existent dans le CMS.
+const faqEntries = await getCollection('faq', (e) => {
+  const entryId = e.id;
+  return entryId.endsWith(`.${lang}.md`) && e.data.category === 'sportifs';
+});
+const faqItems = faqEntries.map((e) => ({ question: e.data.question, answer: e.data.answer }));
+
+const services = (d.offers ?? []).map((offer, i) =>
+  serviceJsonLd({
+    id: `service-sport-${i + 1}`,
+    name: offer.title,
+    description: offer.intro,
+  }),
+);
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Accueil', href: `/${lang}/` },
+    { name: 'Sportifs', href: path },
+  ]),
+  ...services,
+  ...testimonials.map((t) => reviewJsonLd(t.data)),
+  ...(faqItems.length > 0 ? [faqPageJsonLd(faqItems)] : []),
+];
+const ogImage = '/og/sportifs.png';
 ---
 
 <PageLayout
@@ -34,6 +63,8 @@ const testimonials = await getTestimonialsByAuthor(d.testimonials ?? [], lang);
   path={path}
   usedFallback={usedFallback}
   canonicalHref={canonicalHref}
+  jsonLd={jsonLd}
+  ogImage={ogImage}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} />
 
@@ -42,6 +73,8 @@ const testimonials = await getTestimonialsByAuthor(d.testimonials ?? [], lang);
   {d.enjeux && <IconList title={d.enjeux.title} items={d.enjeux.items} />}
 
   {d.offers && d.offers.length > 0 && <Offers title="Les accompagnements" items={d.offers} />}
+
+  {faqItems.length > 0 && <FaqSection items={faqItems} />}
 
   {
     testimonials.length > 0 && (

@@ -9,7 +9,8 @@ import FinalCta from '../../components/sections/FinalCta.astro';
 import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 import { references } from '../../data/references';
 import { withLocale } from '../../lib/locale';
-import { SITE } from '../../lib/site';
+import { SITE, SITE_FALLBACK } from '../../lib/site';
+import { localBusinessJsonLd, reviewJsonLd, websiteJsonLd } from '../../lib/seo';
 
 const lang = 'fr';
 const path = '/';
@@ -21,6 +22,7 @@ const entry = await getPage(lang, 'home');
 if (!entry) throw new Error(`Contenu introuvable : home.${lang}`);
 const d = entry.data;
 const settings = (await getSettings())?.data;
+const site = settings ?? SITE_FALLBACK;
 
 const title = d.seo?.title ?? settings?.seoDefaults.title ?? 'Optima Mind';
 const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
@@ -35,6 +37,13 @@ const aboutCtas = [
 const finalCtas = [{ label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` }];
 
 const featured = await getTestimonialsByAuthor(d.featuredTestimonials ?? [], lang);
+
+const jsonLd = [
+  localBusinessJsonLd(site),
+  websiteJsonLd(site),
+  ...featured.map((t) => reviewJsonLd(t.data)),
+];
+const ogImage = '/og/accueil.png';
 ---
 
 <PageLayout
@@ -44,6 +53,8 @@ const featured = await getTestimonialsByAuthor(d.featuredTestimonials ?? [], lan
   path={path}
   usedFallback={usedFallback}
   canonicalHref={canonicalHref}
+  jsonLd={jsonLd}
+  ogImage={ogImage}
 >
   <Hero
     eyebrow={d.hero?.eyebrow}

@@ -5,6 +5,7 @@ import ContactForm from '../../components/forms/ContactForm.astro';
 import { getPage, getSettings } from '../../lib/content';
 import { SITE, SITE_FALLBACK, telHref } from '../../lib/site';
 import { withLocale } from '../../lib/locale';
+import { breadcrumbJsonLd } from '../../lib/seo';
 
 const lang = 'fr';
 const path = '/contact/';
@@ -18,6 +19,14 @@ const settings = (await getSettings())?.data ?? SITE_FALLBACK;
 
 const title = d.seo?.title ?? 'Contact — Optima Mind';
 const description = d.seo?.description ?? '';
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Accueil', href: `/${lang}/` },
+    { name: 'Contact', href: path },
+  ]),
+];
+const ogImage = '/og/contact.png';
 
 const mapsUrl =
   'https://www.google.com/maps/search/?api=1&query=' +
@@ -33,6 +42,8 @@ const mapsUrl =
   path={path}
   usedFallback={usedFallback}
   canonicalHref={canonicalHref}
+  jsonLd={jsonLd}
+  ogImage={ogImage}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} />
 

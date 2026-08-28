@@ -5,6 +5,7 @@ import PageHero from '../../components/sections/PageHero.astro';
 import { getPage, getSettings } from '../../lib/content';
 import { withLocale } from '../../lib/locale';
 import { SITE } from '../../lib/site';
+import { breadcrumbJsonLd } from '../../lib/seo';
 
 const lang = 'fr';
 const path = '/politique-de-confidentialite/';
@@ -19,6 +20,14 @@ const settings = (await getSettings())?.data;
 
 const title = d.seo?.title ?? 'Politique de confidentialité — Optima Mind';
 const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Accueil', href: `/${lang}/` },
+    { name: 'Politique de confidentialité', href: path },
+  ]),
+];
+const ogImage = '/og/politique-de-confidentialite.png';
 ---
 
 <PageLayout
@@ -28,6 +37,8 @@ const description = d.seo?.description ?? settings?.seoDefaults.description ?? '
   path={path}
   usedFallback={usedFallback}
   canonicalHref={canonicalHref}
+  jsonLd={jsonLd}
+  ogImage={ogImage}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} />
 

@@ -6,6 +6,7 @@ import FinalCta from '../../components/sections/FinalCta.astro';
 import { getPage, getSettings } from '../../lib/content';
 import { withLocale } from '../../lib/locale';
 import { SITE } from '../../lib/site';
+import { breadcrumbJsonLd, serviceJsonLd } from '../../lib/seo';
 
 const lang = 'fr';
 const path = '/entreprises/';
@@ -23,6 +24,19 @@ const ctas = [
   { label: 'Contactez-nous', href: `/${lang}/contact/` },
   { label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` },
 ];
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Accueil', href: `/${lang}/` },
+    { name: 'Entreprises', href: path },
+  ]),
+  serviceJsonLd({
+    id: 'service-entreprise',
+    name: d.title,
+    description: d.hero?.intro ?? d.hero?.lead ?? '',
+  }),
+];
+const ogImage = '/og/entreprises.png';
 ---
 
 <PageLayout
@@ -32,6 +46,8 @@ const ctas = [
   path={path}
   usedFallback={usedFallback}
   canonicalHref={canonicalHref}
+  jsonLd={jsonLd}
+  ogImage={ogImage}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} intro={d.hero?.intro} />
 
