@@ -26,8 +26,11 @@ export default defineConfig({
     },
   },
 
-  // Éditeur Decap à /admin + OAuth GitHub (/oauth) — voir README § CMS.
-  integrations: [decapCmsOauth()],
+  // Éditeur Decap : page statique public/admin/index.html (servie partout,
+  // dev et prod) + OAuth GitHub (/oauth, /oauth/callback) fourni par
+  // l'intégration. adminDisabled : la route injectée /admin est désactivée
+  // pour éviter l'ombrage de la page statique en mode dev.
+  integrations: [decapCmsOauth({ adminDisabled: true })],
 
   image: {
     service: {

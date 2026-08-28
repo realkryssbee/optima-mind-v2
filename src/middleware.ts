@@ -42,6 +42,12 @@ export const onRequest = defineMiddleware((context, next) => {
     return new Response('410 Gone', { status: 410 });
   }
 
+  // Éditeur : l'URL /admin/ doit rester propre (dev + prod) — la page
+  // statique vit à /admin/index.html (public/admin/).
+  if (url.pathname === '/admin' || url.pathname === '/admin/') {
+    return context.redirect('/admin/index.html', 302);
+  }
+
   if (url.pathname === '/' || url.pathname === '/index.html') {
     const cookieLang = getLocaleFromCookie(cookies.get(LANG_COOKIE)?.value);
     const locale = cookieLang ?? detectLocale(request.headers.get('accept-language'));

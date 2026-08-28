@@ -1,4 +1,4 @@
-﻿# ============================================================
+# ============================================================
 # Optima Mind â€” Decap CMS (interface d'Ã©dition en franÃ§ais)
 # Le contenu est stockÃ© en Markdown dans le dÃ©pÃ´t (src/content/).
 # DÃ©ploiement : Vercel + GitHub. L'Ã©diteur (/admin) et les routes
@@ -15,7 +15,6 @@ backend:
   site_domain: www.optima-mind.com
   base_url: https://www.optima-mind.com
   auth_endpoint: oauth
-  auth_endpoint: api/auth
 
 # Publication par pull request â†’ preview Vercel de la branche.
 publish_mode: editorial_workflow
