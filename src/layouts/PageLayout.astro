@@ -251,6 +251,7 @@ const siteName = settings.name;
 
   .site-header__inner {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-5);
     min-height: 4.5rem;
@@ -403,6 +404,37 @@ const siteName = settings.name;
     .site-header__nav {
       order: 3;
       flex-basis: 100%;
+    }
+  }
+
+  /* Écrans très étroits : en-tête compact, sans débordement.
+     Le CTA « Prendre RDV » reste accessible (hero + footer). */
+  @media (max-width: 30rem) {
+    .site-header__inner {
+      gap: var(--space-3);
+      padding-block: var(--space-2);
+    }
+
+    .site-header__cta {
+      display: none;
+    }
+
+    .site-header__brand {
+      gap: var(--space-2);
+    }
+
+    .site-header__mark {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .site-header__nav-list {
+      gap: var(--space-2);
+    }
+
+    .site-header__nav-link {
+      padding-inline: var(--space-1);
+      font-size: var(--text-small);
     }
   }
 </style>
