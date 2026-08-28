@@ -1,0 +1,125 @@
+/* ============================================================
+   Optima Mind — Design tokens (étape 0 validée)
+   Palette, typographies, échelles : valeurs centralisées.
+   Les composants n'utilisent jamais de valeur en dur.
+   Contrastes WCAG 2.2 vérifiés par calcul — voir docs/ETAPE-0.md.
+   ============================================================ */
+
+:root {
+  /* ---------- Couleurs ----------
+     --color-brand       : identité graphique (logo) — décor uniquement
+     --color-primary     : actions, liens, titres — 7,5:1 sur blanc
+     --color-accent      : ambre — décor uniquement (2,4:1, jamais en texte)
+     --color-accent-strong: texte ambre — 5,9:1 sur blanc */
+  --color-brand: #00b2e7;
+  --color-primary: #0a5c73;
+  --color-primary-hover: #08424f;
+  --color-primary-active: #06313b;
+  --color-primary-soft: #e3f3f9;
+  --color-ink: #2c2e3d;
+  --color-ink-soft: #55686f;
+  --color-muted: #5f727f;
+  --color-accent: #d4a017;
+  --color-accent-strong: #8a5a00;
+  --color-accent-soft: #f6edd8;
+  --color-bg: #ffffff;
+  --color-bg-soft: #f0f3f2;
+  --color-surface: #ffffff;
+  --color-border: #dfe5e8;
+  --color-error: #b42318;
+  --color-error-soft: #fdecea;
+  --color-success: #1b6b4f;
+  --color-success-soft: #e7f3ec;
+  --color-focus: #0b6e93;
+
+  /* ---------- Typographies ----------
+     Montserrat + Caveat auto-hébergées (@fontsource), latin-ext inclus
+     pour le polonais (ą ć ę ł ń ó ś ź ż). */
+  --font-sans:
+    'Montserrat Variable', 'Montserrat', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-hand: 'Caveat Variable', 'Caveat', cursive;
+
+  /* Échelle typographique fluide (mobile-first) */
+  --text-display: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
+  --text-h2: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+  --text-h3: clamp(1.25rem, 1.1rem + 0.8vw, 1.5rem);
+  --text-h4: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --text-body: 1rem;
+  --text-body-lg: 1.125rem;
+  --text-small: 0.875rem;
+  --text-eyebrow: 0.8125rem;
+
+  --leading-display: 1.1;
+  --leading-heading: 1.25;
+  --leading-body: 1.7;
+  --tracking-eyebrow: 0.08em;
+
+  /* ---------- Espacement ---------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 2.5rem;
+  --space-9: 3rem;
+  --space-10: 4rem;
+  --space-11: 5rem;
+  --space-12: 6rem;
+
+  /* Rythme vertical des sections */
+  --section-y: clamp(4rem, 10vw, 6.5rem);
+
+  /* ---------- Rayons ---------- */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-pill: 999px;
+
+  /* ---------- Ombres ---------- */
+  --shadow-sm: 0 1px 2px rgb(16 24 40 / 0.06);
+  --shadow-md: 0 4px 12px rgb(16 24 40 / 0.08);
+  --shadow-lg: 0 12px 32px rgb(16 24 40 / 0.1);
+
+  /* ---------- Layout ---------- */
+  --container: 72rem;
+  --container-narrow: 48rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+
+  /* ---------- Focus & interaction ---------- */
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-focus);
+  --target-min: 2.75rem; /* 44 px minimum (WCAG 2.2 — cible 2.5.8) */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --dur-fast: 120ms;
+  --dur: 180ms;
+  --dur-slow: 320ms;
+
+  /* ---------- Z-index ---------- */
+  --z-header: 50;
+  --z-skip: 100;
+  --z-modal: 90;
+}
+
+/* Préférences de mouvement (WCAG 2.2 — 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur: 1ms;
+    --dur-slow: 1ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mode sombre : différé en v1.1 (décision étape 0). Les tokens seront
+   redéfinis ici proprement — jamais d'inversion naïve.
+   @media (prefers-color-scheme: dark) { :root { … } } */
