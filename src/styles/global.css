@@ -144,3 +144,15 @@ video {
   text-transform: uppercase;
   color: var(--color-primary);
 }
+
+/* Bandeau visuel pleine largeur (visuels du site actuel) */
+.banner {
+  margin: 0;
+  overflow: hidden;
+}
+
+.banner__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}

@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import ContactForm from '../../components/forms/ContactForm.astro';
+import contactBanner from '../../assets/uploads/banner-contacte-moi_2.png';
 import { getPage, getSettings } from '../../lib/content';
 import { SITE, SITE_FALLBACK, telHref } from '../../lib/site';
 import { withLocale } from '../../lib/locale';
@@ -46,6 +48,18 @@ const mapsUrl =
   ogImage={ogImage}
 >
   <PageHero eyebrow={d.hero?.eyebrow} title={d.title} />
+
+  <figure class="banner">
+    <Image
+      src={contactBanner}
+      alt=""
+      widths={[480, 800, 1200, 1600, 2000]}
+      sizes="100vw"
+      format="avif"
+      loading="lazy"
+      class="banner__img"
+    />
+  </figure>
 
   <div class="contact">
     <div class="container contact__grid">
