@@ -113,9 +113,14 @@ const siteName = settings.name;
         </svg>
       </button>
 
-      <Button href={rdvHref} class="site-header__cta">
-        {t(lang, 'nav.rdv')}
-      </Button>
+      <div class="site-header__ctas">
+        <Button href="https://optima.clixite-prod.cloud/" external variant="primary" class="site-header__cta">
+          {t(lang, 'cta.scan')}
+        </Button>
+        <Button href={rdvHref} variant="secondary" class="site-header__cta site-header__cta--rdv">
+          {t(lang, 'nav.rdv')}
+        </Button>
+      </div>
     </div>
   </header>
 
@@ -327,6 +332,20 @@ const siteName = settings.name;
     margin-inline-start: auto;
   }
 
+  /* Groupe de CTA du header : Faire le Scan (principal) + Prendre RDV. */
+  .site-header__ctas {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .site-header__ctas :global(.button) {
+    min-height: 2.5rem;
+    padding: 0.55rem 1.1rem;
+    font-size: var(--text-small);
+    white-space: nowrap;
+  }
+
   /* Bouton hamburger : masqué sur desktop, visible <= 60rem. */
   .site-header__toggle {
     display: none;
@@ -500,14 +519,14 @@ const siteName = settings.name;
   }
 
   /* Écrans très étroits : en-tête compact, sans débordement.
-     Le CTA « Prendre RDV » reste accessible (hero + footer). */
+     Les CTA du header (Scan + RDV) restent accessibles (hero + footer). */
   @media (max-width: 30rem) {
     .site-header__inner {
       gap: var(--space-3);
       padding-block: var(--space-2);
     }
 
-    .site-header__cta {
+    .site-header__ctas {
       display: none;
     }
 
