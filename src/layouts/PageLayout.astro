@@ -120,6 +120,76 @@ const siteName = settings.name;
       <div class="site-footer__brand">
         <p class="site-footer__name">{siteName}</p>
         <p>{t(lang, 'footer.tagline')}</p>
+        {
+          settings.social && (
+            <ul class="site-footer__social">
+              {settings.social.facebook && (
+                <li>
+                  <a
+                    href={settings.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5H16.4V4.9c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.4v7h3.3Z" />
+                    </svg>
+                  </a>
+                </li>
+              )}
+              {settings.social.linkedin && (
+                <li>
+                  <a
+                    href={settings.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M6.9 8.6H4v11.4h2.9V8.6ZM5.5 4.1a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4ZM20 13.5c0-2.9-1.6-4.9-4-4.9a3.5 3.5 0 0 0-3.1 1.7V8.6H10V20h2.9v-5.9c0-1.4.8-2.2 2-2.2 1.2 0 1.9.8 1.9 2.2V20H20v-6.5Z" />
+                    </svg>
+                  </a>
+                </li>
+              )}
+              {settings.social.instagram && (
+                <li>
+                  <a
+                    href={settings.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      aria-hidden="true"
+                    >
+                      <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+                      <circle cx="12" cy="12" r="4" />
+                      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+                    </svg>
+                  </a>
+                </li>
+              )}
+            </ul>
+          )
+        }
       </div>
 
       <div class="site-footer__newsletter">
@@ -259,6 +329,34 @@ const siteName = settings.name;
   .site-footer__name {
     font-weight: 700;
     font-size: var(--text-h4);
+  }
+
+  .site-footer__social {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-4);
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .site-footer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--target-min);
+    height: var(--target-min);
+    border-radius: 50%;
+    color: var(--color-ink-soft);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    transition:
+      color var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out);
+  }
+
+  .site-footer__social a:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 
   .site-footer__links,
