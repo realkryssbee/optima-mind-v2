@@ -329,15 +329,7 @@ collections:
         required: false
         condition:
           field: pageType
-          value: mentions
-      - label: 'Pages lÃ©gales â€” corps du texte'
-        name: body
-        widget: markdown
-        i18n: true
-        required: false
-        condition:
-          field: pageType
-          value: privacy
+          value: [mentions, privacy]
       - label: Appel Ã  l'action
         name: cta
         widget: object
