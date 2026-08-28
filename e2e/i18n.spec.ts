@@ -25,13 +25,25 @@ test.describe('i18n (FR/PL)', () => {
     );
   });
 
-  test('fallback /pl/ page canonicalizes to the French version', async ({ page }) => {
+  test('PL page has its own canonical (real translation exists)', async ({ page }) => {
     await page.goto('/pl/sportifs/');
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       'href',
-      'https://www.optima-mind.com/fr/sportifs/',
+      'https://www.optima-mind.com/pl/sportifs/',
     );
-    await expect(page.getByRole('note')).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(
+      'A gdyby Twój umysł stał się Twoim największym atutem?',
+    );
+  });
+
+  test('localized blog listing under /pl/ has its own canonical', async ({ page }) => {
+    await page.goto('/pl/blog/');
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      'https://www.optima-mind.com/pl/blog/',
+    );
+    await expect(page.getByText('Na razie brak opublikowanych artykułów')).toBeVisible();
+    await expect(page.getByRole('note')).toHaveCount(0);
   });
 
   test('language choice persists via cookie on the root redirect', async ({ page, context }) => {

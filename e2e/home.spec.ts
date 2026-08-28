@@ -9,10 +9,12 @@ test.describe('Home', () => {
     await expect(page.getByRole('link', { name: /Polski/ }).first()).toBeVisible();
   });
 
-  test('PL route falls back to French content with a notice — no 404', async ({ page }) => {
+  test('PL home renders real Polish content (no fallback notice)', async ({ page }) => {
     await page.goto('/pl/');
-    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await expect(page.getByRole('note')).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(
+      'Coaching, który zamienia Twój potencjał w konkretne wyniki',
+    );
+    await expect(page.getByRole('note')).toHaveCount(0);
   });
 
   test('language switcher links to the other locale keeping the page', async ({ page }) => {

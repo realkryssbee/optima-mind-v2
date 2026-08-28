@@ -76,7 +76,10 @@ l'accueil s'il est « mis en avant »).
 - Dans l'éditeur d'une page, **en haut, choisissez la langue** (Français ou
   Polski) puis traduisez les champs.
 - Enregistrez et publiez.
-- **Tant qu'une page n'est pas traduite** : les visiteurs polonais voient la
+- **État actuel** : toutes les pages ont déjà une version polonaise publiée —
+  il reste à **relire et valider** les traductions (faites par nos soins,
+  vérification native recommandée).
+- **Tant qu'un champ n'est pas traduit** : les visiteurs polonais voient la
   version française avec une petite mention l'indiquant — jamais une page
   d'erreur.
 
