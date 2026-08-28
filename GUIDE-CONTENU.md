@@ -61,6 +61,15 @@ l'accueil s'il est « mis en avant »).
 - Pensez à remplir le champ **texte alternatif** : c'est la description lue
   par les personnes malvoyantes et utilisée par Google.
 
+**Où vont les images ?** (si vous travaillez avec la personne qui gère le site)
+
+- **Photos du site** (pages, témoignages, blog) : dossier
+  `src/assets/uploads/` — c'est le dossier média du CMS : les images y
+  arrivent automatiquement lors d'un upload dans l'éditeur, et vous pouvez
+  aussi y déposer des fichiers directement.
+- **Logo et éléments de marque** : dossier `src/assets/brand/` (le logo
+  actuel y est déjà importé).
+
 ## 6. Publier une traduction polonaise
 
 - Dans l'éditeur d'une page, **en haut, choisissez la langue** (Français ou

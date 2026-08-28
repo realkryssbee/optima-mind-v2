@@ -8,10 +8,14 @@
 :root {
   /* ---------- Couleurs ----------
      --color-brand       : identité graphique (logo) — décor uniquement
-     --color-primary     : actions, liens, titres — 7,5:1 sur blanc
+     --color-cta         : boutons principaux (cyan du logo) — texte sombre AA
+     --color-primary     : liens, titres, secondaires — 7,5:1 sur blanc
      --color-accent      : ambre — décor uniquement (2,4:1, jamais en texte)
      --color-accent-strong: texte ambre — 5,9:1 sur blanc */
   --color-brand: #00b2e7;
+  --color-cta: #00b2e7;
+  --color-cta-hover: #00a3d8;
+  --color-cta-text: #2c2e3d; /* 5,44:1 sur cyan (AA) */
   --color-primary: #0a5c73;
   --color-primary-hover: #08424f;
   --color-primary-active: #06313b;

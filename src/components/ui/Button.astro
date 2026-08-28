@@ -33,17 +33,19 @@ const classes = `button button--${variant} button--${size}${className ? ` ${clas
 }
 
 <style>
+  /* Forme et gabarit inspirés du site actuel (boutons thegem, arrondis) :
+     bouton principal cyan avec texte sombre (contraste AA vérifié). */
   .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
     min-height: var(--target-min);
-    padding: 0.75rem 1.5rem;
+    padding: 0.95rem 1.9rem;
     border: 2px solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-pill);
     font-family: inherit;
-    font-weight: 600;
+    font-weight: 700;
     font-size: var(--text-body);
     line-height: 1.2;
     text-decoration: none;
@@ -55,17 +57,17 @@ const classes = `button button--${variant} button--${size}${className ? ` ${clas
   }
 
   .button--primary {
-    background-color: var(--color-primary);
-    color: #fff;
+    background-color: var(--color-cta);
+    color: var(--color-cta-text);
   }
 
   .button--primary:hover {
-    background-color: var(--color-primary-hover);
-    color: #fff;
+    background-color: var(--color-cta-hover);
+    color: var(--color-cta-text);
   }
 
   .button--primary:active {
-    background-color: var(--color-primary-active);
+    background-color: var(--color-cta-hover);
   }
 
   .button--secondary {
@@ -89,7 +91,7 @@ const classes = `button button--${variant} button--${size}${className ? ` ${clas
   }
 
   .button--lg {
-    padding: 0.875rem 2rem;
+    padding: 1.5rem 2.1rem;
     font-size: var(--text-body-lg);
   }
 </style>

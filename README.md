@@ -53,11 +53,12 @@ La réservation Cal.com se configure dans le CMS (Réglages → Réservation →
 ```
 src/
 ├── content/          # Contenus CMS (Markdown, édités via Decap) — incrément 3
+├── assets/           # images : uploads/ (média CMS), brand/ (logo), references/
 ├── layouts/          # BaseLayout (head SEO complet) · PageLayout (header/nav/footer)
 ├── components/       # ui/ (Button, Card…) · sections/ · seo/ (LanguageSwitcher…)
-├── pages/            # Routes /fr/*, /pl/*, /api/*, sitemap, robots, og
+├── pages/            # Routes /fr/*, /pl/*, /api/*, sitemap, robots, og, blog
 ├── styles/           # tokens.css (design system) · global.css
-├── lib/              # i18n, locale, site (NAP), validate, rate-limit
+├── lib/              # i18n, locale, site (NAP), forms, rate-limit, seo
 └── middleware.ts     # Redirection / → langue détectée (cookie mémorisé)
 ```
 

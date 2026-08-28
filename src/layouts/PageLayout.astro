@@ -1,8 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import LanguageSwitcher from '../components/seo/LanguageSwitcher.astro';
 import Button from '../components/ui/Button.astro';
 import NewsletterForm from '../components/forms/NewsletterForm.astro';
+import logo from '../assets/brand/optima-mind-logo.png';
 import { getNav, getRdvHref } from '../data/nav';
 import { getSettings } from '../lib/content';
 import { t, type Locale } from '../lib/i18n';
@@ -64,16 +66,7 @@ const siteName = settings.name;
         href={`/${lang}/`}
         aria-label={`${siteName} — ${t(lang, 'nav.home')}`}
       >
-        <svg
-          class="site-header__mark"
-          width="36"
-          height="36"
-          viewBox="0 0 64 64"
-          aria-hidden="true"
-        >
-          <rect width="64" height="64" rx="14" fill="var(--color-brand)"></rect>
-          <path d="M14 40 26 24l8 10L44 20l6 20Z" fill="#fff"></path>
-        </svg>
+        <Image class="site-header__mark" src={logo} alt="" width={40} height={40} loading="eager" />
         <span class="site-header__wordmark">{siteName}</span>
       </a>
 
@@ -271,6 +264,12 @@ const siteName = settings.name;
     text-decoration: none;
     color: var(--color-ink);
     font-weight: 700;
+  }
+
+  .site-header__mark {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 auto;
   }
 
   .site-header__nav {
