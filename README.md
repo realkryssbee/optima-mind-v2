@@ -86,7 +86,7 @@ src/
 | 2   | Pages statiques FR                          | ✅ Livré |
 | 3   | CMS Decap + branchement du contenu          | ✅ Livré |
 | 4   | Bilingue FR/PL                              | ✅ Livré |
-| 5   | Formulaires (Brevo) + réservation (Cal.com) | —        |
+| 5   | Formulaires (Brevo) + réservation (Cal.com) | ✅ Livré |
 | 6   | SEO + données structurées + redirections    | —        |
 | 7   | Accessibilité + performance                 | —        |
 | 8   | CI/CD Vercel + guides + rapports            | —        |

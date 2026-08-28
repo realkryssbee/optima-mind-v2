@@ -51,7 +51,7 @@ test.describe('Interior pages (FR)', () => {
 
   test('contact page shows the form and real coordinates', async ({ page }) => {
     await page.goto('/fr/contact/');
-    await expect(page.locator('form')).toBeVisible();
+    await expect(page.locator('form.contact-form')).toBeVisible();
     await expect(page.getByLabel(/Prénom/)).toBeVisible();
     await expect(page.locator('.contact__info').getByText('+32 473 85 24 65')).toBeVisible();
   });

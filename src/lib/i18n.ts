@@ -30,6 +30,15 @@ const ui = {
     'footer.rights': 'Tous droits réservés.',
     'fallback.notice':
       'Cette page n’est pas encore disponible en polonais — voici la version française.',
+    'newsletter.title': 'Newsletter',
+    'newsletter.placeholder': 'Votre adresse email',
+    'newsletter.consent':
+      "J'accepte de recevoir la newsletter d'Optima Mind (désinscription possible à tout moment).",
+    'newsletter.submit': "S'inscrire",
+    'newsletter.success': 'Merci ! Confirmez votre inscription dans l’email envoyé.',
+    'newsletter.error': 'Une erreur est survenue, veuillez réessayer.',
+    'newsletter.rate': 'Trop de demandes, réessayez plus tard.',
+    'booking.load': 'Réserver en ligne',
   },
   pl: {
     'skip-link': 'Przejdź do treści',
@@ -51,6 +60,15 @@ const ui = {
     'footer.rights': 'Wszelkie prawa zastrzeżone.',
     'fallback.notice':
       'Ta strona nie jest jeszcze dostępna po polsku — wyświetlamy wersję francuską.',
+    'newsletter.title': 'Newsletter',
+    'newsletter.placeholder': 'Twój adres e-mail',
+    'newsletter.consent':
+      'Wyrażam zgodę na otrzymywanie newslettera Optima Mind (można zrezygnować w każdej chwili).',
+    'newsletter.submit': 'Zapisz się',
+    'newsletter.success': 'Dziękujemy! Potwierdź zapis w wysłanym e-mailu.',
+    'newsletter.error': 'Wystąpił błąd, spróbuj ponownie.',
+    'newsletter.rate': 'Zbyt wiele prób, spróbuj później.',
+    'booking.load': 'Zarezerwuj online',
   },
 } as const;
 
