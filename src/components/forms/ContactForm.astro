@@ -1,0 +1,167 @@
+---
+import { SITE } from '../../lib/site';
+
+interface Props {
+  /** Id unique du champ (nom HTML). */
+  id: string;
+}
+
+const { id } = Astro.props;
+
+const topics = [
+  { value: 'sportif', label: 'Sportif / Individuel' },
+  { value: 'equipe', label: 'Équipe sportive' },
+  { value: 'entraineur', label: 'Entraîneur' },
+  { value: 'entreprise', label: 'Entreprise' },
+] as const;
+---
+
+<form class="contact-form" method="post" action="/api/contact" novalidate>
+  <div class="contact-form__grid">
+    <div class="contact-form__field">
+      <label class="contact-form__label" for={`${id}-firstname`}>
+        Prénom <span aria-hidden="true">*</span>
+      </label>
+      <input
+        class="contact-form__input"
+        id={`${id}-firstname`}
+        name="firstname"
+        type="text"
+        autocomplete="given-name"
+        required
+        maxlength="100"
+      />
+    </div>
+
+    <div class="contact-form__field">
+      <label class="contact-form__label" for={`${id}-lastname`}>
+        Nom <span aria-hidden="true">*</span>
+      </label>
+      <input
+        class="contact-form__input"
+        id={`${id}-lastname`}
+        name="lastname"
+        type="text"
+        autocomplete="family-name"
+        required
+        maxlength="100"
+      />
+    </div>
+
+    <div class="contact-form__field">
+      <label class="contact-form__label" for={`${id}-email`}>
+        Adresse email <span aria-hidden="true">*</span>
+      </label>
+      <input
+        class="contact-form__input"
+        id={`${id}-email`}
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        maxlength="200"
+      />
+    </div>
+
+    <div class="contact-form__field">
+      <label class="contact-form__label" for={`${id}-phone`}> Téléphone </label>
+      <input
+        class="contact-form__input"
+        id={`${id}-phone`}
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        maxlength="40"
+      />
+    </div>
+
+    <div class="contact-form__field contact-form__field--full">
+      <label class="contact-form__label" for={`${id}-topic`}>
+        Sujet <span aria-hidden="true">*</span>
+      </label>
+      <select class="contact-form__input" id={`${id}-topic`} name="topic" required>
+        <option value="" selected>Veuillez sélectionner</option>
+        {topics.map((t) => <option value={t.value}>{t.label}</option>)}
+      </select>
+    </div>
+
+    <div class="contact-form__field contact-form__field--full">
+      <label class="contact-form__label" for={`${id}-message`}>
+        Questions <span aria-hidden="true">*</span>
+      </label>
+      <textarea
+        class="contact-form__input contact-form__input--textarea"
+        id={`${id}-message`}
+        name="message"
+        rows={6}
+        required
+        maxlength="3000"></textarea>
+    </div>
+  </div>
+
+  <!-- Honeypot anti-spam (masqué) — incrément 5 -->
+  <div class="contact-form__honeypot" aria-hidden="true">
+    <label for={`${id}-website`}>Ce champ doit rester vide</label>
+    <input id={`${id}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <p class="contact-form__note">
+    ⟨À FOURNIR : envoi en ligne du formulaire — incrément 5. En attendant, contactez directement
+    {SITE.email} ou {SITE.phone}.⟩
+  </p>
+
+  <button class="button button--primary" type="submit"> Envoyer </button>
+</form>
+
+<style>
+  .contact-form__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .contact-form__field--full {
+    grid-column: 1 / -1;
+  }
+
+  .contact-form__label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+  }
+
+  .contact-form__input {
+    width: 100%;
+    min-height: var(--target-min);
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: var(--text-body);
+    color: var(--color-ink);
+    background-color: var(--color-bg);
+  }
+
+  .contact-form__input:focus-visible {
+    border-color: var(--color-focus);
+  }
+
+  .contact-form__input--textarea {
+    min-height: 8rem;
+    resize: vertical;
+  }
+
+  .contact-form__honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .contact-form__note {
+    margin-block: var(--space-5);
+    font-size: var(--text-small);
+    color: var(--color-muted);
+  }
+</style>
