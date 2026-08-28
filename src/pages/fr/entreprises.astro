@@ -2,11 +2,12 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import IconList from '../../components/sections/IconList.astro';
+import Testimonials from '../../components/sections/Testimonials.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
-import { getPage, getSettings } from '../../lib/content';
+import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 import { withLocale } from '../../lib/locale';
 import { SITE } from '../../lib/site';
-import { breadcrumbJsonLd, serviceJsonLd } from '../../lib/seo';
+import { breadcrumbJsonLd, reviewJsonLd, serviceJsonLd } from '../../lib/seo';
 
 const lang = 'fr';
 const path = '/entreprises/';
@@ -25,6 +26,10 @@ const ctas = [
   { label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` },
 ];
 
+// Témoignages d'entreprises (catégorie « entreprise ») — affichés dès que
+// des entrées existent dans le CMS.
+const testimonials = await getTestimonialsByAuthor(d.testimonials ?? [], lang);
+
 const jsonLd = [
   breadcrumbJsonLd([
     { name: 'Accueil', href: `/${lang}/` },
@@ -35,6 +40,7 @@ const jsonLd = [
     name: d.title,
     description: d.hero?.intro ?? d.hero?.lead ?? '',
   }),
+  ...testimonials.map((t) => reviewJsonLd(t.data)),
 ];
 const ogImage = '/og/entreprises.png';
 ---
@@ -83,6 +89,19 @@ const ogImage = '/og/entreprises.png';
         title={d.thematiques.title}
         subtitle={d.thematiques.subtitle}
         items={d.thematiques.items}
+      />
+    )
+  }
+
+  {
+    testimonials.length > 0 && (
+      <Testimonials
+        title="Témoignages"
+        items={testimonials.map((t) => ({
+          quote: t.data.quote,
+          author: t.data.author,
+          role: t.data.role,
+        }))}
       />
     )
   }
