@@ -1,10 +1,16 @@
 ---
 import { Image } from 'astro:assets';
-import type { Reference } from '../../data/content-fr';
+import type { ImageMetadata } from 'astro';
+
+interface ReferenceItem {
+  name: string;
+  alt: string;
+  src: ImageMetadata;
+}
 
 interface Props {
   title: string;
-  items: Reference[];
+  items: ReferenceItem[];
 }
 
 const { title, items } = Astro.props;

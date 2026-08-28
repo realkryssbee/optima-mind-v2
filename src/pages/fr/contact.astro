@@ -2,19 +2,26 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import ContactForm from '../../components/forms/ContactForm.astro';
-import { SITE } from '../../lib/site';
+import { getPage, getSettings } from '../../lib/content';
+import { SITE_FALLBACK, telHref } from '../../lib/site';
 
 const lang = 'fr';
 const path = '/contact/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
-const title = 'Contact — Optima Mind, Wavre';
-const description =
-  'Contactez Agnieszka Orchowska : prise de rendez-vous, questions et devis. Clos du Relais 61, 1300 Wavre.';
+const entry = await getPage(lang, 'contact');
+if (!entry) throw new Error(`Contenu introuvable : contact.${lang}`);
+const d = entry.data;
+const settings = (await getSettings())?.data ?? SITE_FALLBACK;
+
+const title = d.seo?.title ?? 'Contact — Optima Mind';
+const description = d.seo?.description ?? '';
 
 const mapsUrl =
   'https://www.google.com/maps/search/?api=1&query=' +
-  encodeURIComponent(`${SITE.address.street}, ${SITE.address.zip} ${SITE.address.city}`);
+  encodeURIComponent(
+    `${settings.address.street}, ${settings.address.zip} ${settings.address.city}`,
+  );
 ---
 
 <PageLayout
@@ -24,11 +31,11 @@ const mapsUrl =
   path={path}
   usedFallback={usedFallback}
 >
-  <PageHero eyebrow="Contact" title="Contactez-nous facilement" />
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} />
 
   <div class="contact">
     <div class="container contact__grid">
-      <ContactForm id="contact" />
+      <ContactForm id="contact" email={settings.email} phone={settings.phone} />
 
       <aside class="contact__info">
         <h2>Coordonnées</h2>
@@ -36,12 +43,12 @@ const mapsUrl =
         <div class="contact__block">
           <h3>Adresse</h3>
           <address class="contact__address">
-            <p>{SITE.name}</p>
+            <p>{settings.name}</p>
             <p>
-              {SITE.address.street}
+              {settings.address.street}
               <br />
-              {SITE.address.zip}
-              {SITE.address.city}, {SITE.address.country}
+              {settings.address.zip}
+              {settings.address.city}, {settings.address.country}
             </p>
             <p>
               <a href={mapsUrl} target="_blank" rel="noopener noreferrer"> Voir sur la carte </a>
@@ -52,24 +59,29 @@ const mapsUrl =
         <div class="contact__block">
           <h3>Téléphone & email</h3>
           <p>
-            <a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a>
+            <a href={telHref(settings.phone)}>{settings.phone}</a>
           </p>
           <p>
-            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            <a href={`mailto:${settings.email}`}>{settings.email}</a>
           </p>
         </div>
 
         <div class="contact__block">
           <h3>Horaires</h3>
-          <p>{SITE.openingHours}</p>
+          <p>{settings.openingHours}</p>
         </div>
 
         <div class="contact__block">
           <h3>Lieux de séance</h3>
           <p>En visioconférence ou en présentiel :</p>
           <ul class="contact__lieux">
-            <li>À domicile — {SITE.address.street}, {SITE.address.zip} {SITE.address.city}</li>
-            <li>À Kampus — Centre de kinésithérapie — Rue de Bruxelles 48/50, 1300 Wavre</li>
+            {
+              (settings.lieux ?? []).map((lieu) => (
+                <li>
+                  {lieu.name} — {lieu.address}
+                </li>
+              ))
+            }
           </ul>
         </div>
       </aside>

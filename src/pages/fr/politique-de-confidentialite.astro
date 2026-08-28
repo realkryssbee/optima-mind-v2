@@ -1,15 +1,21 @@
 ---
+import { render } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
-import { SITE } from '../../lib/site';
+import { getPage, getSettings } from '../../lib/content';
 
 const lang = 'fr';
 const path = '/politique-de-confidentialite/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
-const title = 'Politique de confidentialité — Optima Mind';
-const description =
-  "Politique de confidentialité d'Optima Mind : données collectées, finalités, durées de conservation et droits RGPD.";
+const entry = await getPage(lang, 'privacy');
+if (!entry) throw new Error(`Contenu introuvable : privacy.${lang}`);
+const d = entry.data;
+const { Content } = await render(entry);
+const settings = (await getSettings())?.data;
+
+const title = d.seo?.title ?? 'Politique de confidentialité — Optima Mind';
+const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
 ---
 
 <PageLayout
@@ -19,121 +25,11 @@ const description =
   path={path}
   usedFallback={usedFallback}
 >
-  <PageHero eyebrow="RGPD" title="Politique de confidentialité" />
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} />
 
   <article class="legal">
     <div class="container legal__inner">
-      <section>
-        <h2>Responsable du traitement</h2>
-        <p>
-          {SITE.legalName}, {SITE.legalStatus.toLowerCase()}, {SITE.bce},{' '}
-          {SITE.address.street}, {SITE.address.zip}
-          {SITE.address.city} — {SITE.address.country}. Contact pour toute question relative aux
-          données personnelles :{' '}
-          <a href={`mailto:${SITE.rgpdEmail}`}>{SITE.rgpdEmail}</a>.
-        </p>
-      </section>
-
-      <section>
-        <h2>Données collectées</h2>
-        <ul>
-          <li>
-            <strong>Formulaire de contact</strong> : prénom, nom, adresse email, téléphone, sujet et message.
-          </li>
-          <li>
-            <strong>Prise de rendez-vous</strong> (via le service de réservation) : nom, adresse email,
-            téléphone et disponibilités.
-          </li>
-          <li>
-            <strong>Newsletter</strong> : adresse email, date et heure du consentement (double opt-in).
-          </li>
-          <li>
-            <strong>Statistiques de fréquentation</strong> : données agrégées et anonymes, sans cookie
-            ni identification (Plausible).
-          </li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Finalités et bases légales</h2>
-        <ul>
-          <li>
-            Répondre aux demandes de contact et préparer les rendez-vous (intérêt légitime,
-            exécution de la demande).
-          </li>
-          <li>
-            Gérer l'inscription à la newsletter (consentement explicite, horodaté, révocable à tout
-            moment).
-          </li>
-          <li>Assurer le fonctionnement et la sécurité du site (intérêt légitime).</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Durées de conservation</h2>
-        <ul>
-          <li>
-            Demandes de contact et rendez-vous : <strong
-              >3 ans maximum après le dernier contact</strong
-            >.
-          </li>
-          <li>Newsletter : jusqu'à désinscription ; suppression immédiate à la demande.</li>
-          <li>Statistiques anonymes : 12 mois.</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Destinataires et transferts</h2>
-        <p>
-          Vos données ne sont ni vendues ni échangées. Elles sont transmises uniquement aux
-          prestataires strictement nécessaires :
-        </p>
-        <ul>
-          <li>
-            <strong>Brevo</strong> (France, données stockées dans l'UE) — envoi des emails transactionnels
-            et de la newsletter.
-          </li>
-          <li>
-            <strong>Service de réservation</strong> (hébergement dans l'UE) — gestion des rendez-vous
-            et emails de confirmation.
-          </li>
-          <li>
-            <strong>Vercel Inc.</strong> (États-Unis) — hébergement du site. Les transferts vers les États-Unis
-            sont encadrés par les clauses contractuelles types (SCC) de la Commission européenne.
-          </li>
-          <li>
-            <strong>Plausible</strong> (UE) — statistiques anonymes, sans cookie.
-          </li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Cookies</h2>
-        <p>
-          Le site n'utilise aucun traceur publicitaire ni cookie de préférence. Un cookie technique
-          mémorise votre choix de langue ; il est nécessaire au bon fonctionnement du site et ne
-          requiert pas de consentement. Les statistiques sont collectées sans cookie.
-        </p>
-      </section>
-
-      <section>
-        <h2>Vos droits</h2>
-        <p>
-          Conformément au RGPD (UE 2016/679), vous disposez des droits d'accès, de rectification,
-          d'opposition, de limitation du traitement, d'effacement et de portabilité. Pour les
-          exercer, contactez : <a href={`mailto:${SITE.rgpdEmail}`}>{SITE.rgpdEmail}</a>. Vous
-          pouvez également introduire une réclamation auprès de l'autorité de protection des données
-          (APD — Belgique).
-        </p>
-      </section>
-
-      <section>
-        <h2>Mise à jour</h2>
-        <p>
-          Cette politique peut évoluer. La date de dernière mise à jour est indiquée en bas de page.
-          ⟨À FOURNIR : date de validation par la cliente⟩
-        </p>
-      </section>
+      <Content />
     </div>
   </article>
 </PageLayout>
@@ -144,19 +40,32 @@ const description =
   }
 
   .legal__inner {
-    display: grid;
-    gap: var(--space-8);
     max-width: var(--container-narrow);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .legal__inner h2 {
+    font-size: var(--text-h3);
+    margin-top: var(--space-6);
+  }
+
+  .legal__inner h2:first-child {
+    margin-top: 0;
+  }
+
+  .legal__inner p,
+  .legal__inner li {
+    color: var(--color-ink-soft);
   }
 
   .legal__inner ul {
-    margin: 0;
     padding-inline-start: var(--space-5);
     display: grid;
     gap: var(--space-2);
   }
 
-  .legal__inner li + li {
-    margin-top: 0;
+  .legal__inner strong {
+    color: var(--color-ink);
   }
 </style>

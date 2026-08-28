@@ -1,6 +1,10 @@
 ---
 import Button from '../ui/Button.astro';
-import type { Cta } from '../../data/content-fr';
+
+interface Cta {
+  label: string;
+  href: string;
+}
 
 interface Props {
   eyebrow?: string;

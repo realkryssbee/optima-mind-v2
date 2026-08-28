@@ -1,12 +1,13 @@
 ---
-import { SITE } from '../../lib/site';
-
 interface Props {
   /** Id unique du champ (nom HTML). */
   id: string;
+  /** Coordonnées de repli pour la note (avant branchement de l'envoi). */
+  email?: string;
+  phone?: string;
 }
 
-const { id } = Astro.props;
+const { id, email, phone } = Astro.props;
 
 const topics = [
   { value: 'sportif', label: 'Sportif / Individuel' },
@@ -107,7 +108,7 @@ const topics = [
 
   <p class="contact-form__note">
     ⟨À FOURNIR : envoi en ligne du formulaire — incrément 5. En attendant, contactez directement
-    {SITE.email} ou {SITE.phone}.⟩
+    {email ?? 'info@optima-mind.com'} ou {phone ?? '+32 473 85 24 65'}.⟩
   </p>
 
   <button class="button button--primary" type="submit"> Envoyer </button>

@@ -3,9 +3,10 @@ import BaseLayout from './BaseLayout.astro';
 import LanguageSwitcher from '../components/seo/LanguageSwitcher.astro';
 import Button from '../components/ui/Button.astro';
 import { getNav, getRdvHref } from '../data/nav';
+import { getSettings } from '../lib/content';
 import { t, type Locale } from '../lib/i18n';
 import { withLocale } from '../lib/locale';
-import { SITE } from '../lib/site';
+import { SITE_FALLBACK, telHref } from '../lib/site';
 
 interface Props {
   lang: Locale;
@@ -34,7 +35,10 @@ const nav = getNav(lang);
 const rdvHref = getRdvHref(lang);
 const current = withLocale(lang, path);
 const year = new Date().getFullYear();
-const address = SITE.address;
+// Réglages globaux depuis le CMS (fallback : valeurs réelles en dur).
+const settings = (await getSettings())?.data ?? SITE_FALLBACK;
+const address = settings.address;
+const siteName = settings.name;
 ---
 
 <BaseLayout
@@ -53,7 +57,7 @@ const address = SITE.address;
       <a
         class="site-header__brand"
         href={`/${lang}/`}
-        aria-label={`${SITE.name} — ${t(lang, 'nav.home')}`}
+        aria-label={`${siteName} — ${t(lang, 'nav.home')}`}
       >
         <svg
           class="site-header__mark"
@@ -65,7 +69,7 @@ const address = SITE.address;
           <rect width="64" height="64" rx="14" fill="var(--color-brand)"></rect>
           <path d="M14 40 26 24l8 10L44 20l6 20Z" fill="#fff"></path>
         </svg>
-        <span class="site-header__wordmark">{SITE.name}</span>
+        <span class="site-header__wordmark">{siteName}</span>
       </a>
 
       <nav class="site-header__nav" aria-label={t(lang, 'footer.nav')}>
@@ -109,7 +113,7 @@ const address = SITE.address;
   <footer class="site-footer">
     <div class="container site-footer__grid">
       <div class="site-footer__brand">
-        <p class="site-footer__name">{SITE.name}</p>
+        <p class="site-footer__name">{siteName}</p>
         <p>{t(lang, 'footer.tagline')}</p>
       </div>
 
@@ -135,10 +139,10 @@ const address = SITE.address;
             {address.city}, {address.country}
           </p>
           <p>
-            <a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a>
+            <a href={telHref(settings.phone)}>{settings.phone}</a>
           </p>
           <p>
-            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            <a href={`mailto:${settings.email}`}>{settings.email}</a>
           </p>
         </address>
       </div>
@@ -147,7 +151,7 @@ const address = SITE.address;
     <div class="container site-footer__legal">
       <p>
         © {year}
-        {SITE.name}. {t(lang, 'footer.rights')}
+        {siteName}. {t(lang, 'footer.rights')}
       </p>
       <nav aria-label={t(lang, 'footer.legal')}>
         <ul class="site-footer__legal-links">

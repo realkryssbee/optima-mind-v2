@@ -2,15 +2,23 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
-import { apropos } from '../../data/content-fr';
+import { getPage, getSettings } from '../../lib/content';
 
 const lang = 'fr';
 const path = '/a-propos/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
-const title = 'À propos — Agnieszka Orchowska, Optima Mind';
-const description =
-  'Ingénieure, Green Belt et diplômée en psychologie du sport : un parcours entre terrain et entreprise au service de la performance durable.';
+const entry = await getPage(lang, 'apropos');
+if (!entry) throw new Error(`Contenu introuvable : apropos.${lang}`);
+const d = entry.data;
+const settings = (await getSettings())?.data;
+
+const title = d.seo?.title ?? settings?.seoDefaults.title ?? 'Optima Mind';
+const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
+const ctas = [
+  { label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` },
+  { label: 'Contactez-nous', href: `/${lang}/contact/` },
+];
 ---
 
 <PageLayout
@@ -20,7 +28,7 @@ const description =
   path={path}
   usedFallback={usedFallback}
 >
-  <PageHero eyebrow={apropos.hero.eyebrow} title={apropos.hero.title} />
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} />
 
   <div class="apropos">
     <div class="container apropos__grid">
@@ -29,7 +37,7 @@ const description =
       </div>
       <div class="apropos__sections">
         {
-          apropos.sections.map((section, i) => (
+          (d.sections ?? []).map((section, i) => (
             <section class="apropos__section" aria-labelledby={`apropos-section-${i}`}>
               <h2 id={`apropos-section-${i}`}>{section.title}</h2>
               {section.paragraphs.map((p) => (
@@ -42,25 +50,27 @@ const description =
     </div>
   </div>
 
-  <section class="formations">
-    <div class="container formations__inner">
-      <h2>{apropos.formations.title}</h2>
-      {
-        apropos.formations.groups.map((group) => (
-          <div class="formations__group">
-            <h3>{group.name}</h3>
-            <ul>
-              {group.items.map((item) => (
-                <li>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </div>
-  </section>
+  {
+    d.formations && (
+      <section class="formations">
+        <div class="container formations__inner">
+          <h2>{d.formations.title}</h2>
+          {d.formations.groups.map((group) => (
+            <div class="formations__group">
+              <h3>{group.name}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
-  <FinalCta title={apropos.cta.title} lead={apropos.cta.lead} ctas={apropos.cta.ctas} />
+  {d.cta && <FinalCta title={d.cta.title ?? 'Contactez-nous'} lead={d.cta.lead} ctas={ctas} />}
 </PageLayout>
 
 <style>

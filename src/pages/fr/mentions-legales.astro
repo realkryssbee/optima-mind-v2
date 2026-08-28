@@ -1,15 +1,21 @@
 ---
+import { render } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
-import { SITE } from '../../lib/site';
+import { getPage, getSettings } from '../../lib/content';
 
 const lang = 'fr';
 const path = '/mentions-legales/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
-const title = 'Mentions légales — Optima Mind';
-const description =
-  "Mentions légales du site Optima Mind : éditeur, statut, numéro d'entreprise, hébergement.";
+const entry = await getPage(lang, 'mentions');
+if (!entry) throw new Error(`Contenu introuvable : mentions.${lang}`);
+const d = entry.data;
+const { Content } = await render(entry);
+const settings = (await getSettings())?.data;
+
+const title = d.seo?.title ?? 'Mentions légales — Optima Mind';
+const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
 ---
 
 <PageLayout
@@ -19,70 +25,11 @@ const description =
   path={path}
   usedFallback={usedFallback}
 >
-  <PageHero eyebrow="Informations légales" title="Mentions légales" />
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} />
 
   <article class="legal">
     <div class="container legal__inner">
-      <section>
-        <h2>Éditeur du site</h2>
-        <dl>
-          <dt>Nom / Dénomination</dt>
-          <dd>{SITE.legalName}</dd>
-          <dt>Statut juridique</dt>
-          <dd>{SITE.legalStatus}</dd>
-          <dt>Numéro d'entreprise (BCE)</dt>
-          <dd>{SITE.bce}</dd>
-          <dt>Adresse professionnelle</dt>
-          <dd>
-            {SITE.address.street}, {SITE.address.zip}
-            {SITE.address.city} — {SITE.address.country}
-          </dd>
-          <dt>Contact</dt>
-          <dd>
-            Email : <a href={`mailto:${SITE.rgpdEmail}`}>{SITE.rgpdEmail}</a> · Site web :{' '}
-            {SITE.domain.replace('https://', '')}
-          </dd>
-          <dt>Responsable de la publication</dt>
-          <dd>Agnieszka Orchowska</dd>
-        </dl>
-      </section>
-
-      <section>
-        <h2>Hébergement</h2>
-        <p>
-          Le site est hébergé par Vercel Inc., 340 S. Lemon Ave #4133, Walnut, CA 91789, États-Unis
-          (infrastructure mondiale, traitement des données conforme à la politique de
-          confidentialité).
-        </p>
-      </section>
-
-      <section>
-        <h2>Propriété intellectuelle</h2>
-        <p>
-          L'ensemble des contenus du site (textes, images, logo, structure) est protégé par le droit
-          d'auteur. Toute reproduction, représentation ou diffusion, totale ou partielle, sans
-          autorisation préalable écrite de l'éditeur est interdite.
-        </p>
-      </section>
-
-      <section>
-        <h2>Limitation de responsabilité</h2>
-        <p>
-          Les contenus proposés sur ce site sont fournis à titre informatif. L'éditeur ne peut être
-          tenu responsable d'éventuels dommages directs ou indirects résultant de l'utilisation des
-          informations présentes. Les accompagnements proposés relèvent de la préparation mentale,
-          du coaching et du développement personnel et professionnel. Ils ne se substituent en aucun
-          cas à un suivi médical, psychologique ou psychiatrique.
-        </p>
-      </section>
-
-      <section>
-        <h2>Données personnelles</h2>
-        <p>
-          Le traitement des données personnelles est décrit dans la{' '}
-          <a href={`/${lang}/politique-de-confidentialite/`}>politique de confidentialité</a>.
-        </p>
-      </section>
+      <Content />
     </div>
   </article>
 </PageLayout>
@@ -93,24 +40,32 @@ const description =
   }
 
   .legal__inner {
-    display: grid;
-    gap: var(--space-8);
     max-width: var(--container-narrow);
-  }
-
-  .legal__inner dl {
     display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: var(--space-2) var(--space-5);
-    margin: 0;
+    gap: var(--space-5);
   }
 
-  .legal__inner dt {
-    font-weight: 700;
+  .legal__inner h2 {
+    font-size: var(--text-h3);
+    margin-top: var(--space-6);
   }
 
-  .legal__inner dd {
-    margin: 0;
+  .legal__inner h2:first-child {
+    margin-top: 0;
+  }
+
+  .legal__inner p,
+  .legal__inner li {
     color: var(--color-ink-soft);
+  }
+
+  .legal__inner ul {
+    padding-inline-start: var(--space-5);
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .legal__inner strong {
+    color: var(--color-ink);
   }
 </style>

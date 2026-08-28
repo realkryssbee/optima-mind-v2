@@ -1,10 +1,14 @@
 ---
-import type { Testimonial } from '../../data/content-fr';
+interface TestimonialItem {
+  quote: string;
+  author: string;
+  role?: string;
+}
 
 interface Props {
   title: string;
   subtitle?: string;
-  items: Testimonial[];
+  items: TestimonialItem[];
 }
 
 const { title, subtitle, items } = Astro.props;

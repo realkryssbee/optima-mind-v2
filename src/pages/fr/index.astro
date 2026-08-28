@@ -6,18 +6,31 @@ import AboutTeaser from '../../components/sections/AboutTeaser.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import References from '../../components/sections/References.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
-import { home, references, testimonials } from '../../data/content-fr';
+import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
+import { references } from '../../data/references';
 
 const lang = 'fr';
 const path = '/';
-
-// Contenu réel servi par fallback rewrite (brief §6) : la page est rendue
-// sous /pl/ tant que la version polonaise n'existe pas.
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
-const title = 'Coach mental pour sportif et entreprises Wavre — Optima Mind';
-const description =
-  "Coach mental pour sportif et entreprises Wavre. La performance durable ne s'improvise pas, elle se construit. Préparation mentale à Wavre (Brabant wallon).";
+const entry = await getPage(lang, 'home');
+if (!entry) throw new Error(`Contenu introuvable : home.${lang}`);
+const d = entry.data;
+const settings = (await getSettings())?.data;
+
+const title = d.seo?.title ?? settings?.seoDefaults.title ?? 'Optima Mind';
+const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
+const heroCtas = [
+  { label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` },
+  { label: 'En savoir plus', href: `/${lang}/sportifs/` },
+];
+const aboutCtas = [
+  { label: 'Découvrir mon parcours', href: `/${lang}/a-propos/` },
+  { label: 'Contactez-nous', href: `/${lang}/contact/` },
+];
+const finalCtas = [{ label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` }];
+
+const featured = await getTestimonialsByAuthor(d.featuredTestimonials ?? [], lang);
 ---
 
 <PageLayout
@@ -28,25 +41,44 @@ const description =
   usedFallback={usedFallback}
 >
   <Hero
-    eyebrow={home.hero.eyebrow}
-    title={home.hero.title}
-    lead={home.hero.lead}
-    ctas={home.hero.ctas}
-    valueProp={home.valueProp.title}
+    eyebrow={d.hero?.eyebrow}
+    title={d.title}
+    lead={d.hero?.lead ?? ''}
+    ctas={heroCtas}
+    valueProp={d.valueProp}
   />
 
-  <UniversCards title="Que proposons-nous ?" items={home.univers} />
+  <UniversCards title="Que proposons-nous ?" items={d.univers ?? []} />
 
-  <AboutTeaser
-    eyebrow={home.aboutTeaser.eyebrow}
-    title={home.aboutTeaser.title}
-    paragraphs={home.aboutTeaser.paragraphs}
-    ctas={home.aboutTeaser.ctas}
-  />
+  {
+    d.aboutTeaser && (
+      <AboutTeaser
+        eyebrow={d.aboutTeaser.eyebrow}
+        title={d.aboutTeaser.title}
+        paragraphs={d.aboutTeaser.paragraphs}
+        ctas={aboutCtas}
+      />
+    )
+  }
 
-  <Testimonials title="Témoignages" items={testimonials.filter((t) => t.featured)} />
+  {
+    featured.length > 0 && (
+      <Testimonials
+        title="Témoignages"
+        items={featured.map((t) => ({
+          quote: t.data.quote,
+          author: t.data.author,
+          role: t.data.role,
+        }))}
+      />
+    )
+  }
 
-  <References title="Nos collaborations" items={references} />
+  {d.showReferences && <References title="Nos collaborations" items={references} />}
 
-  <FinalCta title={home.finalCta.title} lead={home.finalCta.lead} ctas={home.finalCta.ctas} />
+  {
+    d.cta && (
+      <FinalCta title={d.cta.title ?? 'Prendre rendez-vous'} lead={d.cta.lead} ctas={finalCtas} />
+    )
+  }
 </PageLayout>

@@ -6,15 +6,22 @@ import IconList from '../../components/sections/IconList.astro';
 import Offers from '../../components/sections/Offers.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
-import { sportifs, testimonials } from '../../data/content-fr';
+import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 
 const lang = 'fr';
 const path = '/sportifs/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
-const title = 'Préparation mentale du sportif — Optima Mind';
-const description =
-  'Accompagnement mental individuel, collectif et entraîneur : confiance, concentration, gestion des émotions et routines de performance.';
+const entry = await getPage(lang, 'sportifs');
+if (!entry) throw new Error(`Contenu introuvable : sportifs.${lang}`);
+const d = entry.data;
+const settings = (await getSettings())?.data;
+
+const title = d.seo?.title ?? settings?.seoDefaults.title ?? 'Optima Mind';
+const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
+const ctas = [{ label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` }];
+
+const testimonials = await getTestimonialsByAuthor(d.testimonials ?? [], lang);
 ---
 
 <PageLayout
@@ -24,15 +31,26 @@ const description =
   path={path}
   usedFallback={usedFallback}
 >
-  <PageHero eyebrow={sportifs.hero.eyebrow} title={sportifs.hero.title} lead={sportifs.hero.lead} />
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} />
 
-  <Quote text={sportifs.quote.text} source={sportifs.quote.source} />
+  {d.quote && <Quote text={d.quote.text} source={d.quote.source} />}
 
-  <IconList title={sportifs.enjeux.title} items={sportifs.enjeux.items} />
+  {d.enjeux && <IconList title={d.enjeux.title} items={d.enjeux.items} />}
 
-  <Offers title="Les accompagnements" items={sportifs.offers} />
+  {d.offers && d.offers.length > 0 && <Offers title="Les accompagnements" items={d.offers} />}
 
-  <Testimonials title="Témoignages" items={testimonials.filter((t) => t.category === 'sport')} />
+  {
+    testimonials.length > 0 && (
+      <Testimonials
+        title="Témoignages"
+        items={testimonials.map((t) => ({
+          quote: t.data.quote,
+          author: t.data.author,
+          role: t.data.role,
+        }))}
+      />
+    )
+  }
 
-  <FinalCta title={sportifs.cta.title} lead={sportifs.cta.lead} ctas={sportifs.cta.ctas} />
+  {d.cta && <FinalCta title={d.cta.title ?? 'Prendre RDV'} lead={d.cta.lead} ctas={ctas} />}
 </PageLayout>

@@ -2,16 +2,27 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import Button from '../../components/ui/Button.astro';
-import { rendezVous } from '../../data/content-fr';
-import { SITE } from '../../lib/site';
+import { getPage, getSettings } from '../../lib/content';
+import { SITE_FALLBACK } from '../../lib/site';
 
 const lang = 'fr';
 const path = '/prise-de-rendez-vous/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
-const title = 'Prendre rendez-vous — Optima Mind';
-const description =
-  'Réservez votre séance individuelle : premier échange de 30 minutes offert, en visioconférence ou en présentiel à Wavre.';
+const entry = await getPage(lang, 'rdv');
+if (!entry) throw new Error(`Contenu introuvable : rdv.${lang}`);
+const d = entry.data;
+const settings = (await getSettings())?.data ?? SITE_FALLBACK;
+
+const title = d.seo?.title ?? 'Prendre rendez-vous — Optima Mind';
+const description = d.seo?.description ?? '';
+
+const types = [
+  { name: 'Sportif individuel', duration: '60 min', href: `/${lang}/sportifs/` },
+  { name: 'Équipe sportive', duration: '90 min', href: `/${lang}/sportifs/` },
+  { name: 'Entraîneur', duration: '60 min', href: `/${lang}/sportifs/` },
+  { name: 'Entreprise', duration: '90 min', href: `/${lang}/entreprises/` },
+] as const;
 ---
 
 <PageLayout
@@ -21,34 +32,27 @@ const description =
   path={path}
   usedFallback={usedFallback}
 >
-  <PageHero
-    eyebrow={rendezVous.hero.eyebrow}
-    title={rendezVous.hero.title}
-    lead={rendezVous.hero.lead}
-  />
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} />
 
   <section class="rdv">
     <div class="container rdv__inner">
       <div class="rdv__booking">
         <h2>Réservation en ligne</h2>
-        <p>
-          ⟨À FOURNIR : outil de réservation en ligne (Cal.com) — incrément 5. En attendant,
-          contactez-nous directement.⟩
-        </p>
+        <p>{settings.booking.note || '⟨À FOURNIR : lien Cal.com — incrément 5⟩'}</p>
         <div class="rdv__actions">
-          <Button href="/fr/contact/">Contactez-nous</Button>
-          <Button href={`mailto:${SITE.email}`} variant="secondary">
-            {SITE.email}
+          <Button href={`/${lang}/contact/`}>Contactez-nous</Button>
+          <Button href={`mailto:${settings.email}`} variant="secondary">
+            {settings.email}
           </Button>
         </div>
       </div>
 
       <div class="rdv__types">
-        <h2>{rendezVous.types.title}</h2>
-        <p class="rdv__types-sub">{rendezVous.types.subtitle}</p>
+        <h2>Quel accompagnement ?</h2>
+        <p class="rdv__types-sub">⟨À FOURNIR : confirmation des durées et tarifs éventuels⟩</p>
         <ul class="rdv__types-list">
           {
-            rendezVous.types.items.map((type) => (
+            types.map((type) => (
               <li class="rdv__type">
                 <span class="rdv__type-name">{type.name}</span>
                 <span class="rdv__type-duration">{type.duration}</span>
@@ -62,10 +66,10 @@ const description =
       </div>
 
       <div class="rdv__lieux">
-        <h2>{rendezVous.lieux.title}</h2>
+        <h2>Où nous rencontrer ?</h2>
         <ul class="rdv__lieux-list">
           {
-            rendezVous.lieux.items.map((lieu) => (
+            (settings.lieux ?? []).map((lieu) => (
               <li class="rdv__lieu">
                 <h3>{lieu.name}</h3>
                 <p>{lieu.address}</p>

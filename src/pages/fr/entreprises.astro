@@ -3,15 +3,23 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import IconList from '../../components/sections/IconList.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
-import { entreprises } from '../../data/content-fr';
+import { getPage, getSettings } from '../../lib/content';
 
 const lang = 'fr';
 const path = '/entreprises/';
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
-const title = 'Coaching performance en entreprise — Optima Mind';
-const description =
-  'Clarté stratégique, leadership, résilience et mindset de performance durable pour dirigeants, managers et équipes.';
+const entry = await getPage(lang, 'entreprises');
+if (!entry) throw new Error(`Contenu introuvable : entreprises.${lang}`);
+const d = entry.data;
+const settings = (await getSettings())?.data;
+
+const title = d.seo?.title ?? settings?.seoDefaults.title ?? 'Optima Mind';
+const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
+const ctas = [
+  { label: 'Contactez-nous', href: `/${lang}/contact/` },
+  { label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` },
+];
 ---
 
 <PageLayout
@@ -21,36 +29,45 @@ const description =
   path={path}
   usedFallback={usedFallback}
 >
-  <PageHero
-    eyebrow={entreprises.hero.eyebrow}
-    title={entreprises.hero.title}
-    lead={entreprises.hero.lead}
-    intro={entreprises.hero.intro}
-  />
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} intro={d.hero?.intro} />
 
-  <IconList
-    title={entreprises.benefices.title}
-    subtitle={entreprises.benefices.subtitle}
-    items={entreprises.benefices.items}
-  />
+  {
+    d.benefices && (
+      <IconList
+        title={d.benefices.title}
+        subtitle={d.benefices.subtitle}
+        items={d.benefices.items}
+      />
+    )
+  }
 
-  <section class="mission">
-    <div class="container mission__inner">
-      <p class="eyebrow">{entreprises.mission.eyebrow}</p>
-      <h2>{entreprises.mission.title}</h2>
-      {entreprises.mission.paragraphs.map((p) => <p>{p}</p>)}
-    </div>
-  </section>
+  {
+    d.mission && (
+      <section class="mission">
+        <div class="container mission__inner">
+          <p class="eyebrow">{d.mission.eyebrow}</p>
+          <h2>{d.mission.title}</h2>
+          {d.mission.paragraphs.map((p) => (
+            <p>{p}</p>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
-  <IconList title={entreprises.publicCible.title} items={entreprises.publicCible.items} />
+  {d.publicCible && <IconList title={d.publicCible.title} items={d.publicCible.items} />}
 
-  <IconList
-    title={entreprises.thematiques.title}
-    subtitle={entreprises.thematiques.subtitle}
-    items={entreprises.thematiques.items}
-  />
+  {
+    d.thematiques && (
+      <IconList
+        title={d.thematiques.title}
+        subtitle={d.thematiques.subtitle}
+        items={d.thematiques.items}
+      />
+    )
+  }
 
-  <FinalCta title={entreprises.cta.title} lead={entreprises.cta.lead} ctas={entreprises.cta.ctas} />
+  {d.cta && <FinalCta title={d.cta.title ?? 'Contactez-nous'} lead={d.cta.lead} ctas={ctas} />}
 </PageLayout>
 
 <style>

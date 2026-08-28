@@ -1,14 +1,20 @@
-/**
- * Données factuelles du site (NAP).
- * Valeurs relevées sur le site actuel (audit 2025-08) — à confirmer
- * officiellement par la cliente. Rien n'est inventé ; les valeurs
- * inconnues sont balisées ⟨À FOURNIR : …⟩.
- */
+import type { Settings } from '../content.config';
+
+/** Constantes du site (non éditables). */
 export const SITE = {
-  name: 'Optima Mind',
   domain: 'https://www.optima-mind.com',
+  name: 'Optima Mind',
+} as const;
+
+/**
+ * Valeurs de repli des réglages globaux (le CMS est la source de vérité ;
+ * ces valeurs réelles servent de filet de sécurité au build).
+ */
+export const SITE_FALLBACK: Settings = {
+  name: 'Optima Mind',
   legalName: 'Agnieszka Orchowska – Optima Mind',
   legalStatus: 'Indépendante (personne physique)',
+  bce: 'BE 1012.449.376',
   address: {
     street: 'Clos du Relais 61',
     zip: '1300',
@@ -16,16 +22,32 @@ export const SITE = {
     country: 'Belgique',
   },
   phone: '+32 473 85 24 65',
-  phoneHref: '+32473852465',
   email: 'info@optima-mind.com',
   rgpdEmail: 'aga@optima-mind.com',
-  bce: 'BE 1012.449.376',
   openingHours: '⟨À FOURNIR : horaires réels de consultation⟩',
   social: {
     facebook: 'https://www.facebook.com/profile.php?id=61587185073550',
     linkedin: 'https://www.linkedin.com/in/agnieszka-orchowska-5b7426/',
     instagram: 'https://www.instagram.com/optima_mind/',
   },
-  // ⟨À FOURNIR : mention « Made by KryssBee » à conserver ?⟩
-  agencyCredit: null,
-} as const;
+  seoDefaults: {
+    title: 'Coach mental pour sportif et entreprises Wavre — Optima Mind',
+    description:
+      "Coach mental pour sportif et entreprises Wavre. La performance durable ne s'improvise pas, elle se construit.",
+  },
+  booking: {
+    calUrl: '',
+    note: '⟨À FOURNIR : lien Cal.com — incrément 5⟩',
+  },
+  lieux: [
+    { name: 'À domicile', address: 'Clos du Relais 61, 1300 Wavre' },
+    {
+      name: 'À Kampus — Centre de kinésithérapie',
+      address: 'Rue de Bruxelles 48/50, 1300 Wavre',
+    },
+  ],
+};
+
+export function telHref(phone: string): string {
+  return `tel:${phone.replace(/[^+\d]/g, '')}`;
+}
