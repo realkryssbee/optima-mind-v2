@@ -1,0 +1,83 @@
+---
+import { t, type Locale } from '../../lib/i18n';
+import { withLocale } from '../../lib/locale';
+
+interface Props {
+  lang: Locale;
+  /** Chemin de contenu sans préfixe de langue. */
+  path: string;
+}
+
+const { lang, path } = Astro.props;
+const locales: Locale[] = ['fr', 'pl'];
+---
+
+<nav class="lang-switcher" aria-label={t(lang, 'lang.label')}>
+  <ul class="lang-switcher__list">
+    {
+      locales.map((code) => (
+        <li>
+          <a
+            class="lang-switcher__link"
+            href={withLocale(code, path)}
+            lang={code}
+            hreflang={code}
+            aria-current={code === lang ? 'true' : undefined}
+            data-lang-switch
+            data-lang={code}
+          >
+            <span class="visually-hidden">{t(lang, code === 'fr' ? 'lang.fr' : 'lang.pl')} — </span>
+            {code.toUpperCase()}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  // Mémorise la langue choisie (amélioration progressive : les liens
+  // fonctionnent sans JavaScript). L'import force l'externalisation du
+  // script (compatible CSP `script-src 'self'`).
+  import { LANG_COOKIE } from '../../lib/locale';
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-switch]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const code = link.getAttribute('data-lang');
+      if (code) {
+        document.cookie = `${LANG_COOKIE}=${code}; path=/; max-age=31536000; samesite=lax`;
+      }
+    });
+  });
+</script>
+
+<style>
+  .lang-switcher__list {
+    display: flex;
+    gap: var(--space-1);
+    list-style: none;
+    padding: 0;
+  }
+
+  .lang-switcher__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--target-min);
+    min-height: var(--target-min);
+    padding-inline: var(--space-2);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 700;
+    color: var(--color-ink-soft);
+  }
+
+  .lang-switcher__link:hover {
+    color: var(--color-primary);
+  }
+
+  .lang-switcher__link[aria-current='true'] {
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+  }
+</style>

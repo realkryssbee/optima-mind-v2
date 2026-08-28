@@ -1,0 +1,80 @@
+---
+import '@fontsource-variable/montserrat/index.css';
+import '@fontsource-variable/caveat/index.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+import type { Locale } from '../lib/i18n';
+import { localeToOgLocale } from '../lib/i18n';
+import { withLocale } from '../lib/locale';
+import { SITE } from '../lib/site';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  /** Chemin de contenu sans préfixe de langue, ex. '/' ou '/sportifs/'. */
+  path: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  ogImage?: string;
+}
+
+const {
+  lang,
+  title,
+  description,
+  path,
+  noindex = false,
+  jsonLd,
+  ogImage = '/og-default.png',
+} = Astro.props;
+
+const canonical = `${SITE.domain}${withLocale(lang, path)}`;
+const otherLocale: Locale = lang === 'fr' ? 'pl' : 'fr';
+const alternates = [
+  { hreflang: 'fr', href: `${SITE.domain}${withLocale('fr', path)}` },
+  { hreflang: 'pl', href: `${SITE.domain}${withLocale('pl', path)}` },
+];
+const schema = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" hreflang="x-default" href={`${SITE.domain}/`} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${SITE.domain}${ogImage}`} />
+    <meta property="og:locale" content={localeToOgLocale(lang)} />
+    <meta property="og:locale:alternate" content={localeToOgLocale(otherLocale)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${SITE.domain}${ogImage}`} />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    {
+      schema.length > 0 && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(schema.length === 1 ? schema[0] : schema)}
+        />
+      )
+    }
+  </body>
+</html>

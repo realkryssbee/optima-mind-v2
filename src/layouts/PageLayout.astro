@@ -1,0 +1,291 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import LanguageSwitcher from '../components/seo/LanguageSwitcher.astro';
+import Button from '../components/ui/Button.astro';
+import { getNav, getRdvHref } from '../data/nav';
+import { t, type Locale } from '../lib/i18n';
+import { withLocale } from '../lib/locale';
+import { SITE } from '../lib/site';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  path: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  ogImage?: string;
+  /** true quand la page est servie en fallback (contenu FR sous une URL /pl/). */
+  usedFallback?: boolean;
+}
+
+const {
+  lang,
+  title,
+  description,
+  path,
+  noindex,
+  jsonLd,
+  ogImage,
+  usedFallback = false,
+} = Astro.props;
+
+const nav = getNav(lang);
+const rdvHref = getRdvHref(lang);
+const current = withLocale(lang, path);
+const year = new Date().getFullYear();
+const address = SITE.address;
+---
+
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={path}
+  noindex={noindex}
+  jsonLd={jsonLd}
+  ogImage={ogImage}
+>
+  <a class="skip-link" href="#main">{t(lang, 'skip-link')}</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a
+        class="site-header__brand"
+        href={`/${lang}/`}
+        aria-label={`${SITE.name} — ${t(lang, 'nav.home')}`}
+      >
+        <svg
+          class="site-header__mark"
+          width="36"
+          height="36"
+          viewBox="0 0 64 64"
+          aria-hidden="true"
+        >
+          <rect width="64" height="64" rx="14" fill="var(--color-brand)"></rect>
+          <path d="M14 40 26 24l8 10L44 20l6 20Z" fill="#fff"></path>
+        </svg>
+        <span class="site-header__wordmark">{SITE.name}</span>
+      </a>
+
+      <nav class="site-header__nav" aria-label={t(lang, 'footer.nav')}>
+        <ul class="site-header__nav-list">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  class="site-header__nav-link"
+                  href={item.href}
+                  aria-current={item.href === current ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <LanguageSwitcher lang={lang} path={path} />
+
+      <Button href={rdvHref} class="site-header__cta">
+        {t(lang, 'nav.rdv')}
+      </Button>
+    </div>
+  </header>
+
+  {
+    usedFallback && (
+      <p class="fallback-notice container" role="note">
+        {t(lang, 'fallback.notice')}
+      </p>
+    )
+  }
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__grid">
+      <div class="site-footer__brand">
+        <p class="site-footer__name">{SITE.name}</p>
+        <p>{t(lang, 'footer.tagline')}</p>
+      </div>
+
+      <nav aria-label={t(lang, 'footer.nav')}>
+        <h2 class="visually-hidden">{t(lang, 'footer.nav')}</h2>
+        <ul class="site-footer__links">
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="site-footer__contact">
+        <h2 class="site-footer__title">{t(lang, 'footer.contact')}</h2>
+        <address class="site-footer__address">
+          <p>{address.street}</p>
+          <p>
+            {address.zip}
+            {address.city}, {address.country}
+          </p>
+          <p>
+            <a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a>
+          </p>
+          <p>
+            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          </p>
+        </address>
+      </div>
+    </div>
+
+    <div class="container site-footer__legal">
+      <p>
+        © {year}
+        {SITE.name}. {t(lang, 'footer.rights')}
+      </p>
+      <nav aria-label={t(lang, 'footer.legal')}>
+        <ul class="site-footer__legal-links">
+          <li>
+            <a href={`/${lang}/mentions-legales/`}>{t(lang, 'footer.mentions')}</a>
+          </li>
+          <li>
+            <a href={`/${lang}/politique-de-confidentialite/`}>{t(lang, 'footer.privacy')}</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+</BaseLayout>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background-color: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    min-height: 4.5rem;
+    padding-block: var(--space-3);
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+
+  .site-header__nav {
+    margin-inline-start: auto;
+  }
+
+  .site-header__nav-list {
+    display: flex;
+    gap: var(--space-4);
+    list-style: none;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .site-header__nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+    padding-inline: var(--space-2);
+    text-decoration: none;
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  .site-header__nav-link:hover {
+    color: var(--color-primary);
+  }
+
+  .site-header__nav-link[aria-current='page'] {
+    color: var(--color-primary);
+    box-shadow: inset 0 -2px 0 var(--color-primary);
+  }
+
+  .fallback-notice {
+    background: var(--color-accent-soft);
+    color: var(--color-ink);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    margin-block: var(--space-4);
+    font-weight: 600;
+  }
+
+  .site-footer {
+    margin-top: var(--section-y);
+    background-color: var(--color-bg-soft);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-8);
+    padding-block: var(--space-10);
+  }
+
+  .site-footer__name {
+    font-weight: 700;
+    font-size: var(--text-h4);
+  }
+
+  .site-footer__links,
+  .site-footer__legal-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .site-footer__contact {
+    font-style: normal;
+  }
+
+  .site-footer__title {
+    font-size: var(--text-h4);
+    margin-bottom: var(--space-3);
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-ink-soft);
+    font-size: var(--text-small);
+  }
+
+  .site-footer__legal-links {
+    flex-direction: row;
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 60rem) {
+    .site-header__nav {
+      order: 3;
+      flex-basis: 100%;
+    }
+  }
+</style>
