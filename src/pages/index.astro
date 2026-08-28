@@ -1,0 +1,7 @@
+---
+// URL racine '/' : redirection vers la langue détectée, gérée par le
+// middleware (src/middleware.ts). Cette page n'est jamais rendue.
+export const prerender = false;
+
+return Astro.redirect('/fr/', 302);
+---
