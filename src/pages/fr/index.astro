@@ -6,6 +6,7 @@ import AboutTeaser from '../../components/sections/AboutTeaser.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import References from '../../components/sections/References.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
+import heroImage from '../../assets/uploads/1_1-2_mini_mini1.jpg';
 import { getPageWithFallback, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 import { references } from '../../data/references';
 import { withLocale } from '../../lib/locale';
@@ -64,6 +65,7 @@ const ogImage = '/og/accueil.png';
     lead={d.hero?.lead ?? ''}
     ctas={heroCtas}
     valueProp={d.valueProp}
+    image={heroImage}
   />
 
   <UniversCards title={t(lang, 'section.univers')} items={d.univers ?? []} />

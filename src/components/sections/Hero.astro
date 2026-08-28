@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Button from '../ui/Button.astro';
 
 interface Cta {
@@ -13,12 +15,32 @@ interface Props {
   ctas: Cta[];
   /** Phrase de proposition de valeur mise en avant. */
   valueProp?: string;
+  /** Image de fond pleine largeur (accueil). */
+  image?: ImageMetadata;
 }
 
-const { eyebrow, title, lead, ctas, valueProp } = Astro.props;
+const { eyebrow, title, lead, ctas, valueProp, image } = Astro.props;
 ---
 
 <section class="hero">
+  {
+    image && (
+      <div class="hero__media" aria-hidden="true">
+        <Image
+          src={image}
+          alt=""
+          widths={[640, 1024, 1536, 1920]}
+          sizes="100vw"
+          format="avif"
+          loading="eager"
+          fetchpriority="high"
+          class="hero__img"
+        />
+        <div class="hero__scrim"></div>
+      </div>
+    )
+  }
+
   <div class="container hero__inner">
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
     <h1>{title}</h1>
@@ -38,20 +60,56 @@ const { eyebrow, title, lead, ctas, valueProp } = Astro.props;
 
 <style>
   .hero {
+    position: relative;
     padding-block: var(--section-y) calc(var(--section-y) * 0.75);
-    background:
-      radial-gradient(60rem 30rem at 85% -10%, var(--color-primary-soft), transparent 60%),
-      var(--color-bg);
+    background: var(--color-bg);
+    overflow: hidden;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Voile sombre : garantit le contraste du texte sur l'image (WCAG 2.2 AA).
+     Dégradé plus marqué à gauche (zone de texte), plus léger à droite. */
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      rgb(10 28 38 / 0.8) 0%,
+      rgb(10 28 38 / 0.55) 55%,
+      rgb(10 28 38 / 0.3) 100%
+    );
   }
 
   .hero__inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     gap: var(--space-5);
+    max-width: var(--container);
+  }
+
+  .hero .eyebrow {
+    color: var(--color-bg);
+  }
+
+  .hero h1 {
+    color: var(--color-bg);
   }
 
   .hero__lead {
     font-size: var(--text-body-lg);
-    color: var(--color-ink-soft);
+    color: rgb(255 255 255 / 0.92);
     max-width: 45ch;
   }
 
@@ -65,10 +123,23 @@ const { eyebrow, title, lead, ctas, valueProp } = Astro.props;
   .hero__value {
     margin-top: var(--space-6);
     padding-block-start: var(--space-6);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid rgb(255 255 255 / 0.35);
     font-family: var(--font-hand);
     font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
-    color: var(--color-primary);
+    color: var(--color-bg);
     max-width: 30ch;
+  }
+
+  /* Sur image, le bouton secondaire (bordure primary) doit rester lisible :
+     on lui donne un fond sombre translucide. */
+  .hero :global(.button--secondary) {
+    color: var(--color-bg);
+    border-color: var(--color-bg);
+    background-color: rgb(10 28 38 / 0.35);
+  }
+
+  .hero :global(.button--secondary:hover) {
+    background-color: rgb(10 28 38 / 0.55);
+    color: var(--color-bg);
   }
 </style>

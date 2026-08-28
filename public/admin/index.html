@@ -6,9 +6,29 @@
     <title>Édition — Optima Mind</title>
   </head>
   <body>
-    <!-- Decap CMS (éditeur git-based). Version épinglée ; la configuration
-         est servie par /admin/config.yml (public/admin/config.yml). -->
-    <script src="https://unpkg.com/decap-cms@3.15.1/dist/decap-cms.js"></script>
-    <script src="/admin/config.yml"></script>
+    <!-- Chargement différé : la config est parsée depuis /admin/config.yml et
+         base_url est injecté à l'origine courante (le backend Decap exige une
+         origine absolue ; '' retombe silencieusement sur api.netlify.com),
+         puis Decap CMS est chargé avec window.CMS_CONFIG déjà défini. -->
+    <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script>
+      window.__decapBootstrap = (async () => {
+        try {
+          const res = await fetch('/admin/config.yml');
+          const text = await res.text();
+          const config = window.jsyaml.load(text);
+          if (config && config.backend) {
+            config.backend.base_url = window.location.origin;
+            config.backend.auth_endpoint = 'oauth';
+          }
+          window.CMS_CONFIG = config;
+        } catch (err) {
+          console.error('Impossible de charger la configuration Decap :', err);
+        }
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/decap-cms@3.15.1/dist/decap-cms.js';
+        document.body.appendChild(script);
+      })();
+    </script>
   </body>
 </html>

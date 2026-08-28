@@ -42,10 +42,13 @@ h4 {
   text-wrap: balance;
 }
 
+/* H1 : couleur de marque (token --color-primary, 7,5:1 sur blanc — AA).
+   Les sections hero sur image surchargent localement en blanc. */
 h1 {
   font-size: var(--text-display);
   line-height: var(--leading-display);
   letter-spacing: -0.02em;
+  color: var(--color-primary);
 }
 
 h2 {
