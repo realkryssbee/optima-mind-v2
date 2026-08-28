@@ -9,17 +9,17 @@ statique).
 Audit complet archivé : `docs/rapports/lighthouse-mobile-accueil.json`
 (réexécutable avec `npm run lhci:collect && npm run lhci:assert`).
 
-| Critère                                 | Cible         | Mesuré       | Statut |
-| --------------------------------------- | ------------- | ------------ | ------ |
-| Performance                             | ≥ 95          | **99**       | ✅     |
-| Accessibilité                           | ≥ 95          | **100**      | ✅     |
-| Best Practices                          | ≥ 95          | **100**      | ✅     |
-| SEO                                     | ≥ 95          | **100**      | ✅     |
-| LCP                                     | < 1,8 s       | **1,7–1,8 s** (machine locale ; meilleur sur CDN) | ✅ |
-| CLS                                     | < 0,05        | **0**        | ✅     |
-| TBT (proxy INP — aucun script bloquant) | < 200 ms      | **0 ms**     | ✅     |
-| Poids total de la page                  | < 300 Ko      | **125 Ko**   | ✅     |
-| JavaScript envoyé                       | < 100 Ko gzip | **≈ 1,7 Ko** | ✅     |
+| Critère                                 | Cible         | Mesuré                                            | Statut |
+| --------------------------------------- | ------------- | ------------------------------------------------- | ------ |
+| Performance                             | ≥ 95          | **99**                                            | ✅     |
+| Accessibilité                           | ≥ 95          | **100**                                           | ✅     |
+| Best Practices                          | ≥ 95          | **100**                                           | ✅     |
+| SEO                                     | ≥ 95          | **100**                                           | ✅     |
+| LCP                                     | < 1,8 s       | **1,7–1,8 s** (machine locale ; meilleur sur CDN) | ✅     |
+| CLS                                     | < 0,05        | **0**                                             | ✅     |
+| TBT (proxy INP — aucun script bloquant) | < 200 ms      | **0 ms**                                          | ✅     |
+| Poids total de la page                  | < 300 Ko      | **125 Ko**                                        | ✅     |
+| JavaScript envoyé                       | < 100 Ko gzip | **≈ 1,7 Ko**                                      | ✅     |
 
 _INP : non mesurable en lab — l'architecture (≈ 1,7 Ko de JS, zéro script
 bloquant, aucun long task) garantit un INP très inférieur à 200 ms._
