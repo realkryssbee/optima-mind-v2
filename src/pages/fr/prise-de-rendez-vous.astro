@@ -1,0 +1,150 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import Button from '../../components/ui/Button.astro';
+import { rendezVous } from '../../data/content-fr';
+import { SITE } from '../../lib/site';
+
+const lang = 'fr';
+const path = '/prise-de-rendez-vous/';
+const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+
+const title = 'Prendre rendez-vous — Optima Mind';
+const description =
+  'Réservez votre séance individuelle : premier échange de 30 minutes offert, en visioconférence ou en présentiel à Wavre.';
+---
+
+<PageLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={path}
+  usedFallback={usedFallback}
+>
+  <PageHero
+    eyebrow={rendezVous.hero.eyebrow}
+    title={rendezVous.hero.title}
+    lead={rendezVous.hero.lead}
+  />
+
+  <section class="rdv">
+    <div class="container rdv__inner">
+      <div class="rdv__booking">
+        <h2>Réservation en ligne</h2>
+        <p>
+          ⟨À FOURNIR : outil de réservation en ligne (Cal.com) — incrément 5. En attendant,
+          contactez-nous directement.⟩
+        </p>
+        <div class="rdv__actions">
+          <Button href="/fr/contact/">Contactez-nous</Button>
+          <Button href={`mailto:${SITE.email}`} variant="secondary">
+            {SITE.email}
+          </Button>
+        </div>
+      </div>
+
+      <div class="rdv__types">
+        <h2>{rendezVous.types.title}</h2>
+        <p class="rdv__types-sub">{rendezVous.types.subtitle}</p>
+        <ul class="rdv__types-list">
+          {
+            rendezVous.types.items.map((type) => (
+              <li class="rdv__type">
+                <span class="rdv__type-name">{type.name}</span>
+                <span class="rdv__type-duration">{type.duration}</span>
+                <a class="rdv__type-link" href={type.href}>
+                  En savoir plus
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="rdv__lieux">
+        <h2>{rendezVous.lieux.title}</h2>
+        <ul class="rdv__lieux-list">
+          {
+            rendezVous.lieux.items.map((lieu) => (
+              <li class="rdv__lieu">
+                <h3>{lieu.name}</h3>
+                <p>{lieu.address}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+  .rdv {
+    padding-block: var(--section-y);
+  }
+
+  .rdv__inner {
+    display: grid;
+    gap: var(--space-9);
+  }
+
+  .rdv__booking,
+  .rdv__types,
+  .rdv__lieux {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .rdv__booking {
+    padding: var(--space-7);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, var(--color-primary-soft), var(--color-surface) 60%);
+  }
+
+  .rdv__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .rdv__types-list,
+  .rdv__lieux-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: var(--space-5);
+  }
+
+  .rdv__type {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+
+  .rdv__type-name {
+    font-weight: 700;
+  }
+
+  .rdv__type-duration {
+    color: var(--color-ink-soft);
+    font-size: var(--text-small);
+  }
+
+  .rdv__type-link {
+    margin-top: var(--space-2);
+  }
+
+  .rdv__lieu h3 {
+    font-size: var(--text-h4);
+  }
+
+  .rdv__lieu p {
+    color: var(--color-ink-soft);
+  }
+</style>

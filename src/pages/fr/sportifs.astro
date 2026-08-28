@@ -1,0 +1,38 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import Quote from '../../components/sections/Quote.astro';
+import IconList from '../../components/sections/IconList.astro';
+import Offers from '../../components/sections/Offers.astro';
+import Testimonials from '../../components/sections/Testimonials.astro';
+import FinalCta from '../../components/sections/FinalCta.astro';
+import { sportifs, testimonials } from '../../data/content-fr';
+
+const lang = 'fr';
+const path = '/sportifs/';
+const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+
+const title = 'Préparation mentale du sportif — Optima Mind';
+const description =
+  'Accompagnement mental individuel, collectif et entraîneur : confiance, concentration, gestion des émotions et routines de performance.';
+---
+
+<PageLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={path}
+  usedFallback={usedFallback}
+>
+  <PageHero eyebrow={sportifs.hero.eyebrow} title={sportifs.hero.title} lead={sportifs.hero.lead} />
+
+  <Quote text={sportifs.quote.text} source={sportifs.quote.source} />
+
+  <IconList title={sportifs.enjeux.title} items={sportifs.enjeux.items} />
+
+  <Offers title="Les accompagnements" items={sportifs.offers} />
+
+  <Testimonials title="Témoignages" items={testimonials.filter((t) => t.category === 'sport')} />
+
+  <FinalCta title={sportifs.cta.title} lead={sportifs.cta.lead} ctas={sportifs.cta.ctas} />
+</PageLayout>

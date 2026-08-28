@@ -1,0 +1,71 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import IconList from '../../components/sections/IconList.astro';
+import FinalCta from '../../components/sections/FinalCta.astro';
+import { entreprises } from '../../data/content-fr';
+
+const lang = 'fr';
+const path = '/entreprises/';
+const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+
+const title = 'Coaching performance en entreprise — Optima Mind';
+const description =
+  'Clarté stratégique, leadership, résilience et mindset de performance durable pour dirigeants, managers et équipes.';
+---
+
+<PageLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={path}
+  usedFallback={usedFallback}
+>
+  <PageHero
+    eyebrow={entreprises.hero.eyebrow}
+    title={entreprises.hero.title}
+    lead={entreprises.hero.lead}
+    intro={entreprises.hero.intro}
+  />
+
+  <IconList
+    title={entreprises.benefices.title}
+    subtitle={entreprises.benefices.subtitle}
+    items={entreprises.benefices.items}
+  />
+
+  <section class="mission">
+    <div class="container mission__inner">
+      <p class="eyebrow">{entreprises.mission.eyebrow}</p>
+      <h2>{entreprises.mission.title}</h2>
+      {entreprises.mission.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
+
+  <IconList title={entreprises.publicCible.title} items={entreprises.publicCible.items} />
+
+  <IconList
+    title={entreprises.thematiques.title}
+    subtitle={entreprises.thematiques.subtitle}
+    items={entreprises.thematiques.items}
+  />
+
+  <FinalCta title={entreprises.cta.title} lead={entreprises.cta.lead} ctas={entreprises.cta.ctas} />
+</PageLayout>
+
+<style>
+  .mission {
+    padding-block: var(--section-y);
+    background-color: var(--color-bg-soft);
+  }
+
+  .mission__inner {
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--container-narrow);
+  }
+
+  .mission__inner p:not(.eyebrow) {
+    color: var(--color-ink-soft);
+  }
+</style>

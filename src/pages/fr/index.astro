@@ -1,19 +1,23 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
-import Button from '../../components/ui/Button.astro';
-import { t } from '../../lib/i18n';
-import { getRdvHref } from '../../data/nav';
+import Hero from '../../components/sections/Hero.astro';
+import UniversCards from '../../components/sections/UniversCards.astro';
+import AboutTeaser from '../../components/sections/AboutTeaser.astro';
+import Testimonials from '../../components/sections/Testimonials.astro';
+import References from '../../components/sections/References.astro';
+import FinalCta from '../../components/sections/FinalCta.astro';
+import { home, references, testimonials } from '../../data/content-fr';
 
 const lang = 'fr';
 const path = '/';
 
-// Contenu réel servi par fallback rewrite (brief §6) : la page est
-// rendue sous /pl/ tant que la version polonaise n'existe pas.
+// Contenu réel servi par fallback rewrite (brief §6) : la page est rendue
+// sous /pl/ tant que la version polonaise n'existe pas.
 const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
 
 const title = 'Coach mental pour sportif et entreprises Wavre — Optima Mind';
 const description =
-  "La performance durable ne s'improvise pas, elle se construit. Préparation mentale pour sportifs, entraîneurs et entreprises — Wavre, Brabant wallon.";
+  "Coach mental pour sportif et entreprises Wavre. La performance durable ne s'improvise pas, elle se construit. Préparation mentale à Wavre (Brabant wallon).";
 ---
 
 <PageLayout
@@ -23,59 +27,26 @@ const description =
   path={path}
   usedFallback={usedFallback}
 >
-  <section class="hero">
-    <div class="container hero__inner">
-      <p class="eyebrow">Optima Mind — Wavre, Belgique</p>
-      <h1>Le coaching qui transforme votre potentiel</h1>
-      <p class="hero__lead">
-        La performance durable ne s'improvise pas, elle se construit. Une approche structurée,
-        humaine et pragmatique au service des sportifs, des équipes, des entraîneurs et des
-        entreprises.
-      </p>
-      <div class="hero__actions">
-        <Button href={getRdvHref(lang)} size="lg">
-          {t(lang, 'nav.rdv')}
-        </Button>
-        <Button href="/fr/sportifs/" variant="secondary" size="lg">
-          Découvrir l'accompagnement
-        </Button>
-      </div>
-      <p class="hero__note">
-        ⟨À FOURNIR : photo d'Agnieszka (hero), accroche validée, sections univers / témoignages /
-        références — incrément 2⟩
-      </p>
-    </div>
-  </section>
+  <Hero
+    eyebrow={home.hero.eyebrow}
+    title={home.hero.title}
+    lead={home.hero.lead}
+    ctas={home.hero.ctas}
+    valueProp={home.valueProp.title}
+  />
+
+  <UniversCards title="Que proposons-nous ?" items={home.univers} />
+
+  <AboutTeaser
+    eyebrow={home.aboutTeaser.eyebrow}
+    title={home.aboutTeaser.title}
+    paragraphs={home.aboutTeaser.paragraphs}
+    ctas={home.aboutTeaser.ctas}
+  />
+
+  <Testimonials title="Témoignages" items={testimonials.filter((t) => t.featured)} />
+
+  <References title="Nos collaborations" items={references} />
+
+  <FinalCta title={home.finalCta.title} lead={home.finalCta.lead} ctas={home.finalCta.ctas} />
 </PageLayout>
-
-<style>
-  .hero {
-    padding-block: var(--section-y);
-    background:
-      radial-gradient(60rem 30rem at 85% -10%, var(--color-primary-soft), transparent 60%),
-      var(--color-bg);
-  }
-
-  .hero__inner {
-    display: grid;
-    gap: var(--space-5);
-  }
-
-  .hero__lead {
-    font-size: var(--text-body-lg);
-    color: var(--color-ink-soft);
-    max-width: 45ch;
-  }
-
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-    margin-top: var(--space-3);
-  }
-
-  .hero__note {
-    font-size: var(--text-small);
-    color: var(--color-muted);
-  }
-</style>

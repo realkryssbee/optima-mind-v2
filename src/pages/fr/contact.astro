@@ -1,0 +1,124 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import ContactForm from '../../components/forms/ContactForm.astro';
+import { SITE } from '../../lib/site';
+
+const lang = 'fr';
+const path = '/contact/';
+const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+
+const title = 'Contact — Optima Mind, Wavre';
+const description =
+  'Contactez Agnieszka Orchowska : prise de rendez-vous, questions et devis. Clos du Relais 61, 1300 Wavre.';
+
+const mapsUrl =
+  'https://www.google.com/maps/search/?api=1&query=' +
+  encodeURIComponent(`${SITE.address.street}, ${SITE.address.zip} ${SITE.address.city}`);
+---
+
+<PageLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={path}
+  usedFallback={usedFallback}
+>
+  <PageHero eyebrow="Contact" title="Contactez-nous facilement" />
+
+  <div class="contact">
+    <div class="container contact__grid">
+      <ContactForm id="contact" />
+
+      <aside class="contact__info">
+        <h2>Coordonnées</h2>
+
+        <div class="contact__block">
+          <h3>Adresse</h3>
+          <address class="contact__address">
+            <p>{SITE.name}</p>
+            <p>
+              {SITE.address.street}
+              <br />
+              {SITE.address.zip}
+              {SITE.address.city}, {SITE.address.country}
+            </p>
+            <p>
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer"> Voir sur la carte </a>
+            </p>
+          </address>
+        </div>
+
+        <div class="contact__block">
+          <h3>Téléphone & email</h3>
+          <p>
+            <a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a>
+          </p>
+          <p>
+            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          </p>
+        </div>
+
+        <div class="contact__block">
+          <h3>Horaires</h3>
+          <p>{SITE.openingHours}</p>
+        </div>
+
+        <div class="contact__block">
+          <h3>Lieux de séance</h3>
+          <p>En visioconférence ou en présentiel :</p>
+          <ul class="contact__lieux">
+            <li>À domicile — {SITE.address.street}, {SITE.address.zip} {SITE.address.city}</li>
+            <li>À Kampus — Centre de kinésithérapie — Rue de Bruxelles 48/50, 1300 Wavre</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</PageLayout>
+
+<style>
+  .contact {
+    padding-block: var(--section-y);
+  }
+
+  .contact__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+    gap: var(--space-9);
+    align-items: start;
+  }
+
+  .contact__info {
+    display: grid;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-soft);
+  }
+
+  .contact__block h3 {
+    font-size: var(--text-h4);
+    margin-bottom: var(--space-2);
+  }
+
+  .contact__address {
+    font-style: normal;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .contact__lieux {
+    margin: 0;
+    padding-inline-start: var(--space-5);
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  @media (max-width: 48rem) {
+    .contact__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

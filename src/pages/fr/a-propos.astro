@@ -1,0 +1,146 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import FinalCta from '../../components/sections/FinalCta.astro';
+import { apropos } from '../../data/content-fr';
+
+const lang = 'fr';
+const path = '/a-propos/';
+const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+
+const title = 'À propos — Agnieszka Orchowska, Optima Mind';
+const description =
+  'Ingénieure, Green Belt et diplômée en psychologie du sport : un parcours entre terrain et entreprise au service de la performance durable.';
+---
+
+<PageLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={path}
+  usedFallback={usedFallback}
+>
+  <PageHero eyebrow={apropos.hero.eyebrow} title={apropos.hero.title} />
+
+  <div class="apropos">
+    <div class="container apropos__grid">
+      <div class="apropos__portrait" aria-hidden="true">
+        <p>⟨À FOURNIR : portrait d’Agnieszka — ratio 4:5⟩</p>
+      </div>
+      <div class="apropos__sections">
+        {
+          apropos.sections.map((section, i) => (
+            <section class="apropos__section" aria-labelledby={`apropos-section-${i}`}>
+              <h2 id={`apropos-section-${i}`}>{section.title}</h2>
+              {section.paragraphs.map((p) => (
+                <p>{p}</p>
+              ))}
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <section class="formations">
+    <div class="container formations__inner">
+      <h2>{apropos.formations.title}</h2>
+      {
+        apropos.formations.groups.map((group) => (
+          <div class="formations__group">
+            <h3>{group.name}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <FinalCta title={apropos.cta.title} lead={apropos.cta.lead} ctas={apropos.cta.ctas} />
+</PageLayout>
+
+<style>
+  .apropos {
+    padding-block: var(--section-y);
+  }
+
+  .apropos__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .apropos__portrait {
+    position: sticky;
+    top: 6rem;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--color-border);
+    background: linear-gradient(160deg, var(--color-primary-soft), var(--color-surface));
+    display: grid;
+    place-items: center;
+    padding: var(--space-4);
+    color: var(--color-muted);
+    font-size: var(--text-small);
+    text-align: center;
+  }
+
+  .apropos__sections {
+    display: grid;
+    gap: var(--space-9);
+  }
+
+  .apropos__section {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .formations {
+    padding-block: var(--section-y);
+    background-color: var(--color-bg-soft);
+  }
+
+  .formations__inner {
+    display: grid;
+    gap: var(--space-7);
+    max-width: var(--container-narrow);
+  }
+
+  .formations__group {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .formations__group h3 {
+    color: var(--color-primary);
+  }
+
+  .formations__group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .formations__group li {
+    padding-block-start: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 48rem) {
+    .apropos__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .apropos__portrait {
+      position: static;
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>
