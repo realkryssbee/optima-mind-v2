@@ -1,9 +1,9 @@
-# ============================================================
-# Optima Mind — Decap CMS (interface d'édition en français)
-# Le contenu est stocké en Markdown dans le dépôt (src/content/).
-# Déploiement : Vercel + GitHub. L'éditeur (/admin) et les routes
-# OAuth (/oauth, /oauth/callback) sont fournis par l'intégration
-# astro-decap-cms-oauth. Voir README.md (section CMS) pour créer
+﻿# ============================================================
+# Optima Mind â€” Decap CMS (interface d'Ã©dition en franÃ§ais)
+# Le contenu est stockÃ© en Markdown dans le dÃ©pÃ´t (src/content/).
+# DÃ©ploiement : Vercel + GitHub. L'Ã©diteur (/admin) et les routes
+# OAuth (/oauth, /oauth/callback) sont fournis par l'intÃ©gration
+# astro-decap-cms-oauth. Voir README.md (section CMS) pour crÃ©er
 # l'application OAuth GitHub et renseigner les variables
 # OAUTH_GITHUB_CLIENT_ID / OAUTH_GITHUB_CLIENT_SECRET.
 # ============================================================
@@ -17,11 +17,11 @@ backend:
   auth_endpoint: oauth
   auth_endpoint: api/auth
 
-# Publication par pull request → preview Vercel de la branche.
+# Publication par pull request â†’ preview Vercel de la branche.
 publish_mode: editorial_workflow
 
-# Images : uploadées dans le dépôt, optimisées automatiquement au build
-# (Astro/sharp : AVIF/WebP, srcset) — aucun redimensionnement manuel.
+# Images : uploadÃ©es dans le dÃ©pÃ´t, optimisÃ©es automatiquement au build
+# (Astro/sharp : AVIF/WebP, srcset) â€” aucun redimensionnement manuel.
 media_folder: src/assets/uploads
 public_folder: /src/assets/uploads
 
@@ -34,18 +34,18 @@ i18n:
 
 collections:
   # ----------------------------------------------------------
-  # Réglages globaux (NAP, réseaux, SEO par défaut, réservation)
+  # RÃ©glages globaux (NAP, rÃ©seaux, SEO par dÃ©faut, rÃ©servation)
   # ----------------------------------------------------------
   - name: settings
-    label: Réglages
+    label: RÃ©glages
     folder: src/content/settings
     create: false
     delete: false
     fields:
       - { name: name, label: Nom du site, widget: string }
-      - { name: legalName, label: Nom légal (éditeur), widget: string }
+      - { name: legalName, label: Nom lÃ©gal (Ã©diteur), widget: string }
       - { name: legalStatus, label: Statut juridique, widget: string }
-      - { name: bce, label: Numéro d'entreprise (BCE), widget: string }
+      - { name: bce, label: NumÃ©ro d'entreprise (BCE), widget: string }
       - label: Adresse
         name: address
         widget: object
@@ -54,11 +54,11 @@ collections:
           - { name: zip, label: Code postal, widget: string }
           - { name: city, label: Ville, widget: string }
           - { name: country, label: Pays, widget: string }
-      - { name: phone, label: Téléphone, widget: string }
+      - { name: phone, label: TÃ©lÃ©phone, widget: string }
       - { name: email, label: Email public, widget: string }
       - { name: rgpdEmail, label: Email RGPD, widget: string }
-      - { name: openingHours, label: Horaires, widget: string, hint: '⟨À FOURNIR⟩' }
-      - label: Réseaux sociaux
+      - { name: openingHours, label: Horaires, widget: string, hint: 'âŸ¨Ã€ FOURNIRâŸ©' }
+      - label: RÃ©seaux sociaux
         name: social
         widget: object
         required: false
@@ -66,19 +66,19 @@ collections:
           - { name: facebook, label: Facebook, widget: string, required: false }
           - { name: linkedin, label: LinkedIn, widget: string, required: false }
           - { name: instagram, label: Instagram, widget: string, required: false }
-      - label: Valeurs SEO par défaut
+      - label: Valeurs SEO par dÃ©faut
         name: seoDefaults
         widget: object
         fields:
           - { name: title, label: Titre (max 60 car.), widget: string }
           - { name: description, label: Description (max 160 car.), widget: text }
-      - label: Réservation
+      - label: RÃ©servation
         name: booking
         widget: object
         fields:
           - { name: calUrl, label: Lien Cal.com, widget: string, required: false }
           - { name: note, label: Note, widget: text, required: false }
-      - label: Lieux de séance
+      - label: Lieux de sÃ©ance
         name: lieux
         widget: list
         required: false
@@ -87,7 +87,7 @@ collections:
           - { name: address, label: Adresse, widget: string }
 
   # ----------------------------------------------------------
-  # Pages (une entrée par page et par langue)
+  # Pages (une entrÃ©e par page et par langue)
   # ----------------------------------------------------------
   - name: pages
     label: Pages
@@ -100,15 +100,15 @@ collections:
       - label: Type de page
         name: pageType
         widget: select
-        i18n: false
+        i18n: true
         options:
           - { label: Accueil, value: home }
           - { label: Sportifs, value: sportifs }
           - { label: Entreprises, value: entreprises }
-          - { label: À propos, value: apropos }
+          - { label: Ã€ propos, value: apropos }
           - { label: Contact, value: contact }
-          - { label: Mentions légales, value: mentions }
-          - { label: Politique de confidentialité, value: privacy }
+          - { label: Mentions lÃ©gales, value: mentions }
+          - { label: Politique de confidentialitÃ©, value: privacy }
           - { label: Prise de rendez-vous, value: rdv }
       - { name: title, label: Titre de la page (H1), widget: string, i18n: true }
       - label: Hero
@@ -121,13 +121,13 @@ collections:
           - { name: title, label: Titre, widget: string, required: false }
           - { name: lead, label: Accroche, widget: text, required: false }
           - { name: intro, label: Introduction, widget: text, required: false }
-      - label: 'Accueil — proposition de valeur'
+      - label: 'Accueil â€” proposition de valeur'
         name: valueProp
         widget: text
         i18n: true
         required: false
         condition: { field: pageType, value: home }
-      - label: 'Accueil — les deux univers'
+      - label: 'Accueil â€” les deux univers'
         name: univers
         widget: list
         i18n: true
@@ -142,9 +142,9 @@ collections:
             widget: object
             required: false
             fields:
-              - { name: label, label: Libellé, widget: string }
+              - { name: label, label: LibellÃ©, widget: string }
               - { name: href, label: Destination, widget: string }
-      - label: 'Accueil — Libérez votre potentiel'
+      - label: 'Accueil â€” LibÃ©rez votre potentiel'
         name: aboutTeaser
         widget: object
         i18n: true
@@ -159,27 +159,27 @@ collections:
               widget: list,
               field: { label: Paragraphe, name: paragraph, widget: text },
             }
-      - label: 'Accueil — témoignages mis en avant'
+      - label: 'Accueil â€” tÃ©moignages mis en avant'
         name: featuredTestimonials
         widget: list
         i18n: true
         required: false
         condition: { field: pageType, value: home }
         field:
-          label: Témoignage
+          label: TÃ©moignage
           name: author
           widget: relation
           collection: testimonials
           value_field: author
           search_fields: [author, role]
           display_fields: [author, role]
-      - label: 'Accueil — afficher les références'
+      - label: 'Accueil â€” afficher les rÃ©fÃ©rences'
         name: showReferences
         widget: boolean
-        i18n: false
+        i18n: true
         required: false
         condition: { field: pageType, value: home }
-      - label: 'Sportifs — citation'
+      - label: 'Sportifs â€” citation'
         name: quote
         widget: object
         i18n: true
@@ -188,7 +188,7 @@ collections:
         fields:
           - { name: text, label: Citation, widget: text }
           - { name: source, label: Source, widget: string }
-      - label: 'Sportifs — enjeux'
+      - label: 'Sportifs â€” enjeux'
         name: enjeux
         widget: object
         i18n: true
@@ -202,7 +202,7 @@ collections:
               widget: list,
               field: { label: Situation, name: item, widget: text },
             }
-      - label: 'Sportifs — offres'
+      - label: 'Sportifs â€” offres'
         name: offers
         widget: list
         i18n: true
@@ -213,25 +213,25 @@ collections:
           - { name: intro, label: Introduction, widget: text }
           - {
               name: items,
-              label: Points clés,
+              label: Points clÃ©s,
               widget: list,
               field: { label: Point, name: item, widget: string },
             }
-      - label: 'Sportifs — témoignages'
+      - label: 'Sportifs â€” tÃ©moignages'
         name: testimonials
         widget: list
         i18n: true
         required: false
         condition: { field: pageType, value: sportifs }
         field:
-          label: Témoignage
+          label: TÃ©moignage
           name: author
           widget: relation
           collection: testimonials
           value_field: author
           search_fields: [author, role]
           display_fields: [author, role]
-      - label: 'Entreprises — bénéfices'
+      - label: 'Entreprises â€” bÃ©nÃ©fices'
         name: benefices
         widget: object
         i18n: true
@@ -242,11 +242,11 @@ collections:
           - { name: subtitle, label: Sous-titre, widget: string }
           - {
               name: items,
-              label: Bénéfices,
+              label: BÃ©nÃ©fices,
               widget: list,
-              field: { label: Bénéfice, name: item, widget: text },
+              field: { label: BÃ©nÃ©fice, name: item, widget: text },
             }
-      - label: 'Entreprises — mission'
+      - label: 'Entreprises â€” mission'
         name: mission
         widget: object
         i18n: true
@@ -261,7 +261,7 @@ collections:
               widget: list,
               field: { label: Paragraphe, name: paragraph, widget: text },
             }
-      - label: 'Entreprises — public cible'
+      - label: 'Entreprises â€” public cible'
         name: publicCible
         widget: object
         i18n: true
@@ -275,7 +275,7 @@ collections:
               widget: list,
               field: { label: Public, name: item, widget: text },
             }
-      - label: 'Entreprises — thématiques'
+      - label: 'Entreprises â€” thÃ©matiques'
         name: thematiques
         widget: object
         i18n: true
@@ -286,11 +286,11 @@ collections:
           - { name: subtitle, label: Sous-titre, widget: string }
           - {
               name: items,
-              label: Thématiques,
+              label: ThÃ©matiques,
               widget: list,
-              field: { label: Thématique, name: item, widget: text },
+              field: { label: ThÃ©matique, name: item, widget: text },
             }
-      - label: 'À propos — sections'
+      - label: 'Ã€ propos â€” sections'
         name: sections
         widget: list
         i18n: true
@@ -304,7 +304,7 @@ collections:
               widget: list,
               field: { label: Paragraphe, name: paragraph, widget: text },
             }
-      - label: 'À propos — formations'
+      - label: 'Ã€ propos â€” formations'
         name: formations
         widget: object
         i18n: true
@@ -323,7 +323,7 @@ collections:
                   widget: list,
                   field: { label: Formation, name: item, widget: string },
                 }
-      - label: 'Pages légales — corps du texte'
+      - label: 'Pages lÃ©gales â€” corps du texte'
         name: body
         widget: markdown
         i18n: true
@@ -331,7 +331,7 @@ collections:
         condition:
           field: pageType
           value: mentions
-      - label: 'Pages légales — corps du texte'
+      - label: 'Pages lÃ©gales â€” corps du texte'
         name: body
         widget: markdown
         i18n: true
@@ -339,7 +339,7 @@ collections:
         condition:
           field: pageType
           value: privacy
-      - label: Appel à l'action
+      - label: Appel Ã  l'action
         name: cta
         widget: object
         i18n: true
@@ -347,7 +347,7 @@ collections:
         fields:
           - { name: title, label: Titre, widget: string, required: false }
           - { name: lead, label: Accroche, widget: text, required: false }
-      - label: SEO (laisser vide pour les valeurs par défaut)
+      - label: SEO (laisser vide pour les valeurs par dÃ©faut)
         name: seo
         widget: object
         i18n: true
@@ -355,48 +355,54 @@ collections:
         fields:
           - { name: title, label: Titre (max 60 car.), widget: string, required: false }
           - { name: description, label: Description (max 160 car.), widget: text, required: false }
-      - { name: updatedAt, label: Mis à jour, widget: datetime, i18n: false, required: false }
+      - { name: updatedAt, label: Mis Ã  jour, widget: datetime, i18n: true, required: false }
 
   # ----------------------------------------------------------
-  # Témoignages
+  # TÃ©moignages
   # ----------------------------------------------------------
   - name: testimonials
-    label: Témoignages
+    label: TÃ©moignages
     folder: src/content/testimonials
     create: true
     delete: true
     i18n: true
     slug: '{{author}}'
     fields:
-      - { name: author, label: Auteur, widget: string, i18n: false }
-      - { name: role, label: Rôle / club / entreprise, widget: string, i18n: true, required: false }
-      - { name: photo, label: Photo (optionnelle), widget: image, i18n: false, required: false }
-      - { name: quote, label: Témoignage, widget: text, i18n: true }
+      - { name: author, label: Auteur, widget: string, i18n: true }
+      - {
+          name: role,
+          label: RÃ´le / club / entreprise,
+          widget: string,
+          i18n: true,
+          required: false,
+        }
+      - { name: photo, label: Photo (optionnelle), widget: image, i18n: true, required: false }
+      - { name: quote, label: TÃ©moignage, widget: text, i18n: true }
       - {
           name: category,
-          label: Catégorie,
+          label: CatÃ©gorie,
           widget: select,
-          i18n: false,
+          i18n: true,
           options: [{ label: Sport, value: sport }, { label: Entreprise, value: entreprise }],
         }
       - {
           name: featured,
           label: Mis en avant (accueil),
           widget: boolean,
-          i18n: false,
+          i18n: true,
           required: false,
         }
-      - { name: consent, label: Accord écrit de publication, widget: boolean, i18n: false }
+      - { name: consent, label: Accord Ã©crit de publication, widget: boolean, i18n: true }
       - {
           name: publishedAt,
           label: Date de publication,
           widget: datetime,
-          i18n: false,
+          i18n: true,
           required: false,
         }
 
   # ----------------------------------------------------------
-  # FAQ (affichage + données structurées FAQPage)
+  # FAQ (affichage + donnÃ©es structurÃ©es FAQPage)
   # ----------------------------------------------------------
   - name: faq
     label: FAQ
@@ -407,23 +413,23 @@ collections:
     slug: '{{question}}'
     fields:
       - { name: question, label: Question, widget: string, i18n: true }
-      - { name: answer, label: Réponse, widget: text, i18n: true }
+      - { name: answer, label: RÃ©ponse, widget: text, i18n: true }
       - {
           name: category,
-          label: Catégorie,
+          label: CatÃ©gorie,
           widget: select,
-          i18n: false,
+          i18n: true,
           required: false,
           options:
             [
               { label: Sportifs, value: sportifs },
               { label: Entreprises, value: entreprises },
-              { label: Général, value: general },
+              { label: GÃ©nÃ©ral, value: general },
             ],
         }
 
   # ----------------------------------------------------------
-  # Blog (prêt pour une future version — routes et modèle existent)
+  # Blog (prÃªt pour une future version â€” routes et modÃ¨le existent)
   # ----------------------------------------------------------
   - name: blog
     label: Articles
@@ -434,11 +440,11 @@ collections:
     slug: '{{slug}}'
     fields:
       - { name: title, label: Titre, widget: string, i18n: true }
-      - { name: slug, label: Identifiant (URL), widget: string, i18n: false }
+      - { name: slug, label: Identifiant (URL), widget: string, i18n: true }
       - { name: excerpt, label: Extrait, widget: text, i18n: true, required: false }
-      - { name: cover, label: Image de couverture, widget: image, i18n: false, required: false }
-      - { name: publishedAt, label: Date de publication, widget: datetime, i18n: false }
-      - { name: draft, label: Brouillon, widget: boolean, i18n: false, required: false }
+      - { name: cover, label: Image de couverture, widget: image, i18n: true, required: false }
+      - { name: publishedAt, label: Date de publication, widget: datetime, i18n: true }
+      - { name: draft, label: Brouillon, widget: boolean, i18n: true, required: false }
       - label: SEO
         name: seo
         widget: object
