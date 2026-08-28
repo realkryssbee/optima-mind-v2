@@ -195,6 +195,8 @@ const faqSchema = z.object({
 
 const blogPostSchema = z.object({
   title: z.string(),
+  /** Identifiant d'URL (non traduit) — ex. « routine-de-performance ». */
+  slug: z.string(),
   excerpt: z.string().optional(),
   cover: z.string().optional(),
   publishedAt: z.string(),

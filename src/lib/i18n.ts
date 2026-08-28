@@ -39,6 +39,10 @@ const ui = {
     'newsletter.error': 'Une erreur est survenue, veuillez réessayer.',
     'newsletter.rate': 'Trop de demandes, réessayez plus tard.',
     'booking.load': 'Réserver en ligne',
+    'blog.empty': 'Aucun article publié pour le moment — revenez bientôt !',
+    'blog.meta.title': 'Blog — Optima Mind',
+    'blog.meta.description':
+      'Articles et ressources sur la préparation mentale et la performance durable.',
   },
   pl: {
     'skip-link': 'Przejdź do treści',
@@ -69,6 +73,9 @@ const ui = {
     'newsletter.error': 'Wystąpił błąd, spróbuj ponownie.',
     'newsletter.rate': 'Zbyt wiele prób, spróbuj później.',
     'booking.load': 'Zarezerwuj online',
+    'blog.empty': 'Na razie brak opublikowanych artykułów — zajrzyj wkrótce!',
+    'blog.meta.title': 'Blog — Optima Mind',
+    'blog.meta.description': 'Artykuły i materiały o przygotowaniu mentalnym i trwałej wydajności.',
   },
 } as const;
 

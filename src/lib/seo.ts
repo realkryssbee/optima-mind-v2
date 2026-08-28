@@ -131,3 +131,23 @@ export function faqPageJsonLd(
     })),
   };
 }
+
+export function articleJsonLd(options: {
+  title: string;
+  publishedAt: string;
+  excerpt?: string;
+  imageUrl?: string;
+  url: string;
+}): Record<string, unknown> {
+  return {
+    '@context': CONTEXT,
+    '@type': 'Article',
+    headline: options.title,
+    datePublished: options.publishedAt,
+    author: { '@id': `${SITE.domain}/#person` },
+    publisher: { '@id': `${SITE.domain}/#localbusiness` },
+    mainEntityOfPage: options.url,
+    ...(options.excerpt && { description: options.excerpt }),
+    ...(options.imageUrl && { image: options.imageUrl }),
+  };
+}

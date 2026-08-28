@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import PageLayout from '../../../layouts/PageLayout.astro';
+import PageHero from '../../../components/sections/PageHero.astro';
+import { getCollection, getEntry } from 'astro:content';
+import { articleJsonLd, breadcrumbJsonLd } from '../../../lib/seo';
+import { resolveUpload } from '../../../lib/images';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (e) => e.id.endsWith('.fr.md') && !e.data.draft);
+  return posts.map((post) => ({ params: { slug: post.data.slug } }));
+}
+
+const { slug } = Astro.params;
+const lang = 'fr';
+const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+
+const entry = await getEntry('blog', `${slug}.fr.md`);
+if (!entry) throw new Error(`Article introuvable : ${slug}.fr`);
+const { Content } = await render(entry);
+
+const cover = resolveUpload(entry.data.cover);
+const coverImage = cover ? await getImage({ src: cover, width: 1200 }) : undefined;
+
+const title = entry.data.seo?.title ?? entry.data.title;
+const description = entry.data.seo?.description ?? entry.data.excerpt ?? '';
+const path = `/blog/${entry.data.slug}/`;
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Accueil', href: `/${lang}/` },
+    { name: 'Blog', href: `/${lang}/blog/` },
+    { name: entry.data.title, href: path },
+  ]),
+  articleJsonLd({
+    title: entry.data.title,
+    publishedAt: entry.data.publishedAt,
+    excerpt: entry.data.excerpt,
+    imageUrl: coverImage?.src,
+    url: `https://www.optima-mind.com${path}`,
+  }),
+];
+const ogImage = coverImage?.src ?? '/og-default.png';
+
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString('fr-BE', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<PageLayout
+  lang={lang}
+  title={title}
+  description={description}
+  path={path}
+  usedFallback={usedFallback}
+  jsonLd={jsonLd}
+  ogImage={ogImage}
+>
+  <PageHero eyebrow="Blog" title={entry.data.title} />
+
+  <article class="post">
+    <div class="container post__inner">
+      <p class="post__meta">
+        <time datetime={entry.data.publishedAt}>{formatDate(entry.data.publishedAt)}</time>
+      </p>
+
+      {
+        cover && coverImage && (
+          <Image
+            src={cover}
+            alt={entry.data.title}
+            width={1200}
+            format="avif"
+            loading="eager"
+            class="post__cover"
+          />
+        )
+      }
+
+      <div class="post__content">
+        <Content />
+      </div>
+
+      <p class="post__back">
+        <a href={`/${lang}/blog/`}>← Retour au blog</a>
+      </p>
+    </div>
+  </article>
+</PageLayout>
+
+<style>
+  .post {
+    padding-block: var(--section-y);
+  }
+
+  .post__inner {
+    max-width: var(--container-narrow);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .post__meta {
+    color: var(--color-muted);
+    font-size: var(--text-small);
+  }
+
+  .post__cover {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .post__content {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .post__content h2 {
+    font-size: var(--text-h3);
+    margin-top: var(--space-5);
+  }
+
+  .post__content img {
+    border-radius: var(--radius-md);
+  }
+
+  .post__back a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+    font-weight: 600;
+  }
+</style>
