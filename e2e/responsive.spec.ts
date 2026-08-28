@@ -41,3 +41,32 @@ test.describe('Responsive — aucun débordement horizontal', () => {
     }
   }
 });
+
+test.describe('Menu hamburger (mobile)', () => {
+  test('opens and closes with the toggle, aria-expanded and Escape', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/fr/');
+
+    const toggle = page.getByRole('button', { name: /Menu principal/ });
+    const nav = page.locator('#site-nav');
+
+    await expect(toggle).toBeVisible();
+    await expect(nav).toBeHidden();
+
+    await toggle.click();
+    await expect(nav).toBeVisible();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+    await page.keyboard.press('Escape');
+    await expect(nav).toBeHidden();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('nav stays inline on desktop without the toggle', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/fr/');
+
+    await expect(page.getByRole('button', { name: /Menu principal/ })).toBeHidden();
+    await expect(page.locator('#site-nav')).toBeVisible();
+  });
+});
