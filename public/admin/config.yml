@@ -12,8 +12,11 @@ backend:
   name: github
   repo: realkryssbee/optima-mind-v2
   branch: main
-  site_domain: www.optima-mind.com
-  base_url: https://www.optima-mind.com
+  # base_url vide = URL d'authentification relative → suit automatiquement
+  # l'origine de la page (preview Vercel, localhost, futur domaine).
+  # La callback GitHub OAuth doit correspondre à l'origine utilisée
+  # (ex. https://…vercel.app/oauth/callback en preview).
+  base_url: ''
   auth_endpoint: oauth
 
 # Publication par pull request â†’ preview Vercel de la branche.
