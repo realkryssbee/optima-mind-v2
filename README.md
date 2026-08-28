@@ -36,14 +36,14 @@ npm run lhci:assert  # vérifie les budgets (>= 95 sur les 4 catégories)
 
 Copier `.env.example` vers `.env` et renseigner. Les secrets ne sont jamais committés.
 
-| Variable                                              | Usage                                               |
-| ----------------------------------------------------- | --------------------------------------------------- |
-| `PUBLIC_SITE_URL`                                     | URL canonique du site                               |
+| Variable                                              | Usage                                                     |
+| ----------------------------------------------------- | --------------------------------------------------------- |
+| `PUBLIC_SITE_URL`                                     | URL canonique du site                                     |
 | `BREVO_API_KEY`                                       | API Brevo — formulaires, accusés de réception, newsletter |
-| `BREVO_SENDER_EMAIL` / `BREVO_SENDER_NAME`            | Expéditeur des emails transactionnels               |
-| `BREVO_LIST_ID`                                       | Liste Brevo de la newsletter (double opt-in)        |
-| `CONTACT_RECIPIENT_EMAIL`                             | Destinataire du formulaire de contact               |
-| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (région UE) — repli en mémoire sinon  |
+| `BREVO_SENDER_EMAIL` / `BREVO_SENDER_NAME`            | Expéditeur des emails transactionnels                     |
+| `BREVO_LIST_ID`                                       | Liste Brevo de la newsletter (double opt-in)              |
+| `CONTACT_RECIPIENT_EMAIL`                             | Destinataire du formulaire de contact                     |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (région UE) — repli en mémoire sinon        |
 
 La réservation Cal.com se configure dans le CMS (Réglages → Réservation → Lien Cal.com, ex. `agnieszka/individuel`).
 
@@ -87,6 +87,6 @@ src/
 | 3   | CMS Decap + branchement du contenu          | ✅ Livré |
 | 4   | Bilingue FR/PL                              | ✅ Livré |
 | 5   | Formulaires (Brevo) + réservation (Cal.com) | ✅ Livré |
-| 6   | SEO + données structurées + redirections    | —        |
+| 6   | SEO + données structurées + redirections    | ✅ Livré |
 | 7   | Accessibilité + performance                 | —        |
 | 8   | CI/CD Vercel + guides + rapports            | —        |

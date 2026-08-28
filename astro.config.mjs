@@ -39,5 +39,9 @@ export default defineConfig({
       // stricte `script-src 'self'` (vercel.json).
       assetsInlineLimit: 0,
     },
+    ssr: {
+      // @vercel/og charge `fs` dynamiquement : on le laisse hors bundle.
+      external: ['@vercel/og'],
+    },
   },
 });
