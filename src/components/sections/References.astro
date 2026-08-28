@@ -1,0 +1,72 @@
+---
+import { Image } from 'astro:assets';
+import type { Reference } from '../../data/content-fr';
+
+interface Props {
+  title: string;
+  items: Reference[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<section class="references" aria-labelledby="references-title">
+  <div class="container">
+    <h2 class="references__title" id="references-title">{title}</h2>
+    <ul class="references__list">
+      {
+        items.map((ref) => (
+          <li class="references__item">
+            <Image
+              src={ref.src}
+              alt={ref.alt}
+              width={160}
+              format="avif"
+              loading="lazy"
+              class="references__logo"
+            />
+            <span class="visually-hidden">{ref.name}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .references {
+    padding-block: var(--section-y);
+    background-color: var(--color-bg-soft);
+  }
+
+  .references__title {
+    text-align: center;
+    margin-bottom: var(--space-7);
+  }
+
+  .references__list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .references__item {
+    display: grid;
+    place-items: center;
+  }
+
+  .references__logo {
+    max-height: 4.5rem;
+    width: auto;
+    opacity: 0.85;
+    transition: opacity var(--dur) var(--ease-out);
+  }
+
+  .references__logo:hover {
+    opacity: 1;
+  }
+</style>

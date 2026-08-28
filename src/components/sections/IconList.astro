@@ -1,0 +1,62 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+  items: string[];
+}
+
+const { title, subtitle, items } = Astro.props;
+---
+
+<section class="icon-list">
+  <div class="container">
+    {title && <h2>{title}</h2>}
+    {subtitle && <p class="icon-list__subtitle">{subtitle}</p>}
+    <ul class="icon-list__items">
+      {items.map((item) => <li class="icon-list__item">{item}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .icon-list {
+    padding-block: var(--section-y);
+  }
+
+  .icon-list__subtitle {
+    color: var(--color-ink-soft);
+    margin: var(--space-2) 0 var(--space-6);
+  }
+
+  .icon-list__items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .icon-list__item {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+  }
+
+  .icon-list__item::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 1.3rem;
+    height: 1.3rem;
+    margin-top: 0.2rem;
+    border-radius: 50%;
+    background-color: var(--color-primary-soft);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230A5C73' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+    background-size: 0.8rem;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+</style>

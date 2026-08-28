@@ -1,0 +1,38 @@
+---
+interface Props {
+  text: string;
+  source: string;
+}
+
+const { text, source } = Astro.props;
+---
+
+<figure class="quote">
+  <blockquote class="quote__text">
+    <p>« {text} »</p>
+  </blockquote>
+  <figcaption class="quote__source">— {source}</figcaption>
+</figure>
+
+<style>
+  .quote {
+    margin: 0;
+    padding-block: var(--space-8);
+    text-align: center;
+  }
+
+  .quote__text {
+    font-family: var(--font-hand);
+    font-size: clamp(1.6rem, 1.3rem + 1.6vw, 2.4rem);
+    line-height: 1.35;
+    color: var(--color-primary);
+    max-width: 26ch;
+    margin-inline: auto;
+  }
+
+  .quote__source {
+    margin-top: var(--space-4);
+    color: var(--color-ink-soft);
+    font-size: var(--text-small);
+  }
+</style>

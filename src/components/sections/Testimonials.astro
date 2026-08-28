@@ -1,0 +1,94 @@
+---
+import type { Testimonial } from '../../data/content-fr';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  items: Testimonial[];
+}
+
+const { title, subtitle, items } = Astro.props;
+---
+
+<section class="testimonials" aria-labelledby="testimonials-title">
+  <div class="container">
+    <h2 class="testimonials__heading" id="testimonials-title">{title}</h2>
+    {subtitle && <p class="testimonials__subtitle">{subtitle}</p>}
+    <ul class="testimonials__grid">
+      {
+        items.map((t) => (
+          <li>
+            <figure class="testimonials__card">
+              <blockquote class="testimonials__quote">
+                <p>« {t.quote} »</p>
+              </blockquote>
+              <figcaption class="testimonials__author">
+                <p class="testimonials__name">{t.author}</p>
+                {t.role && <p class="testimonials__role">{t.role}</p>}
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    padding-block: var(--section-y);
+  }
+
+  .testimonials__heading {
+    text-align: center;
+  }
+
+  .testimonials__subtitle {
+    text-align: center;
+    color: var(--color-ink-soft);
+    margin: var(--space-2) auto var(--space-8);
+    max-width: 45ch;
+  }
+
+  .testimonials__grid {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: var(--space-6);
+  }
+
+  .testimonials__card {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .testimonials__quote p {
+    font-size: var(--text-body-lg);
+    line-height: 1.6;
+    max-width: none;
+  }
+
+  .testimonials__author {
+    margin-top: auto;
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-4);
+  }
+
+  .testimonials__name {
+    font-weight: 700;
+  }
+
+  .testimonials__role {
+    color: var(--color-ink-soft);
+    font-size: var(--text-small);
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+import type { Card } from '../../data/content-fr';
+
+interface Props {
+  title: string;
+  items: Card[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<section class="univers" aria-labelledby="univers-title">
+  <div class="container">
+    <h2 class="univers__heading" id="univers-title">{title}</h2>
+    <div class="univers__grid">
+      {
+        items.map((card) => (
+          <article class="univers__card">
+            {card.eyebrow && <p class="eyebrow">{card.eyebrow}</p>}
+            <h3 class="univers__card-title">{card.title}</h3>
+            <p class="univers__card-text">{card.text}</p>
+            {card.link && (
+              <a class="univers__card-link" href={card.link.href}>
+                {card.link.label}
+                <span aria-hidden="true"> →</span>
+              </a>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .univers {
+    padding-block: var(--section-y);
+  }
+
+  .univers__heading {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .univers__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-6);
+  }
+
+  .univers__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-7);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, var(--color-primary-soft), var(--color-surface) 55%);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .univers__card-title {
+    font-size: var(--text-h3);
+  }
+
+  .univers__card-text {
+    color: var(--color-ink-soft);
+    flex: 1;
+  }
+
+  .univers__card-link {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-min);
+    font-weight: 600;
+  }
+</style>

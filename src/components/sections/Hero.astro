@@ -1,0 +1,70 @@
+---
+import Button from '../ui/Button.astro';
+import type { Cta } from '../../data/content-fr';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead: string;
+  ctas: Cta[];
+  /** Phrase de proposition de valeur mise en avant. */
+  valueProp?: string;
+}
+
+const { eyebrow, title, lead, ctas, valueProp } = Astro.props;
+---
+
+<section class="hero">
+  <div class="container hero__inner">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    <p class="hero__lead">{lead}</p>
+    <div class="hero__actions">
+      {
+        ctas.map((cta, i) => (
+          <Button href={cta.href} size="lg" variant={i === 0 ? 'primary' : 'secondary'}>
+            {cta.label}
+          </Button>
+        ))
+      }
+    </div>
+    {valueProp && <p class="hero__value">{valueProp}</p>}
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--section-y) calc(var(--section-y) * 0.75);
+    background:
+      radial-gradient(60rem 30rem at 85% -10%, var(--color-primary-soft), transparent 60%),
+      var(--color-bg);
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .hero__lead {
+    font-size: var(--text-body-lg);
+    color: var(--color-ink-soft);
+    max-width: 45ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-3);
+  }
+
+  .hero__value {
+    margin-top: var(--space-6);
+    padding-block-start: var(--space-6);
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-hand);
+    font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+    color: var(--color-primary);
+    max-width: 30ch;
+  }
+</style>

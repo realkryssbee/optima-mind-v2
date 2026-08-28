@@ -1,0 +1,80 @@
+---
+import Button from '../ui/Button.astro';
+import type { Cta } from '../../data/content-fr';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  paragraphs: string[];
+  ctas: Cta[];
+}
+
+const { eyebrow, title, paragraphs, ctas } = Astro.props;
+---
+
+<section class="about-teaser">
+  <div class="container about-teaser__inner">
+    <div class="about-teaser__content">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2>{title}</h2>
+      {paragraphs.map((p) => <p>{p}</p>)}
+      <div class="about-teaser__actions">
+        {
+          ctas.map((cta, i) => (
+            <Button href={cta.href} variant={i === 0 ? 'primary' : 'secondary'}>
+              {cta.label}
+            </Button>
+          ))
+        }
+      </div>
+    </div>
+    <div class="about-teaser__portrait" aria-hidden="true">
+      <p>⟨À FOURNIR : portrait d’Agnieszka — ratio 4:5⟩</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-teaser {
+    padding-block: var(--section-y);
+    background-color: var(--color-bg-soft);
+  }
+
+  .about-teaser__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .about-teaser__content {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .about-teaser__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-3);
+  }
+
+  .about-teaser__portrait {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, var(--color-primary-soft), var(--color-surface));
+    border: 1px dashed var(--color-border);
+    display: grid;
+    place-items: center;
+    padding: var(--space-4);
+    color: var(--color-muted);
+    font-size: var(--text-small);
+    text-align: center;
+  }
+
+  @media (max-width: 48rem) {
+    .about-teaser__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

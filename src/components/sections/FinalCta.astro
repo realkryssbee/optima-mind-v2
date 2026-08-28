@@ -1,0 +1,61 @@
+---
+import Button from '../ui/Button.astro';
+import type { Cta } from '../../data/content-fr';
+
+interface Props {
+  title: string;
+  lead?: string;
+  ctas: Cta[];
+}
+
+const { title, lead, ctas } = Astro.props;
+---
+
+<section class="final-cta">
+  <div class="container final-cta__inner">
+    <h2 class="final-cta__title">{title}</h2>
+    {lead && <p class="final-cta__lead">{lead}</p>}
+    <div class="final-cta__actions">
+      {
+        ctas.map((cta, i) => (
+          <Button href={cta.href} size="lg" variant={i === 0 ? 'primary' : 'secondary'}>
+            {cta.label}
+          </Button>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    padding-block: var(--section-y);
+    background:
+      radial-gradient(40rem 20rem at 20% 120%, var(--color-primary-soft), transparent 60%),
+      var(--color-bg);
+  }
+
+  .final-cta__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .final-cta__title {
+    max-width: 18ch;
+  }
+
+  .final-cta__lead {
+    color: var(--color-ink-soft);
+    max-width: 45ch;
+  }
+
+  .final-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-3);
+  }
+</style>
