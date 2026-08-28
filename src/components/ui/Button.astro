@@ -6,6 +6,8 @@ interface Props {
   size?: 'md' | 'lg';
   ariaLabel?: string;
   class?: string;
+  /** Lien externe : ouvre dans un nouvel onglet (rel="noopener noreferrer"). */
+  external?: boolean;
 }
 
 const {
@@ -15,14 +17,16 @@ const {
   size = 'md',
   ariaLabel,
   class: className,
+  external = false,
 } = Astro.props;
 
 const classes = `button button--${variant} button--${size}${className ? ` ${className}` : ''}`;
+const extAttrs = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 ---
 
 {
   href ? (
-    <a href={href} class={classes} aria-label={ariaLabel}>
+    <a href={href} class={classes} aria-label={ariaLabel} {...extAttrs}>
       <slot />
     </a>
   ) : (

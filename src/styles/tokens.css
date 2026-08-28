@@ -7,29 +7,32 @@
 
 :root {
   /* ---------- Couleurs ----------
-     --color-brand       : identité graphique (logo) — décor uniquement
+     Alignées sur l'app Optima Mind (optima.clixite-prod.cloud) pour une
+     continuité visuelle entre le site et l'app de test psychologique.
+     --color-brand       : marque (bleu profond clixite) — décors, sélection
      --color-cta         : boutons principaux (cyan du logo) — texte sombre AA
-     --color-primary     : liens, titres, secondaires — 7,5:1 sur blanc
-     --color-accent      : ambre — décor uniquement (2,4:1, jamais en texte)
-     --color-accent-strong: texte ambre — 5,9:1 sur blanc */
-  --color-brand: #00b2e7;
+     --color-primary     : liens, titres, secondaires — 5,8:1 sur fond crème
+     --color-accent      : ambre — décor uniquement (jamais en texte)
+     --color-accent-strong: texte ambre — 5,9:1 sur crème */
+  --color-brand: #066aab;
   --color-cta: #00b2e7;
   --color-cta-hover: #00a3d8;
   --color-cta-text: #2c2e3d; /* 5,44:1 sur cyan (AA) */
-  --color-primary: #0a5c73;
-  --color-primary-hover: #08424f;
-  --color-primary-active: #06313b;
-  --color-primary-soft: #e3f3f9;
-  --color-ink: #2c2e3d;
-  --color-ink-soft: #55686f;
-  --color-muted: #5f727f;
-  --color-accent: #d4a017;
+  --color-primary: #066aab;
+  --color-primary-hover: #055a8f;
+  --color-primary-active: #044a77;
+  --color-primary-soft: #e3f1f9;
+  --color-ink: #0b0b0b;
+  --color-ink-soft: #52514e;
+  --color-muted: #6d6c66;
+  --color-accent: #eda100;
   --color-accent-strong: #8a5a00;
   --color-accent-soft: #f6edd8;
-  --color-bg: #ffffff;
-  --color-bg-soft: #f0f3f2;
+  --color-bg: #fcfcfb;
+  --color-bg-soft: #f3f2ec;
   --color-surface: #ffffff;
-  --color-border: #dfe5e8;
+  --color-border: #e1e0d9;
+  --color-navy: #17202c;
   --color-error: #b42318;
   --color-error-soft: #fdecea;
   --color-success: #1b6b4f;

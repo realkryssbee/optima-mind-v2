@@ -17,9 +17,11 @@ interface Props {
   valueProp?: string;
   /** Image de fond pleine largeur (accueil). */
   image?: ImageMetadata;
+  /** CTA secondaire vers l'app de test psychologique (optima.clixite-prod.cloud). */
+  scan?: { label: string; sub?: string; href: string };
 }
 
-const { eyebrow, title, lead, ctas, valueProp, image } = Astro.props;
+const { eyebrow, title, lead, ctas, valueProp, image, scan } = Astro.props;
 ---
 
 <section class="hero">
@@ -55,6 +57,14 @@ const { eyebrow, title, lead, ctas, valueProp, image } = Astro.props;
       }
     </div>
     {valueProp && <p class="hero__value">{valueProp}</p>}
+    {
+      scan && (
+        <a class="hero__scan" href={scan.href} target="_blank" rel="noopener noreferrer">
+          <span class="hero__scan-label">{scan.label}</span>
+          {scan.sub && <span class="hero__scan-sub">{scan.sub}</span>}
+        </a>
+      )
+    }
   </div>
 </section>
 
@@ -85,9 +95,9 @@ const { eyebrow, title, lead, ctas, valueProp, image } = Astro.props;
     inset: 0;
     background: linear-gradient(
       100deg,
-      rgb(10 28 38 / 0.8) 0%,
-      rgb(10 28 38 / 0.55) 55%,
-      rgb(10 28 38 / 0.3) 100%
+      rgb(23 32 44 / 0.82) 0%,
+      rgb(23 32 44 / 0.58) 55%,
+      rgb(23 32 44 / 0.3) 100%
     );
   }
 
@@ -135,11 +145,53 @@ const { eyebrow, title, lead, ctas, valueProp, image } = Astro.props;
   .hero :global(.button--secondary) {
     color: var(--color-bg);
     border-color: var(--color-bg);
-    background-color: rgb(10 28 38 / 0.35);
+    background-color: rgb(23 32 44 / 0.35);
   }
 
   .hero :global(.button--secondary:hover) {
-    background-color: rgb(10 28 38 / 0.55);
+    background-color: rgb(23 32 44 / 0.55);
     color: var(--color-bg);
+  }
+
+  /* CTA « Faire le Scan » — lien vers l'app de test psychologique. */
+  .hero__scan {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    padding: var(--space-3) var(--space-5);
+    border: 1px solid rgb(255 255 255 / 0.45);
+    border-radius: var(--radius-lg);
+    background-color: rgb(23 32 44 / 0.45);
+    color: var(--color-bg);
+    text-decoration: none;
+    transition:
+      background-color var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out);
+  }
+
+  .hero__scan:hover {
+    background-color: rgb(23 32 44 / 0.65);
+    border-color: var(--color-cta);
+  }
+
+  .hero__scan::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--color-cta);
+    box-shadow: 0 0 0 4px rgb(0 178 231 / 0.25);
+  }
+
+  .hero__scan-label {
+    font-weight: 700;
+    font-size: var(--text-body-lg);
+  }
+
+  .hero__scan-sub {
+    display: block;
+    font-size: var(--text-small);
+    color: rgb(255 255 255 / 0.85);
   }
 </style>

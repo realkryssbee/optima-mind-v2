@@ -66,6 +66,11 @@ const ogImage = '/og/accueil.png';
     ctas={heroCtas}
     valueProp={d.valueProp}
     image={heroImage}
+    scan={{
+      label: t(lang, 'cta.scan'),
+      sub: t(lang, 'cta.scan.sub'),
+      href: 'https://optima.clixite-prod.cloud/',
+    }}
   />
 
   <UniversCards title={t(lang, 'section.univers')} items={d.univers ?? []} />
