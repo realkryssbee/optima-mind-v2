@@ -8,6 +8,9 @@ address:
   zip: '1300'
   city: Wavre
   country: Belgique
+geo:
+  lat: 50.7166
+  lng: 4.6056
 phone: +32 473 85 24 65
 email: info@optima-mind.com
 rgpdEmail: aga@optima-mind.com

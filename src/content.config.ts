@@ -58,6 +58,12 @@ const settingsSchema = z.object({
     city: z.string(),
     country: z.string(),
   }),
+  geo: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
   phone: z.string(),
   email: z.string().email(),
   rgpdEmail: z.string().email(),
