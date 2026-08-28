@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /oauth/
 Disallow: /api/
 
 Sitemap: https://www.optima-mind.com/sitemap.xml

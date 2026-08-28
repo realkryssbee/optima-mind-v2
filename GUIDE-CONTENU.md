@@ -20,8 +20,9 @@ l'adresse `https://www.optima-mind.com/admin`).
 
 ## 2. Première connexion
 
-- L'éditeur demande une autorisation GitHub la première fois (créée une seule
-  fois par la personne qui installe le site — voir le README technique).
+- Rendez-vous sur **`https://www.optima-mind.com/admin`**.
+- Cliquez sur **« Login with GitHub »** : GitHub demande une autorisation la
+  première fois (configuration créée une seule fois — voir README technique).
 - Après connexion, vous arrivez sur l'écran d'accueil de l'éditeur avec la
   liste des contenus : **Pages, Témoignages, FAQ, Réglages**.
 

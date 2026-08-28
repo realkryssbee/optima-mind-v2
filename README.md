@@ -76,18 +76,23 @@ src/
 
 ## Déploiement (Vercel + GitHub)
 
-1. **Dépôt GitHub** : créer le dépôt, pousser `main` (voir `admin/config.yml` :
-   renseigner `repo`).
+1. **Dépôt GitHub** : le dépôt `realkryssbee/optima-mind-v2` existe ; pousser
+   `main` (voir `public/admin/config.yml` pour `repo`).
 2. **Projet Vercel** : importer le dépôt (framework Astro auto-détecté) ;
-   variables d'environnement depuis `.env.example` (Brevo, Upstash) dans
-   Réglages → Environment Variables.
-3. **Éditeur Decap** : créer une **GitHub OAuth App** (Settings → Developer
-   settings) et déployer le petit proxy OAuth (ex. `decap-cms-github-oauth`),
-   puis renseigner `base_url`/`auth_endpoint` dans `admin/config.yml`.
+   variables d'environnement depuis `.env.example` (Brevo, Upstash, OAuth).
+3. **Éditeur Decap** (`/admin`) — fourni par l'intégration
+   `astro-decap-cms-oauth` (routes `/oauth` + `/oauth/callback` incluses) :
+   - Créer une **GitHub OAuth App** (Settings → Developer settings → OAuth
+     apps → New OAuth app) : _Homepage URL_ = `https://www.optima-mind.com` ;
+     _Authorization callback URL_ = `https://www.optima-mind.com/oauth/callback`.
+   - Copier **Client ID** et générer un **Client secret**, puis renseigner les
+     variables Vercel `OAUTH_GITHUB_CLIENT_ID` et `OAUTH_GITHUB_CLIENT_SECRET`.
+   - Accès : `https://www.optima-mind.com/admin` (publication par pull request →
+     preview Vercel de la branche).
 4. **Domaine** : ajouter `www.optima-mind.com` + `optima-mind.com` chez Vercel,
    rediriger vers `www`, migrer le DNS depuis l'hébergeur actuel (OVH).
-5. **Redirections** : déjà dans `vercel.json` — vérifier après la bascule avec
-   les commandes de `docs/REDIRECTIONS.md` (§5).
+5. **Redirections** : 301 dans `vercel.json`, 410 dans `src/middleware.ts` —
+   vérifier après la bascule avec `docs/REDIRECTIONS.md` (§5).
 6. **Search Console** : soumettre `https://www.optima-mind.com/sitemap.xml`.
 
 ## Documentation

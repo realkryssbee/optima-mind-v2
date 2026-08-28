@@ -1,17 +1,20 @@
 # ============================================================
 # Optima Mind — Decap CMS (interface d'édition en français)
 # Le contenu est stocké en Markdown dans le dépôt (src/content/).
-# Déploiement : Vercel + GitHub. Voir README.md (section CMS)
-# pour la configuration OAuth GitHub (proxy) à mettre en place.
+# Déploiement : Vercel + GitHub. L'éditeur (/admin) et les routes
+# OAuth (/oauth, /oauth/callback) sont fournis par l'intégration
+# astro-decap-cms-oauth. Voir README.md (section CMS) pour créer
+# l'application OAuth GitHub et renseigner les variables
+# OAUTH_GITHUB_CLIENT_ID / OAUTH_GITHUB_CLIENT_SECRET.
 # ============================================================
 
 backend:
   name: github
-  # ⟨À FOURNIR : dépôt GitHub (org/repo) une fois créé par la cliente ⟩
-  repo: optima-mind/optima-mind.com
+  repo: realkryssbee/optima-mind-v2
   branch: main
-  # Proxy OAuth GitHub (déploiement Vercel) — à configurer :
-  base_url: https://oauth.optima-mind.com
+  site_domain: www.optima-mind.com
+  base_url: https://www.optima-mind.com
+  auth_endpoint: oauth
   auth_endpoint: api/auth
 
 # Publication par pull request → preview Vercel de la branche.
