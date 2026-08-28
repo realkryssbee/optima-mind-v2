@@ -2,6 +2,7 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import Button from '../../components/ui/Button.astro';
+import CalEmbed from '../../components/booking/CalEmbed.astro';
 import { getPage, getSettings } from '../../lib/content';
 import { SITE, SITE_FALLBACK } from '../../lib/site';
 import { withLocale } from '../../lib/locale';
@@ -41,13 +42,21 @@ const types = [
     <div class="container rdv__inner">
       <div class="rdv__booking">
         <h2>Réservation en ligne</h2>
-        <p>{settings.booking.note || '⟨À FOURNIR : lien Cal.com — incrément 5⟩'}</p>
-        <div class="rdv__actions">
-          <Button href={`/${lang}/contact/`}>Contactez-nous</Button>
-          <Button href={`mailto:${settings.email}`} variant="secondary">
-            {settings.email}
-          </Button>
-        </div>
+        {
+          settings.booking.calUrl ? (
+            <CalEmbed calUrl={settings.booking.calUrl} locale={lang} />
+          ) : (
+            <>
+              <p>{settings.booking.note || '⟨À FOURNIR : lien Cal.com⟩'}</p>
+              <div class="rdv__actions">
+                <Button href={`/${lang}/contact/`}>Contactez-nous</Button>
+                <Button href={`mailto:${settings.email}`} variant="secondary">
+                  {settings.email}
+                </Button>
+              </div>
+            </>
+          )
+        }
       </div>
 
       <div class="rdv__types">

@@ -39,11 +39,13 @@ Copier `.env.example` vers `.env` et renseigner. Les secrets ne sont jamais comm
 | Variable                                              | Usage                                               |
 | ----------------------------------------------------- | --------------------------------------------------- |
 | `PUBLIC_SITE_URL`                                     | URL canonique du site                               |
-| `BOOKING_CAL_URL`                                     | URL de l'agenda Cal.com (incrément 5)               |
-| `BREVO_API_KEY`                                       | API Brevo — formulaires et newsletter (incrément 5) |
+| `BREVO_API_KEY`                                       | API Brevo — formulaires, accusés de réception, newsletter |
 | `BREVO_SENDER_EMAIL` / `BREVO_SENDER_NAME`            | Expéditeur des emails transactionnels               |
+| `BREVO_LIST_ID`                                       | Liste Brevo de la newsletter (double opt-in)        |
 | `CONTACT_RECIPIENT_EMAIL`                             | Destinataire du formulaire de contact               |
-| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (région UE)                           |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (région UE) — repli en mémoire sinon  |
+
+La réservation Cal.com se configure dans le CMS (Réglages → Réservation → Lien Cal.com, ex. `agnieszka/individuel`).
 
 ## Architecture
 
@@ -78,13 +80,13 @@ src/
 
 ## Statut des incréments
 
-| #   | Incrément                                   | Statut      |
-| --- | ------------------------------------------- | ----------- |
-| 1   | Socle Astro 5 + design system + CI          | ✅ Livré    |
-| 2   | Pages statiques FR                          | ✅ Livré    |
-| 3   | CMS Decap + branchement du contenu          | ✅ Livré    |
-| 4   | Bilingue FR/PL                              | ✅ Livré    |
-| 5   | Formulaires (Brevo) + réservation (Cal.com) | —           |
-| 6   | SEO + données structurées + redirections    | —           |
-| 7   | Accessibilité + performance                 | —           |
-| 8   | CI/CD Vercel + guides + rapports            | —           |
+| #   | Incrément                                   | Statut   |
+| --- | ------------------------------------------- | -------- |
+| 1   | Socle Astro 5 + design system + CI          | ✅ Livré |
+| 2   | Pages statiques FR                          | ✅ Livré |
+| 3   | CMS Decap + branchement du contenu          | ✅ Livré |
+| 4   | Bilingue FR/PL                              | ✅ Livré |
+| 5   | Formulaires (Brevo) + réservation (Cal.com) | —        |
+| 6   | SEO + données structurées + redirections    | —        |
+| 7   | Accessibilité + performance                 | —        |
+| 8   | CI/CD Vercel + guides + rapports            | —        |

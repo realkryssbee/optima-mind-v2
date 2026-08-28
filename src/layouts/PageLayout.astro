@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import LanguageSwitcher from '../components/seo/LanguageSwitcher.astro';
 import Button from '../components/ui/Button.astro';
+import NewsletterForm from '../components/forms/NewsletterForm.astro';
 import { getNav, getRdvHref } from '../data/nav';
 import { getSettings } from '../lib/content';
 import { t, type Locale } from '../lib/i18n';
@@ -119,6 +120,10 @@ const siteName = settings.name;
       <div class="site-footer__brand">
         <p class="site-footer__name">{siteName}</p>
         <p>{t(lang, 'footer.tagline')}</p>
+      </div>
+
+      <div class="site-footer__newsletter">
+        <NewsletterForm lang={lang} />
       </div>
 
       <nav aria-label={t(lang, 'footer.nav')}>

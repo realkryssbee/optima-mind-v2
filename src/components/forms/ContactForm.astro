@@ -2,12 +2,9 @@
 interface Props {
   /** Id unique du champ (nom HTML). */
   id: string;
-  /** Coordonnées de repli pour la note (avant branchement de l'envoi). */
-  email?: string;
-  phone?: string;
 }
 
-const { id, email, phone } = Astro.props;
+const { id } = Astro.props;
 
 const topics = [
   { value: 'sportif', label: 'Sportif / Individuel' },
@@ -17,7 +14,7 @@ const topics = [
 ] as const;
 ---
 
-<form class="contact-form" method="post" action="/api/contact" novalidate>
+<form class="contact-form" method="post" action="/api/contact/" novalidate>
   <div class="contact-form__grid">
     <div class="contact-form__field">
       <label class="contact-form__label" for={`${id}-firstname`}>
@@ -30,6 +27,7 @@ const topics = [
         type="text"
         autocomplete="given-name"
         required
+        minlength="2"
         maxlength="100"
       />
     </div>
@@ -45,6 +43,7 @@ const topics = [
         type="text"
         autocomplete="family-name"
         required
+        minlength="2"
         maxlength="100"
       />
     </div>
@@ -96,23 +95,77 @@ const topics = [
         name="message"
         rows={6}
         required
+        minlength="10"
         maxlength="3000"></textarea>
     </div>
   </div>
 
-  <!-- Honeypot anti-spam (masqué) — incrément 5 -->
+  <!-- Honeypot anti-spam (masqué) -->
   <div class="contact-form__honeypot" aria-hidden="true">
     <label for={`${id}-website`}>Ce champ doit rester vide</label>
     <input id={`${id}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
   </div>
 
-  <p class="contact-form__note">
-    ⟨À FOURNIR : envoi en ligne du formulaire — incrément 5. En attendant, contactez directement
-    {email ?? 'info@optima-mind.com'} ou {phone ?? '+32 473 85 24 65'}.⟩
-  </p>
+  <p class="contact-form__status" role="status" aria-live="polite" hidden></p>
 
-  <button class="button button--primary" type="submit"> Envoyer </button>
+  <button class="button button--primary contact-form__submit" type="submit"> Envoyer </button>
 </form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('.contact-form');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('.contact-form__status');
+    const submit = form.querySelector<HTMLButtonElement>('.contact-form__submit');
+    const statusTexts = {
+      success: 'Merci ! Votre message a bien été envoyé — nous revenons vers vous sous 24 h.',
+      error:
+        'Une erreur est survenue. Merci de réessayer ou d’écrire directement à info@optima-mind.com.',
+      config:
+        'L’envoi en ligne est en cours de configuration — contactez-nous directement à info@optima-mind.com.',
+      rate: 'Trop de messages envoyés. Merci de réessayer dans quelques minutes.',
+    } as const;
+
+    const showStatus = (text: string) => {
+      if (status) {
+        status.textContent = text;
+        status.hidden = false;
+      }
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      submit?.setAttribute('disabled', '');
+      submit?.setAttribute('aria-busy', 'true');
+      try {
+        const body = new FormData(form);
+        const res = await fetch('/api/contact/', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(body)),
+        });
+        if (res.ok) {
+          showStatus(statusTexts.success);
+          form.reset();
+        } else if (res.status === 429) {
+          showStatus(statusTexts.rate);
+        } else if (res.status === 503) {
+          showStatus(statusTexts.config);
+        } else {
+          showStatus(statusTexts.error);
+        }
+      } catch {
+        showStatus(statusTexts.error);
+      } finally {
+        submit?.removeAttribute('disabled');
+        submit?.removeAttribute('aria-busy');
+      }
+    });
+  }
+</script>
 
 <style>
   .contact-form__grid {
@@ -160,9 +213,12 @@ const topics = [
     overflow: hidden;
   }
 
-  .contact-form__note {
+  .contact-form__status {
     margin-block: var(--space-5);
-    font-size: var(--text-small);
-    color: var(--color-muted);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    background-color: var(--color-success-soft);
+    color: var(--color-success);
   }
 </style>

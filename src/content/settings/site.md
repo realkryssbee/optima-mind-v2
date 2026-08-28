@@ -21,7 +21,7 @@ seoDefaults:
   description: "Coach mental pour sportif et entreprises Wavre. La performance durable ne s'improvise pas, elle se construit."
 booking:
   calUrl: ''
-  note: '⟨À FOURNIR : lien Cal.com — incrément 5⟩'
+  note: '⟨À FOURNIR : lien Cal.com⟩'
 lieux:
   - name: À domicile
     address: Clos du Relais 61, 1300 Wavre

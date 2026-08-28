@@ -1,0 +1,49 @@
+---
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+  /** Lien Cal.com inline, ex. « agnieszka/individuel » (settings.booking.calUrl). */
+  calUrl: string;
+  locale: Locale;
+}
+
+const { calUrl, locale } = Astro.props;
+const config = JSON.stringify({ layout: 'month_view', theme: 'light', locale });
+---
+
+<div class="cal-embed">
+  <button class="button button--primary" type="button" data-cal-load>
+    {t(locale, 'booking.load')}
+  </button>
+  <div class="cal-embed__container" data-cal-container hidden>
+    <div data-cal-link={calUrl} data-cal-config={config}></div>
+  </div>
+</div>
+
+<script>
+  // L'outil Cal.com est chargé à l'interaction (jamais bloquant au
+  // chargement initial — brief §5.1).
+  const button = document.querySelector<HTMLButtonElement>('[data-cal-load]');
+  const container = document.querySelector<HTMLElement>('[data-cal-container]');
+
+  if (button && container) {
+    button.addEventListener('click', () => {
+      if (!document.querySelector('script[data-cal-embed]')) {
+        const script = document.createElement('script');
+        script.dataset.calEmbed = '';
+        script.src = 'https://app.cal.com/embed/embed.js';
+        script.async = true;
+        document.head.appendChild(script);
+      }
+      container.hidden = false;
+      button.hidden = true;
+    });
+  }
+</script>
+
+<style>
+  .cal-embed__container {
+    min-height: 32rem;
+    margin-top: var(--space-4);
+  }
+</style>

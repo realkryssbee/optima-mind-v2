@@ -37,7 +37,7 @@ export const SITE_FALLBACK: Settings = {
   },
   booking: {
     calUrl: '',
-    note: '⟨À FOURNIR : lien Cal.com — incrément 5⟩',
+    note: '⟨À FOURNIR : lien Cal.com⟩',
   },
   lieux: [
     { name: 'À domicile', address: 'Clos du Relais 61, 1300 Wavre' },
