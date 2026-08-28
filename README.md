@@ -72,11 +72,28 @@ src/
 - **Performance** : aucune bibliothèque JS côté client sur les pages de contenu ; polices
   auto-hébergées ; images AVIF/WebP au build (sharp) ; budgets Lighthouse ≥ 95.
 
+## Déploiement (Vercel + GitHub)
+
+1. **Dépôt GitHub** : créer le dépôt, pousser `main` (voir `admin/config.yml` :
+   renseigner `repo`).
+2. **Projet Vercel** : importer le dépôt (framework Astro auto-détecté) ;
+   variables d'environnement depuis `.env.example` (Brevo, Upstash) dans
+   Réglages → Environment Variables.
+3. **Éditeur Decap** : créer une **GitHub OAuth App** (Settings → Developer
+   settings) et déployer le petit proxy OAuth (ex. `decap-cms-github-oauth`),
+   puis renseigner `base_url`/`auth_endpoint` dans `admin/config.yml`.
+4. **Domaine** : ajouter `www.optima-mind.com` + `optima-mind.com` chez Vercel,
+   rediriger vers `www`, migrer le DNS depuis l'hébergeur actuel (OVH).
+5. **Redirections** : déjà dans `vercel.json` — vérifier après la bascule avec
+   les commandes de `docs/REDIRECTIONS.md` (§5).
+6. **Search Console** : soumettre `https://www.optima-mind.com/sitemap.xml`.
+
 ## Documentation
 
-- `GUIDE-CONTENU.md` — guide d'édition rédigé pour Agnieszka (incrément 8).
-- `docs/REDIRECTIONS.md` — plan de redirections WordPress → nouveau site (incrément 6/8).
+- `GUIDE-CONTENU.md` — guide d'édition rédigé pour Agnieszka, en français simple.
+- `docs/REDIRECTIONS.md` — plan de redirections WordPress → nouveau site (301/410).
 - `docs/ETAPE-0.md` — proposition d'architecture validée (stack, modèle CMS, direction artistique).
+- `docs/RAPPORTS.md` — preuves mesurées (Lighthouse mobile + axe-core WCAG 2.2 AA).
 
 ## Statut des incréments
 
@@ -89,4 +106,4 @@ src/
 | 5   | Formulaires (Brevo) + réservation (Cal.com) | ✅ Livré |
 | 6   | SEO + données structurées + redirections    | ✅ Livré |
 | 7   | Accessibilité + performance                 | ✅ Livré |
-| 8   | CI/CD Vercel + guides + rapports            | —        |
+| 8   | CI/CD Vercel + guides + rapports            | ✅ Livré |
