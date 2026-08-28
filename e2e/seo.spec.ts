@@ -40,4 +40,21 @@ test.describe('SEO', () => {
     await expect(page.getByRole('link', { name: 'Accueil' }).first()).toBeVisible();
     await expect(page.getByRole('link', { name: 'Prendre RDV' }).first()).toBeVisible();
   });
+
+  test('removed WordPress demo URLs return 410 Gone', async ({ request }) => {
+    const gonePaths = [
+      '/news/',
+      '/our-news/',
+      '/class/hatha-yoga/',
+      '/category/yoga-studio/',
+      '/author/kryss/',
+      '/wp-content/uploads/x.jpg',
+      '/feed',
+      '/xmlrpc.php',
+    ];
+    for (const path of gonePaths) {
+      const response = await request.get(path);
+      expect(response.status(), path).toBe(410);
+    }
+  });
 });

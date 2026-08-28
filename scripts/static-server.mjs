@@ -28,9 +28,34 @@ const MIME = {
   '.json': 'application/json; charset=utf-8',
 };
 
+// URLs de démo WordPress → 410 (doit rester synchronisé avec
+// src/middleware.ts, qui gère ces statuts en production).
+const GONE_PATTERNS = [
+  /^\/news(\/|$)/,
+  /^\/our-news(\/|$)/,
+  /^\/class(\/|$)/,
+  /^\/class-category(\/|$)/,
+  /^\/category(\/|$)/,
+  /^\/tag(\/|$)/,
+  /^\/author(\/|$)/,
+  /^\/(2018|2019|2020|2021|2022|2023|2024|2025|2026)\//,
+  /^\/wp-/,
+  /^\/wp-booking-calendar/,
+  /^\/feed(\/|$)/,
+  /^\/comments\/feed/,
+  /^\/xmlrpc\.php$/,
+];
+
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? '/', 'http://localhost');
   let pathname = decodeURIComponent(url.pathname);
+
+  // URLs de démo WordPress retirées → 410 Gone.
+  if (GONE_PATTERNS.some((pattern) => pattern.test(pathname))) {
+    res.writeHead(410, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('410 Gone');
+    return;
+  }
 
   // '/' → langue détectée (cookie mémorisé, puis Accept-Language, défaut fr).
   if (pathname === '/') {

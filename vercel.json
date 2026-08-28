@@ -106,20 +106,6 @@
       "source": "/index.php(.*)",
       "destination": "/fr/",
       "statusCode": 301
-    },
-    { "source": "/news(/.*)?", "statusCode": 410 },
-    { "source": "/our-news(/.*)?", "statusCode": 410 },
-    { "source": "/class(/.*)?", "statusCode": 410 },
-    { "source": "/class-category(/.*)?", "statusCode": 410 },
-    { "source": "/category(/.*)?", "statusCode": 410 },
-    { "source": "/tag(/.*)?", "statusCode": 410 },
-    { "source": "/author(/.*)?", "statusCode": 410 },
-    { "source": "/2018/(.*)", "statusCode": 410 },
-    { "source": "/2019/(.*)", "statusCode": 410 },
-    { "source": "/2025/(.*)", "statusCode": 410 },
-    { "source": "/wp-(.*)", "statusCode": 410 },
-    { "source": "/feed", "statusCode": 410 },
-    { "source": "/comments/feed", "statusCode": 410 },
-    { "source": "/xmlrpc.php", "statusCode": 410 }
+    }
   ]
 }

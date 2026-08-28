@@ -1,8 +1,8 @@
 # Plan de redirections — WordPress → nouveau site
 
 Inventaire réalisé depuis les sitemaps Yoast du site actuel (audit 2025-08).
-Appliqué via `vercel.json` (règles `redirects`) ; aucune URL indexée ne doit
-retomber en 404.
+Appliqué via `vercel.json` (301) et le middleware Astro (410) ; aucune URL
+indexée ne doit retomber en 404.
 
 ## 1. Pages réelles migrées (301 — contenu préservé 1:1)
 
@@ -22,7 +22,9 @@ retomber en 404.
 
 Les URLs suivantes proviennent du thème WordPress (thegem) ou de plugins de
 démo : elles ne doivent plus être indexées. Un 410 indique à Google un retrait
-définitif (mieux qu'une 404).
+définitif (mieux qu'une 404). **Implémentation : middleware Astro
+(`src/middleware.ts`, exécuté en périphérie Vercel)** — `vercel.json` ne peut
+pas garantir le statut 410 (et exige `destination` sur chaque redirect).
 
 - Blog : `/news/`, `/our-news/`, les 17 articles de démo (`/2018/…`,
   `/2019/…`, `/2025/10/02/bonjour-tout-le-monde/`), `/category/…`, `/tag/…`
@@ -30,7 +32,7 @@ définitif (mieux qu'une 404).
 - Auteur : `/author/kryss/`
 - Plugin WP Booking Calendar : pages démo `/wp-booking-calendar*`
 - WordPress : `/wp-content/…`, `/wp-includes/…`, `/wp-json/…`, `/feed`,
-  `/comments/feed`, `/xmlrpc.php` (aussi bloqué côté sécurité), `/index.php`
+  `/comments/feed`, `/xmlrpc.php` (aussi bloqué côté sécurité)
 
 ## 3. Motifs génériques (301)
 
