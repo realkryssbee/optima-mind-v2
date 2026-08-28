@@ -5,20 +5,32 @@ import { render } from 'astro:content';
 import PageLayout from '../../../layouts/PageLayout.astro';
 import PageHero from '../../../components/sections/PageHero.astro';
 import { getCollection, getEntry } from 'astro:content';
+import { t, type Locale } from '../../../lib/i18n';
 import { articleJsonLd, breadcrumbJsonLd } from '../../../lib/seo';
 import { resolveUpload } from '../../../lib/images';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', (e) => e.id.endsWith('.fr.md') && !e.data.draft);
-  return posts.map((post) => ({ params: { slug: post.data.slug } }));
+  // Une route par article (fr et pl si traduits) ; le slug est partagé.
+  const posts = await getCollection('blog', (e) => !e.data.draft);
+  const seen = new Set<string>();
+  const slugs: string[] = [];
+  for (const post of posts) {
+    if (!seen.has(post.data.slug)) {
+      seen.add(post.data.slug);
+      slugs.push(post.data.slug);
+    }
+  }
+  return slugs.map((slug) => ({ params: { slug } }));
 }
 
 const { slug } = Astro.params;
-const lang = 'fr';
-const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
+const lang = (Astro.currentLocale ?? 'fr') as Locale;
 
-const entry = await getEntry('blog', `${slug}.fr.md`);
-if (!entry) throw new Error(`Article introuvable : ${slug}.fr`);
+// Entrée de la langue courante, avec repli français (brief §6).
+const entry =
+  (await getEntry('blog', `${slug}.${lang}.md`)) ?? (await getEntry('blog', `${slug}.fr.md`));
+if (!entry) throw new Error(`Article introuvable : ${slug}`);
+const usedFallback = !entry.id.endsWith(`.${lang}.md`);
 const { Content } = await render(entry);
 
 const cover = resolveUpload(entry.data.cover);
@@ -44,7 +56,11 @@ const jsonLd = [
 const ogImage = coverImage?.src ?? '/og-default.png';
 
 const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('fr-BE', { day: 'numeric', month: 'long', year: 'numeric' });
+  new Date(iso).toLocaleDateString(lang === 'fr' ? 'fr-BE' : 'pl-PL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 ---
 
 <PageLayout
@@ -82,7 +98,7 @@ const formatDate = (iso: string) =>
       </div>
 
       <p class="post__back">
-        <a href={`/${lang}/blog/`}>← Retour au blog</a>
+        <a href={`/${lang}/blog/`}>{t(lang, 'blog.back')}</a>
       </p>
     </div>
   </article>

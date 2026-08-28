@@ -6,35 +6,37 @@ import AboutTeaser from '../../components/sections/AboutTeaser.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import References from '../../components/sections/References.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
-import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
+import { getPageWithFallback, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 import { references } from '../../data/references';
 import { withLocale } from '../../lib/locale';
+import { t, type Locale } from '../../lib/i18n';
 import { SITE, SITE_FALLBACK } from '../../lib/site';
 import { localBusinessJsonLd, reviewJsonLd, websiteJsonLd } from '../../lib/seo';
 
-const lang = 'fr';
+// Gabarit multilingue : sert le contenu de la langue courante (/fr/ ou /pl/),
+// avec repli français si la traduction manque (brief §6).
+const lang = (Astro.currentLocale ?? 'fr') as Locale;
 const path = '/';
-const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
-// Fallback (/pl/) : le contenu est FR → canonical vers la version française.
-const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
-
-const entry = await getPage(lang, 'home');
-if (!entry) throw new Error(`Contenu introuvable : home.${lang}`);
+const { entry, usedFallback } = await getPageWithFallback(lang, 'home');
 const d = entry.data;
 const settings = (await getSettings())?.data;
 const site = settings ?? SITE_FALLBACK;
 
+// Fallback (/pl/ sans traduction) : le contenu est FR → canonical vers la
+// version française.
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
+
 const title = d.seo?.title ?? settings?.seoDefaults.title ?? 'Optima Mind';
 const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
 const heroCtas = [
-  { label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` },
-  { label: 'En savoir plus', href: `/${lang}/sportifs/` },
+  { label: t(lang, 'cta.rdv'), href: `/${lang}/prise-de-rendez-vous/` },
+  { label: t(lang, 'cta.learnMore'), href: `/${lang}/sportifs/` },
 ];
 const aboutCtas = [
-  { label: 'Découvrir mon parcours', href: `/${lang}/a-propos/` },
-  { label: 'Contactez-nous', href: `/${lang}/contact/` },
+  { label: t(lang, 'cta.discover'), href: `/${lang}/a-propos/` },
+  { label: t(lang, 'cta.contact'), href: `/${lang}/contact/` },
 ];
-const finalCtas = [{ label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` }];
+const finalCtas = [{ label: t(lang, 'cta.rdv'), href: `/${lang}/prise-de-rendez-vous/` }];
 
 const featured = await getTestimonialsByAuthor(d.featuredTestimonials ?? [], lang);
 
@@ -64,7 +66,7 @@ const ogImage = '/og/accueil.png';
     valueProp={d.valueProp}
   />
 
-  <UniversCards title="Que proposons-nous ?" items={d.univers ?? []} />
+  <UniversCards title={t(lang, 'section.univers')} items={d.univers ?? []} />
 
   {
     d.aboutTeaser && (
@@ -80,7 +82,7 @@ const ogImage = '/og/accueil.png';
   {
     featured.length > 0 && (
       <Testimonials
-        title="Témoignages"
+        title={t(lang, 'section.testimonials')}
         items={featured.map((t) => ({
           quote: t.data.quote,
           author: t.data.author,
@@ -90,11 +92,11 @@ const ogImage = '/og/accueil.png';
     )
   }
 
-  {d.showReferences && <References title="Nos collaborations" items={references} />}
+  {d.showReferences && <References title={t(lang, 'section.references')} items={references} />}
 
   {
     d.cta && (
-      <FinalCta title={d.cta.title ?? 'Prendre rendez-vous'} lead={d.cta.lead} ctas={finalCtas} />
+      <FinalCta title={d.cta.title ?? t(lang, 'cta.rdv')} lead={d.cta.lead} ctas={finalCtas} />
     )
   }
 </PageLayout>

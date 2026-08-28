@@ -7,10 +7,12 @@ interface Offer {
 
 interface Props {
   title: string;
+  /** Libellé de la liste (ex. « Vous apprendrez à : ») — traduit par la page. */
+  subLabel?: string;
   items: Offer[];
 }
 
-const { title, items } = Astro.props;
+const { title, subLabel = 'Vous apprendrez à :', items } = Astro.props;
 ---
 
 <section class="offers" aria-labelledby="offers-title">
@@ -22,7 +24,7 @@ const { title, items } = Astro.props;
           <article class="offers__card">
             <h3 class="offers__card-title">{offer.title}</h3>
             <p class="offers__card-intro">{offer.intro}</p>
-            <h4 class="offers__card-sub">Vous apprendrez à :</h4>
+            <h4 class="offers__card-sub">{subLabel}</h4>
             <ul class="offers__list">
               {offer.items.map((item) => (
                 <li>{item}</li>

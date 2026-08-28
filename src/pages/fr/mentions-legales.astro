@@ -2,21 +2,19 @@
 import { render } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
-import { getPage, getSettings } from '../../lib/content';
+import { getPageWithFallback, getSettings } from '../../lib/content';
 import { withLocale } from '../../lib/locale';
+import { t, type Locale } from '../../lib/i18n';
 import { SITE } from '../../lib/site';
 import { breadcrumbJsonLd } from '../../lib/seo';
 
-const lang = 'fr';
+const lang = (Astro.currentLocale ?? 'fr') as Locale;
 const path = '/mentions-legales/';
-const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
-const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
-
-const entry = await getPage(lang, 'mentions');
-if (!entry) throw new Error(`Contenu introuvable : mentions.${lang}`);
+const { entry, usedFallback } = await getPageWithFallback(lang, 'mentions');
 const d = entry.data;
 const { Content } = await render(entry);
 const settings = (await getSettings())?.data;
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const title = d.seo?.title ?? 'Mentions légales — Optima Mind';
 const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
@@ -24,7 +22,7 @@ const description = d.seo?.description ?? settings?.seoDefaults.description ?? '
 const jsonLd = [
   breadcrumbJsonLd([
     { name: 'Accueil', href: `/${lang}/` },
-    { name: 'Mentions légales', href: path },
+    { name: t(lang, 'footer.mentions'), href: path },
   ]),
 ];
 const ogImage = '/og/mentions-legales.png';

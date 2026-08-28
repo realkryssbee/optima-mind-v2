@@ -4,20 +4,18 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import ContactForm from '../../components/forms/ContactForm.astro';
 import contactBanner from '../../assets/uploads/banner-contacte-moi_2.png';
-import { getPage, getSettings } from '../../lib/content';
+import { getPageWithFallback, getSettings } from '../../lib/content';
 import { SITE, SITE_FALLBACK, telHref } from '../../lib/site';
 import { withLocale } from '../../lib/locale';
+import { t, type Locale } from '../../lib/i18n';
 import { breadcrumbJsonLd } from '../../lib/seo';
 
-const lang = 'fr';
+const lang = (Astro.currentLocale ?? 'fr') as Locale;
 const path = '/contact/';
-const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
-const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
-
-const entry = await getPage(lang, 'contact');
-if (!entry) throw new Error(`Contenu introuvable : contact.${lang}`);
+const { entry, usedFallback } = await getPageWithFallback(lang, 'contact');
 const d = entry.data;
 const settings = (await getSettings())?.data ?? SITE_FALLBACK;
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const title = d.seo?.title ?? 'Contact — Optima Mind';
 const description = d.seo?.description ?? '';
@@ -35,6 +33,13 @@ const mapsUrl =
   encodeURIComponent(
     `${settings.address.street}, ${settings.address.zip} ${settings.address.city}`,
   );
+
+/** Localise les libellés des lieux de séance (réglages non traduits). */
+function localizeLieu(locale: Locale, name: string): string {
+  if (name.includes('Kampus')) return t(locale, 'lieu.kampus');
+  if (name.includes('domicile')) return t(locale, 'lieu.domicile');
+  return name;
+}
 ---
 
 <PageLayout
@@ -63,13 +68,13 @@ const mapsUrl =
 
   <div class="contact">
     <div class="container contact__grid">
-      <ContactForm id="contact" />
+      <ContactForm id="contact" lang={lang} />
 
       <aside class="contact__info">
-        <h2>Coordonnées</h2>
+        <h2>{t(lang, 'contact.coords')}</h2>
 
         <div class="contact__block">
-          <h3>Adresse</h3>
+          <h3>{t(lang, 'contact.address')}</h3>
           <address class="contact__address">
             <p>{settings.name}</p>
             <p>
@@ -79,13 +84,15 @@ const mapsUrl =
               {settings.address.city}, {settings.address.country}
             </p>
             <p>
-              <a href={mapsUrl} target="_blank" rel="noopener noreferrer"> Voir sur la carte </a>
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
+                {t(lang, 'contact.map')}
+              </a>
             </p>
           </address>
         </div>
 
         <div class="contact__block">
-          <h3>Téléphone & email</h3>
+          <h3>{t(lang, 'contact.phoneEmail')}</h3>
           <p>
             <a href={telHref(settings.phone)}>{settings.phone}</a>
           </p>
@@ -95,18 +102,18 @@ const mapsUrl =
         </div>
 
         <div class="contact__block">
-          <h3>Horaires</h3>
+          <h3>{t(lang, 'contact.hours')}</h3>
           <p>{settings.openingHours}</p>
         </div>
 
         <div class="contact__block">
-          <h3>Lieux de séance</h3>
-          <p>En visioconférence ou en présentiel :</p>
+          <h3>{t(lang, 'contact.venues')}</h3>
+          <p>{t(lang, 'contact.modes')}</p>
           <ul class="contact__lieux">
             {
               (settings.lieux ?? []).map((lieu) => (
                 <li>
-                  {lieu.name} — {lieu.address}
+                  {localizeLieu(lang, lieu.name)} — {lieu.address}
                 </li>
               ))
             }

@@ -3,20 +3,18 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import Button from '../../components/ui/Button.astro';
 import CalEmbed from '../../components/booking/CalEmbed.astro';
-import { getPage, getSettings } from '../../lib/content';
+import { getPageWithFallback, getSettings } from '../../lib/content';
 import { SITE, SITE_FALLBACK } from '../../lib/site';
 import { withLocale } from '../../lib/locale';
+import { t, type Locale } from '../../lib/i18n';
 import { breadcrumbJsonLd } from '../../lib/seo';
 
-const lang = 'fr';
+const lang = (Astro.currentLocale ?? 'fr') as Locale;
 const path = '/prise-de-rendez-vous/';
-const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
-const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
-
-const entry = await getPage(lang, 'rdv');
-if (!entry) throw new Error(`Contenu introuvable : rdv.${lang}`);
+const { entry, usedFallback } = await getPageWithFallback(lang, 'rdv');
 const d = entry.data;
 const settings = (await getSettings())?.data ?? SITE_FALLBACK;
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const title = d.seo?.title ?? 'Prendre rendez-vous — Optima Mind';
 const description = d.seo?.description ?? '';
@@ -24,17 +22,24 @@ const description = d.seo?.description ?? '';
 const jsonLd = [
   breadcrumbJsonLd([
     { name: 'Accueil', href: `/${lang}/` },
-    { name: 'Prendre rendez-vous', href: path },
+    { name: t(lang, 'nav.rdv'), href: path },
   ]),
 ];
 const ogImage = '/og/prise-de-rendez-vous.png';
 
 const types = [
-  { name: 'Sportif individuel', duration: '60 min', href: `/${lang}/sportifs/` },
-  { name: 'Équipe sportive', duration: '90 min', href: `/${lang}/sportifs/` },
-  { name: 'Entraîneur', duration: '60 min', href: `/${lang}/sportifs/` },
-  { name: 'Entreprise', duration: '90 min', href: `/${lang}/entreprises/` },
+  { name: t(lang, 'rdv.type.sportif'), duration: '60 min', href: `/${lang}/sportifs/` },
+  { name: t(lang, 'rdv.type.equipe'), duration: '90 min', href: `/${lang}/sportifs/` },
+  { name: t(lang, 'rdv.type.entraineur'), duration: '60 min', href: `/${lang}/sportifs/` },
+  { name: t(lang, 'rdv.type.entreprise'), duration: '90 min', href: `/${lang}/entreprises/` },
 ] as const;
+
+/** Localise les libellés des lieux de séance (réglages non traduits). */
+function localizeLieu(locale: Locale, name: string): string {
+  if (name.includes('Kampus')) return t(locale, 'lieu.kampus');
+  if (name.includes('domicile')) return t(locale, 'lieu.domicile');
+  return name;
+}
 ---
 
 <PageLayout
@@ -52,7 +57,7 @@ const types = [
   <section class="rdv">
     <div class="container rdv__inner">
       <div class="rdv__booking">
-        <h2>Réservation en ligne</h2>
+        <h2>{t(lang, 'rdv.online')}</h2>
         {
           settings.booking.calUrl ? (
             <CalEmbed calUrl={settings.booking.calUrl} locale={lang} />
@@ -60,7 +65,7 @@ const types = [
             <>
               <p>{settings.booking.note || '⟨À FOURNIR : lien Cal.com⟩'}</p>
               <div class="rdv__actions">
-                <Button href={`/${lang}/contact/`}>Contactez-nous</Button>
+                <Button href={`/${lang}/contact/`}>{t(lang, 'cta.contact')}</Button>
                 <Button href={`mailto:${settings.email}`} variant="secondary">
                   {settings.email}
                 </Button>
@@ -71,8 +76,8 @@ const types = [
       </div>
 
       <div class="rdv__types">
-        <h2>Quel accompagnement ?</h2>
-        <p class="rdv__types-sub">⟨À FOURNIR : confirmation des durées et tarifs éventuels⟩</p>
+        <h2>{t(lang, 'rdv.types')}</h2>
+        <p class="rdv__types-sub">{t(lang, 'rdv.duration.note')}</p>
         <ul class="rdv__types-list">
           {
             types.map((type) => (
@@ -80,7 +85,7 @@ const types = [
                 <span class="rdv__type-name">{type.name}</span>
                 <span class="rdv__type-duration">{type.duration}</span>
                 <a class="rdv__type-link" href={type.href}>
-                  En savoir plus
+                  {t(lang, 'cta.learnMore')}
                 </a>
               </li>
             ))
@@ -89,12 +94,12 @@ const types = [
       </div>
 
       <div class="rdv__lieux">
-        <h2>Où nous rencontrer ?</h2>
+        <h2>{t(lang, 'rdv.lieux')}</h2>
         <ul class="rdv__lieux-list">
           {
             (settings.lieux ?? []).map((lieu) => (
               <li class="rdv__lieu">
-                <h3>{lieu.name}</h3>
+                <h3>{localizeLieu(lang, lieu.name)}</h3>
                 <p>{lieu.address}</p>
               </li>
             ))

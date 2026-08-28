@@ -4,27 +4,25 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
 import portrait from '../../assets/uploads/coach_01.jpg';
-import { getPage, getSettings } from '../../lib/content';
+import { getPageWithFallback, getSettings } from '../../lib/content';
 import { withLocale } from '../../lib/locale';
+import { t, type Locale } from '../../lib/i18n';
 import { SITE, SITE_FALLBACK } from '../../lib/site';
 import { breadcrumbJsonLd, personJsonLd } from '../../lib/seo';
 
-const lang = 'fr';
+const lang = (Astro.currentLocale ?? 'fr') as Locale;
 const path = '/a-propos/';
-const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
-const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
-
-const entry = await getPage(lang, 'apropos');
-if (!entry) throw new Error(`Contenu introuvable : apropos.${lang}`);
+const { entry, usedFallback } = await getPageWithFallback(lang, 'apropos');
 const d = entry.data;
 const settings = (await getSettings())?.data;
 const site = settings ?? SITE_FALLBACK;
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const title = d.seo?.title ?? settings?.seoDefaults.title ?? 'Optima Mind';
 const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
 const ctas = [
-  { label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` },
-  { label: 'Contactez-nous', href: `/${lang}/contact/` },
+  { label: t(lang, 'cta.rdv'), href: `/${lang}/prise-de-rendez-vous/` },
+  { label: t(lang, 'cta.contact'), href: `/${lang}/contact/` },
 ];
 
 const jsonLd = [
@@ -97,7 +95,11 @@ const ogImage = '/og/apropos.png';
     )
   }
 
-  {d.cta && <FinalCta title={d.cta.title ?? 'Contactez-nous'} lead={d.cta.lead} ctas={ctas} />}
+  {
+    d.cta && (
+      <FinalCta title={d.cta.title ?? t(lang, 'cta.contact')} lead={d.cta.lead} ctas={ctas} />
+    )
+  }
 </PageLayout>
 
 <style>

@@ -1,24 +1,38 @@
 ---
+import { t, type Locale } from '../../lib/i18n';
+
 interface Props {
   /** Id unique du champ (nom HTML). */
   id: string;
+  /** Langue de l'interface du formulaire (FR/PL). */
+  lang: Locale;
 }
 
-const { id } = Astro.props;
+const { id, lang } = Astro.props;
 
 const topics = [
-  { value: 'sportif', label: 'Sportif / Individuel' },
-  { value: 'equipe', label: 'Équipe sportive' },
-  { value: 'entraineur', label: 'Entraîneur' },
-  { value: 'entreprise', label: 'Entreprise' },
+  { value: 'sportif', label: t(lang, 'form.topic.sportif') },
+  { value: 'equipe', label: t(lang, 'form.topic.equipe') },
+  { value: 'entraineur', label: t(lang, 'form.topic.entraineur') },
+  { value: 'entreprise', label: t(lang, 'form.topic.entreprise') },
 ] as const;
 ---
 
-<form class="contact-form" method="post" action="/api/contact/" novalidate>
+<form
+  class="contact-form"
+  method="post"
+  action="/api/contact/"
+  novalidate
+  data-success={t(lang, 'form.status.success')}
+  data-error={t(lang, 'form.status.error')}
+  data-config={t(lang, 'form.status.config')}
+  data-rate={t(lang, 'form.status.rate')}
+>
   <div class="contact-form__grid">
     <div class="contact-form__field">
       <label class="contact-form__label" for={`${id}-firstname`}>
-        Prénom <span aria-hidden="true">*</span>
+        {t(lang, 'form.firstname')}
+        <span aria-hidden="true">*</span>
       </label>
       <input
         class="contact-form__input"
@@ -34,7 +48,8 @@ const topics = [
 
     <div class="contact-form__field">
       <label class="contact-form__label" for={`${id}-lastname`}>
-        Nom <span aria-hidden="true">*</span>
+        {t(lang, 'form.lastname')}
+        <span aria-hidden="true">*</span>
       </label>
       <input
         class="contact-form__input"
@@ -50,7 +65,8 @@ const topics = [
 
     <div class="contact-form__field">
       <label class="contact-form__label" for={`${id}-email`}>
-        Adresse email <span aria-hidden="true">*</span>
+        {t(lang, 'form.email')}
+        <span aria-hidden="true">*</span>
       </label>
       <input
         class="contact-form__input"
@@ -64,7 +80,7 @@ const topics = [
     </div>
 
     <div class="contact-form__field">
-      <label class="contact-form__label" for={`${id}-phone`}> Téléphone </label>
+      <label class="contact-form__label" for={`${id}-phone`}>{t(lang, 'form.phone')}</label>
       <input
         class="contact-form__input"
         id={`${id}-phone`}
@@ -77,17 +93,21 @@ const topics = [
 
     <div class="contact-form__field contact-form__field--full">
       <label class="contact-form__label" for={`${id}-topic`}>
-        Sujet <span aria-hidden="true">*</span>
+        {t(lang, 'form.topic')}
+        <span aria-hidden="true">*</span>
       </label>
       <select class="contact-form__input" id={`${id}-topic`} name="topic" required>
-        <option value="" selected>Veuillez sélectionner</option>
+        <option value="" selected>
+          {t(lang, 'form.select')}
+        </option>
         {topics.map((t) => <option value={t.value}>{t.label}</option>)}
       </select>
     </div>
 
     <div class="contact-form__field contact-form__field--full">
       <label class="contact-form__label" for={`${id}-message`}>
-        Questions <span aria-hidden="true">*</span>
+        {t(lang, 'form.message')}
+        <span aria-hidden="true">*</span>
       </label>
       <textarea
         class="contact-form__input contact-form__input--textarea"
@@ -100,16 +120,17 @@ const topics = [
     </div>
   </div>
 
-  <!-- Honeypot anti-spam (masqué visuellement, non focusable, sans aria-hidden
-       pour éviter les fausses alertes d'accessibilité) -->
+  <!-- Honeypot anti-spam (masqué visuellement, non focusable) -->
   <div class="contact-form__honeypot">
-    <label for={`${id}-website`}>Ce champ doit rester vide</label>
+    <label for={`${id}-website`}>{t(lang, 'form.honeypot')}</label>
     <input id={`${id}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
   </div>
 
   <p class="contact-form__status" role="status" aria-live="polite" hidden></p>
 
-  <button class="button button--primary contact-form__submit" type="submit"> Envoyer </button>
+  <button class="button button--primary contact-form__submit" type="submit">
+    {t(lang, 'form.submit')}
+  </button>
 </form>
 
 <script>
@@ -117,14 +138,6 @@ const topics = [
   if (form) {
     const status = form.querySelector<HTMLElement>('.contact-form__status');
     const submit = form.querySelector<HTMLButtonElement>('.contact-form__submit');
-    const statusTexts = {
-      success: 'Merci ! Votre message a bien été envoyé — nous revenons vers vous sous 24 h.',
-      error:
-        'Une erreur est survenue. Merci de réessayer ou d’écrire directement à info@optima-mind.com.',
-      config:
-        'L’envoi en ligne est en cours de configuration — contactez-nous directement à info@optima-mind.com.',
-      rate: 'Trop de messages envoyés. Merci de réessayer dans quelques minutes.',
-    } as const;
 
     const showStatus = (text: string) => {
       if (status) {
@@ -149,17 +162,17 @@ const topics = [
           body: JSON.stringify(Object.fromEntries(body)),
         });
         if (res.ok) {
-          showStatus(statusTexts.success);
+          showStatus(form.dataset.success ?? 'OK');
           form.reset();
         } else if (res.status === 429) {
-          showStatus(statusTexts.rate);
+          showStatus(form.dataset.rate ?? '');
         } else if (res.status === 503) {
-          showStatus(statusTexts.config);
+          showStatus(form.dataset.config ?? '');
         } else {
-          showStatus(statusTexts.error);
+          showStatus(form.dataset.error ?? '');
         }
       } catch {
-        showStatus(statusTexts.error);
+        showStatus(form.dataset.error ?? '');
       } finally {
         submit?.removeAttribute('disabled');
         submit?.removeAttribute('aria-busy');

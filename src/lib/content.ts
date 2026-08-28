@@ -1,4 +1,5 @@
 import { getCollection, getEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import type { Locale } from './i18n';
 
 /**
@@ -17,6 +18,21 @@ export function entrySlug(base: string, locale: Locale): string {
 
 export function getPage(locale: Locale, base: string) {
   return getEntry('pages', entrySlug(base, locale));
+}
+
+/**
+ * Entrée de page pour une langue, avec repli français si la traduction
+ * manque (brief §6) : `usedFallback` indique que le contenu servi est FR.
+ */
+export async function getPageWithFallback(
+  locale: Locale,
+  base: string,
+): Promise<{ entry: CollectionEntry<'pages'>; usedFallback: boolean }> {
+  const entry = await getPage(locale, base);
+  if (entry) return { entry, usedFallback: false };
+  const fallback = await getPage('fr', base);
+  if (fallback) return { entry: fallback, usedFallback: true };
+  throw new Error(`Contenu introuvable : ${base}`);
 }
 
 export function getSettings() {

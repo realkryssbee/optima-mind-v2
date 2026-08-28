@@ -4,26 +4,24 @@ import PageHero from '../../components/sections/PageHero.astro';
 import IconList from '../../components/sections/IconList.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
-import { getPage, getSettings, getTestimonialsByAuthor } from '../../lib/content';
+import { getPageWithFallback, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 import { withLocale } from '../../lib/locale';
+import { t, type Locale } from '../../lib/i18n';
 import { SITE } from '../../lib/site';
 import { breadcrumbJsonLd, reviewJsonLd, serviceJsonLd } from '../../lib/seo';
 
-const lang = 'fr';
+const lang = (Astro.currentLocale ?? 'fr') as Locale;
 const path = '/entreprises/';
-const usedFallback = (Astro.currentLocale ?? 'fr') !== lang;
-const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
-
-const entry = await getPage(lang, 'entreprises');
-if (!entry) throw new Error(`Contenu introuvable : entreprises.${lang}`);
+const { entry, usedFallback } = await getPageWithFallback(lang, 'entreprises');
 const d = entry.data;
 const settings = (await getSettings())?.data;
+const canonicalHref = usedFallback ? `${SITE.domain}${withLocale('fr', path)}` : undefined;
 
 const title = d.seo?.title ?? settings?.seoDefaults.title ?? 'Optima Mind';
 const description = d.seo?.description ?? settings?.seoDefaults.description ?? '';
 const ctas = [
-  { label: 'Contactez-nous', href: `/${lang}/contact/` },
-  { label: 'Prendre RDV', href: `/${lang}/prise-de-rendez-vous/` },
+  { label: t(lang, 'cta.contact'), href: `/${lang}/contact/` },
+  { label: t(lang, 'cta.rdv'), href: `/${lang}/prise-de-rendez-vous/` },
 ];
 
 // Témoignages d'entreprises (catégorie « entreprise ») — affichés dès que
@@ -96,7 +94,7 @@ const ogImage = '/og/entreprises.png';
   {
     testimonials.length > 0 && (
       <Testimonials
-        title="Témoignages"
+        title={t(lang, 'section.testimonials')}
         items={testimonials.map((t) => ({
           quote: t.data.quote,
           author: t.data.author,
@@ -106,7 +104,11 @@ const ogImage = '/og/entreprises.png';
     )
   }
 
-  {d.cta && <FinalCta title={d.cta.title ?? 'Contactez-nous'} lead={d.cta.lead} ctas={ctas} />}
+  {
+    d.cta && (
+      <FinalCta title={d.cta.title ?? t(lang, 'cta.contact')} lead={d.cta.lead} ctas={ctas} />
+    )
+  }
 </PageLayout>
 
 <style>
