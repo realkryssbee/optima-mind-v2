@@ -78,6 +78,17 @@ const schema = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${SITE.domain}${ogImage}`} />
+    {
+      // Analytics sans cookie (Plausible, hébergé UE) — chargé en différé,
+      // activé uniquement si PUBLIC_ANALYTICS_DOMAIN est défini.
+      import.meta.env.PUBLIC_ANALYTICS_DOMAIN && (
+        <script
+          defer
+          data-domain={import.meta.env.PUBLIC_ANALYTICS_DOMAIN}
+          src="https://plausible.io/js/script.js"
+        />
+      )
+    }
     <slot name="head" />
   </head>
   <body>
