@@ -95,6 +95,7 @@ const ogImage = '/og/entreprises.png';
     testimonials.length > 0 && (
       <Testimonials
         title={t(lang, 'section.testimonials')}
+        lang={lang}
         items={testimonials.map((t) => ({
           quote: t.data.quote,
           author: t.data.author,

@@ -3,6 +3,7 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import Button from '../../components/ui/Button.astro';
 import CalEmbed from '../../components/booking/CalEmbed.astro';
+import rdvHero from '../../assets/uploads/rdv-coaching-unsplash.jpg';
 import { getPageWithFallback, getSettings } from '../../lib/content';
 import { SITE, SITE_FALLBACK } from '../../lib/site';
 import { withLocale } from '../../lib/locale';
@@ -52,7 +53,7 @@ function localizeLieu(locale: Locale, name: string): string {
   jsonLd={jsonLd}
   ogImage={ogImage}
 >
-  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} />
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} image={rdvHero} />
 
   <section class="rdv">
     <div class="container rdv__inner">

@@ -90,6 +90,7 @@ const ogImage = '/og/accueil.png';
     featured.length > 0 && (
       <Testimonials
         title={t(lang, 'section.testimonials')}
+        lang={lang}
         items={featured.map((t) => ({
           quote: t.data.quote,
           author: t.data.author,

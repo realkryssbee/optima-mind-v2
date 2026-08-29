@@ -1,4 +1,6 @@
 ---
+import { t, type Locale } from '../../lib/i18n';
+
 interface TestimonialItem {
   quote: string;
   author: string;
@@ -9,38 +11,199 @@ interface Props {
   title: string;
   subtitle?: string;
   items: TestimonialItem[];
+  /** Langue pour les libellés d'interface (aria-labels du carrousel). */
+  lang: Locale;
 }
 
-const { title, subtitle, items } = Astro.props;
+const { title, subtitle, items, lang = 'fr' } = Astro.props;
+const slides = items.map((item, i) => ({ ...item, id: i + 1 }));
+const total = slides.length;
+
+/** Initiale de l'auteur (avatar). */
+const initials = slides.map((item) => (item.author.trim()[0] ?? '?').toUpperCase());
 ---
 
-<section class="testimonials" aria-labelledby="testimonials-title">
+<section class="testimonials" aria-labelledby="testimonials-title" data-testimonials>
   <div class="container">
     <h2 class="testimonials__heading" id="testimonials-title">{title}</h2>
     {subtitle && <p class="testimonials__subtitle">{subtitle}</p>}
-    <ul class="testimonials__grid">
-      {
-        items.map((t) => (
-          <li>
-            <figure class="testimonials__card">
-              <blockquote class="testimonials__quote">
-                <p>« {t.quote} »</p>
-              </blockquote>
-              <figcaption class="testimonials__author">
-                <p class="testimonials__name">{t.author}</p>
-                {t.role && <p class="testimonials__role">{t.role}</p>}
-              </figcaption>
-            </figure>
-          </li>
-        ))
-      }
-    </ul>
+
+    {
+      total > 0 && (
+        <div class="testimonials__carousel" data-carousel>
+          <button
+            class="testimonials__arrow testimonials__arrow--prev"
+            type="button"
+            data-prev
+            aria-label={t(lang, 'testimonials.prev')}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <div class="testimonials__viewport">
+            <div class="testimonials__track" data-track>
+              {
+                slides.map((slide, i) => (
+                  <div class="testimonials__slide" role="group" aria-roledescription="slide" aria-label={`${i + 1} sur ${total}`}>
+                    <figure class="testimonials__card">
+                      <svg class="testimonials__quote-mark" width="56" height="56" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M9.6 4C6 6 3.6 9.2 3.6 13.4c0 3.6 2.2 6.1 5.2 6.1 2.6 0 4.6-1.9 4.6-4.4 0-2.4-1.8-4.2-4.2-4.2-.5 0-1 .1-1.3.2.4-2.2 2.1-4.4 3.9-5.6L9.6 4zm10.4 0c-3.6 2-6 5.2-6 9.4 0 3.6 2.2 6.1 5.2 6.1 2.6 0 4.6-1.9 4.6-4.4 0-2.4-1.8-4.2-4.2-4.2-.5 0-1 .1-1.3.2.4-2.2 2.1-4.4 3.9-5.6L20 4z"></path>
+                      </svg>
+                      <blockquote class="testimonials__quote">
+                        <p>{slide.quote}</p>
+                      </blockquote>
+                      <figcaption class="testimonials__author">
+                        <span class="testimonials__avatar" aria-hidden="true">{initials[i]}</span>
+                        <span class="testimonials__author-meta">
+                          <span class="testimonials__name">{slide.author}</span>
+                          {slide.role && <span class="testimonials__role">{slide.role}</span>}
+                        </span>
+                      </figcaption>
+                    </figure>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <button
+            class="testimonials__arrow testimonials__arrow--next"
+            type="button"
+            data-next
+            aria-label={t(lang, 'testimonials.next')}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      )
+    }
+
+    {
+      total > 1 && (
+        <div class="testimonials__dots" data-dots role="tablist" aria-label={t(lang, 'testimonials.choose')}>
+          {
+            slides.map((slide, i) => (
+              <button
+                class="testimonials__dot"
+                type="button"
+                role="tab"
+                data-dot
+                aria-label={`${t(lang, 'testimonials.slide')} ${i + 1}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+              ></button>
+            ))
+          }
+        </div>
+      )
+    }
   </div>
 </section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-testimonials]');
+  if (root) {
+    const track = root.querySelector<HTMLElement>('[data-track]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-next]');
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    if (track && prev && next && dots.length > 0) {
+      const slideCount = dots.length;
+      let index = 0;
+      let autoplay: number | undefined;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const goTo = (i: number) => {
+        index = (i + slideCount) % slideCount;
+        track.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((d, di) => {
+          d.setAttribute('aria-selected', String(di === index));
+          d.classList.toggle('is-active', di === index);
+        });
+        root.setAttribute('data-active', String(index + 1));
+      };
+
+      const startAutoplay = () => {
+        if (reduced) return;
+        stopAutoplay();
+        autoplay = window.setInterval(() => goTo(index + 1), 6000);
+      };
+      const stopAutoplay = () => {
+        if (autoplay) window.clearInterval(autoplay);
+        autoplay = undefined;
+      };
+
+      prev.addEventListener('click', () => {
+        goTo(index - 1);
+        startAutoplay();
+      });
+      next.addEventListener('click', () => {
+        goTo(index + 1);
+        startAutoplay();
+      });
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          goTo(i);
+          startAutoplay();
+        });
+      });
+
+      // Pause au survol / focus ; reprise au départ.
+      root.addEventListener('mouseenter', stopAutoplay);
+      root.addEventListener('mouseleave', startAutoplay);
+      root.addEventListener('focusin', stopAutoplay);
+      root.addEventListener('focusout', startAutoplay);
+
+      // Navigation clavier (flèches) quand le carrousel a le focus.
+      root.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          goTo(index - 1);
+          startAutoplay();
+        } else if (e.key === 'ArrowRight') {
+          goTo(index + 1);
+          startAutoplay();
+        }
+      });
+
+      // Swipe tactile.
+      let startX = 0;
+      track.addEventListener(
+        'pointerdown',
+        (e) => {
+          startX = e.clientX;
+          stopAutoplay();
+        },
+        { passive: true },
+      );
+      track.addEventListener(
+        'pointerup',
+        (e) => {
+          const dx = e.clientX - startX;
+          if (Math.abs(dx) > 48) {
+            goTo(dx < 0 ? index + 1 : index - 1);
+            startAutoplay();
+          } else {
+            startAutoplay();
+          }
+        },
+        { passive: true },
+      );
+
+      goTo(0);
+      startAutoplay();
+    }
+  }
+</script>
 
 <style>
   .testimonials {
     padding-block: var(--section-y);
+    background:
+      radial-gradient(45rem 24rem at 15% 0%, var(--color-primary-soft), transparent 60%),
+      var(--color-bg);
   }
 
   .testimonials__heading {
@@ -54,37 +217,105 @@ const { title, subtitle, items } = Astro.props;
     max-width: 45ch;
   }
 
-  .testimonials__grid {
-    list-style: none;
-    padding: 0;
+  .testimonials__carousel {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: var(--space-6);
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-4);
+    max-width: 52rem;
+    margin-inline: auto;
   }
 
+  .testimonials__viewport {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+
+  .testimonials__track {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .testimonials__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    padding: var(--space-2);
+  }
+
+  /* Module de quote : carte élégante, guillemet en filigrane. */
   .testimonials__card {
+    position: relative;
     margin: 0;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
-    padding: var(--space-6);
+    gap: var(--space-6);
+    padding: clamp(1.75rem, 4vw, 3rem);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background-color: var(--color-surface);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .testimonials__card::after {
+    content: '';
+    position: absolute;
+    inset-inline-end: -3.5rem;
+    inset-block-end: -3.5rem;
+    width: 11rem;
+    height: 11rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-primary-soft), transparent 70%);
+    pointer-events: none;
+  }
+
+  .testimonials__quote-mark {
+    color: var(--color-cta);
+    opacity: 0.9;
+  }
+
+  .testimonials__quote {
+    margin: 0;
   }
 
   .testimonials__quote p {
-    font-size: var(--text-body-lg);
-    line-height: 1.6;
-    max-width: none;
+    font-size: clamp(1.125rem, 1.05rem + 0.6vw, 1.375rem);
+    line-height: 1.65;
+    font-weight: 500;
+    max-width: 46ch;
   }
 
   .testimonials__author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
     margin-top: auto;
+    padding-top: var(--space-5);
     border-top: 1px solid var(--color-border);
-    padding-top: var(--space-4);
+  }
+
+  .testimonials__avatar {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-cta));
+    color: #fff;
+    font-weight: 800;
+    font-size: var(--text-body-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .testimonials__author-meta {
+    display: grid;
+    gap: 0.15rem;
   }
 
   .testimonials__name {
@@ -94,5 +325,76 @@ const { title, subtitle, items } = Astro.props;
   .testimonials__role {
     color: var(--color-ink-soft);
     font-size: var(--text-small);
+  }
+
+  .testimonials__arrow {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    cursor: pointer;
+    transition:
+      background-color var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out),
+      color var(--dur) var(--ease-out);
+  }
+
+  .testimonials__arrow:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-bg);
+  }
+
+  .testimonials__dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .testimonials__dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--color-border);
+    cursor: pointer;
+    transition:
+      background-color var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-out);
+  }
+
+  .testimonials__dot.is-active {
+    background-color: var(--color-cta);
+    transform: scale(1.25);
+  }
+
+  .testimonials__dot:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Mouvement réduit : pas d'autoplay ni de transition. */
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials__track {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 36rem) {
+    .testimonials__carousel {
+      grid-template-columns: 1fr;
+    }
+
+    .testimonials__arrow {
+      display: none;
+    }
   }
 </style>

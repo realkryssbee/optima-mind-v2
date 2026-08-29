@@ -45,6 +45,8 @@
   --font-sans:
     'Montserrat Variable', 'Montserrat', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Titres display : même famille que --font-sans (Montserrat, comme l'app). */
+  --font-display: 'Montserrat Variable', 'Montserrat', ui-sans-serif, system-ui, sans-serif;
   --font-hand: 'Caveat Variable', 'Caveat', cursive;
 
   /* Échelle typographique fluide (mobile-first) */
