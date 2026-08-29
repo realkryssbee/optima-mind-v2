@@ -3,9 +3,11 @@ interface Props {
   title?: string;
   subtitle?: string;
   items: string[];
+  /** Fond alterné (doux) pour aérer la lecture quand 2 sections se suivent. */
+  variant?: 'default' | 'alt';
 }
 
-const { title, subtitle, items } = Astro.props;
+const { title, subtitle, items, variant = 'default' } = Astro.props;
 
 /** Icônes thématiques (une par situation, dans l'ordre du CMS). */
 const icons = [
@@ -29,7 +31,7 @@ const icons = [
 const fallbackIcon = icons[icons.length - 1];
 ---
 
-<section class="icon-list">
+<section class={`icon-list icon-list--${variant}`}>
   <div class="container">
     {title && <h2 class="icon-list__title">{title}</h2>}
     {subtitle && <p class="icon-list__subtitle">{subtitle}</p>}
@@ -51,24 +53,33 @@ const fallbackIcon = icons[icons.length - 1];
     padding-block: var(--section-y);
   }
 
+  .icon-list--alt {
+    background-color: var(--color-bg-soft);
+    border-block: 1px solid var(--color-border);
+  }
+
   .icon-list__title {
     text-align: center;
+    margin-bottom: var(--space-3);
   }
 
   .icon-list__subtitle {
     color: var(--color-ink-soft);
-    margin: var(--space-2) auto var(--space-8);
+    margin: 0 auto var(--space-9);
     text-align: center;
-    max-width: 45ch;
+    max-width: 52ch;
+    font-size: var(--text-body-lg);
   }
 
+  /* Grille équilibrée sur 2 colonnes (3×2 pour 6 blocs, 2×2 pour 4).
+     Mobile : 1 colonne. */
   .icon-list__items {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-    gap: var(--space-5);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
   }
 
   .icon-list__item {
@@ -76,7 +87,7 @@ const fallbackIcon = icons[icons.length - 1];
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-4);
-    padding: var(--space-6);
+    padding: var(--space-7);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background: linear-gradient(180deg, var(--color-primary-soft) 0%, var(--color-surface) 7rem);
@@ -102,8 +113,14 @@ const fallbackIcon = icons[icons.length - 1];
 
   .icon-list__text {
     font-size: var(--text-body);
-    line-height: 1.65;
+    line-height: 1.7;
     font-weight: 500;
     max-width: none;
+  }
+
+  @media (max-width: 48rem) {
+    .icon-list__items {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
