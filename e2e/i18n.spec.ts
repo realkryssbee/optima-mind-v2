@@ -54,6 +54,8 @@ test.describe('i18n (FR/PL)', () => {
 
   test('language switcher keeps the current page on the other locale', async ({ page }) => {
     await page.goto('/fr/sportifs/');
+    // Le sélecteur de langue est un menu déroulant : on l'ouvre puis on choisit PL.
+    await page.locator('[data-lang-switcher] .lang-switcher__trigger').click();
     await page.locator('[data-lang-switch][data-lang="pl"]').click();
     await expect(page).toHaveURL(/\/pl\/sportifs\//);
   });

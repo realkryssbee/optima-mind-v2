@@ -86,6 +86,27 @@ const siteName = settings.name;
             ))
           }
         </ul>
+
+        <!-- CTA : dans le panneau mobile uniquement (masqués du header <= 60rem). -->
+        <div class="site-header__nav-ctas">
+          <Button
+            href="https://optima.clixite-prod.cloud/"
+            external
+            variant="primary"
+            size="lg"
+            class="site-header__nav-cta"
+          >
+            {t(lang, 'cta.scan')}
+          </Button>
+          <Button
+            href={rdvHref}
+            variant="secondary"
+            size="lg"
+            class="site-header__nav-cta"
+          >
+            {t(lang, 'nav.rdv')}
+          </Button>
+        </div>
       </nav>
 
       <LanguageSwitcher lang={lang} path={path} />
@@ -392,6 +413,12 @@ const siteName = settings.name;
     box-shadow: inset 0 -2px 0 var(--color-primary);
   }
 
+  /* CTA du panneau mobile : masqués sur desktop (les CTA du header
+     prennent le relais), affichés uniquement dans le panneau <= 60rem. */
+  .site-header__nav-ctas {
+    display: none;
+  }
+
   .fallback-notice {
     background: var(--color-accent-soft);
     color: var(--color-ink);
@@ -489,10 +516,15 @@ const siteName = settings.name;
   }
 
   /* <= 60rem : menu hamburger — la navigation devient un panneau
-     masqué par défaut, ouvert par le bouton (aria-expanded). */
+     masqué par défaut, ouvert par le bouton (aria-expanded).
+     Les CTA du header sont déplacés dans le panneau mobile. */
   @media (max-width: 60rem) {
     .site-header__toggle {
       display: inline-flex;
+    }
+
+    .site-header__ctas {
+      display: none;
     }
 
     .site-header__nav {
@@ -501,11 +533,24 @@ const siteName = settings.name;
       display: none;
       margin-inline-start: 0;
       border-top: 1px solid var(--color-border);
-      padding-block-start: var(--space-3);
+      padding-block-start: var(--space-4);
     }
 
     .site-header__nav.is-open {
       display: block;
+      /* Panneau flottant : fond opaque + ombre pour se détacher du contenu. */
+      position: absolute;
+      inset-inline: 0;
+      top: 100%;
+      z-index: var(--z-header);
+      background-color: var(--color-bg);
+      box-shadow: var(--shadow-lg);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding-inline: var(--gutter);
+      padding-block: var(--space-5) var(--space-7);
+      max-height: calc(100dvh - 4.5rem);
+      overflow-y: auto;
     }
 
     .site-header__nav-list {
@@ -514,6 +559,32 @@ const siteName = settings.name;
     }
 
     .site-header__nav-link {
+      width: 100%;
+      min-height: 3.25rem; /* zone tactile confortable (WCAG 2.2 — 2.5.8) */
+      padding-inline: var(--space-3);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-body-lg);
+    }
+
+    .site-header__nav-link:hover {
+      background-color: var(--color-primary-soft);
+    }
+
+    .site-header__nav-link[aria-current='page'] {
+      background-color: var(--color-primary-soft);
+      box-shadow: none;
+    }
+
+    /* CTA du panneau mobile. */
+    .site-header__nav-ctas {
+      display: grid;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+      padding-top: var(--space-5);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .site-header__nav-ctas :global(.button) {
       width: 100%;
     }
   }
@@ -541,11 +612,6 @@ const siteName = settings.name;
 
     .site-header__nav-list {
       gap: var(--space-2);
-    }
-
-    .site-header__nav-link {
-      padding-inline: var(--space-1);
-      font-size: var(--text-small);
     }
   }
 </style>

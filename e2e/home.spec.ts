@@ -6,6 +6,8 @@ test.describe('Home', () => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Navigation' })).toHaveCount(2);
     await expect(page.getByRole('link', { name: 'Prendre RDV' }).first()).toBeVisible();
+    // Sélecteur de langue : ouvrir le menu puis vérifier les langues proposées.
+    await page.locator('[data-lang-switcher] .lang-switcher__trigger').click();
     await expect(page.getByRole('link', { name: /Polski/ }).first()).toBeVisible();
   });
 
