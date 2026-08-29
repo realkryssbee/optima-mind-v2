@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import Quote from '../../components/sections/Quote.astro';
@@ -66,19 +65,7 @@ const ogImage = '/og/sportifs.png';
   jsonLd={jsonLd}
   ogImage={ogImage}
 >
-  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} />
-
-  <figure class="banner">
-    <Image
-      src={sportifsBanner}
-      alt=""
-      widths={[480, 800, 1200, 1584]}
-      sizes="100vw"
-      format="avif"
-      loading="lazy"
-      class="banner__img"
-    />
-  </figure>
+  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} image={sportifsBanner} />
 
   {d.quote && <Quote text={d.quote.text} source={d.quote.source} />}
 
