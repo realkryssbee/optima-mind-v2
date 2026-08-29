@@ -1,9 +1,13 @@
 ---
+import { Image } from 'astro:assets';
 import PageLayout from '../../layouts/PageLayout.astro';
 import PageHero from '../../components/sections/PageHero.astro';
 import IconList from '../../components/sections/IconList.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import FinalCta from '../../components/sections/FinalCta.astro';
+import entreprisesHero from '../../assets/uploads/entreprises-hero-unsplash.jpg';
+import entreprisesMission from '../../assets/uploads/entreprises-mission-unsplash.jpg';
+import entreprisesBanner from '../../assets/uploads/entreprises-banner-unsplash.jpg';
 import { getPageWithFallback, getSettings, getTestimonialsByAuthor } from '../../lib/content';
 import { withLocale } from '../../lib/locale';
 import { t, type Locale } from '../../lib/i18n';
@@ -53,7 +57,13 @@ const ogImage = '/og/entreprises.png';
   jsonLd={jsonLd}
   ogImage={ogImage}
 >
-  <PageHero eyebrow={d.hero?.eyebrow} title={d.title} lead={d.hero?.lead} intro={d.hero?.intro} />
+  <PageHero
+    eyebrow={d.hero?.eyebrow}
+    title={d.title}
+    lead={d.hero?.lead}
+    intro={d.hero?.intro}
+    image={entreprisesHero}
+  />
 
   {
     d.benefices && (
@@ -68,12 +78,25 @@ const ogImage = '/og/entreprises.png';
   {
     d.mission && (
       <section class="mission">
-        <div class="container mission__inner">
-          <p class="eyebrow">{d.mission.eyebrow}</p>
-          <h2>{d.mission.title}</h2>
-          {d.mission.paragraphs.map((p) => (
-            <p>{p}</p>
-          ))}
+        <div class="container mission__grid">
+          <div class="mission__text">
+            <p class="eyebrow">{d.mission.eyebrow}</p>
+            <h2>{d.mission.title}</h2>
+            {d.mission.paragraphs.map((p) => (
+              <p>{p}</p>
+            ))}
+          </div>
+          <figure class="mission__media">
+            <Image
+              src={entreprisesMission}
+              alt=""
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 60rem) 40vw, 100vw"
+              format="avif"
+              loading="lazy"
+              class="mission__img"
+            />
+          </figure>
         </div>
       </section>
     )
@@ -90,6 +113,18 @@ const ogImage = '/og/entreprises.png';
       />
     )
   }
+
+  <figure class="bande">
+    <Image
+      src={entreprisesBanner}
+      alt=""
+      widths={[480, 800, 1200, 1920]}
+      sizes="100vw"
+      format="avif"
+      loading="lazy"
+      class="bande__img"
+    />
+  </figure>
 
   {
     testimonials.length > 0 && (
@@ -118,13 +153,48 @@ const ogImage = '/og/entreprises.png';
     background-color: var(--color-bg-soft);
   }
 
-  .mission__inner {
+  .mission__grid {
     display: grid;
-    gap: var(--space-4);
-    max-width: var(--container-narrow);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: var(--space-9);
+    align-items: center;
   }
 
-  .mission__inner p:not(.eyebrow) {
+  .mission__text {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .mission__text p:not(.eyebrow) {
     color: var(--color-ink-soft);
+  }
+
+  .mission__media {
+    margin: 0;
+  }
+
+  .mission__img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  @media (max-width: 48rem) {
+    .mission__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Bandeau image pleine largeur (respiration visuelle). */
+  .bande {
+    margin: 0;
+  }
+
+  .bande__img {
+    width: 100%;
+    height: auto;
+    max-height: 26rem;
+    object-fit: cover;
   }
 </style>
