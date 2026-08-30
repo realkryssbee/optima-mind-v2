@@ -9,6 +9,8 @@ dist/
 .env
 .env.*
 !.env.example
+# Identifiants NAS (jamais commités)
+scripts/nas-credentials.json
 
 # Tests
 test-results/
