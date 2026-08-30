@@ -8,6 +8,10 @@ export default defineConfig({
   // Canonical : le site actuel utilise www (audit 2025-08).
   site: 'https://www.optima-mind.com',
 
+  // Base de déploiement : vide sur Vercel (racine), '/optima-mind/' quand on
+  // sert le site en sous-dossier sur le NAS (dev.kryssbee.com/optima-mind/).
+  base: process.env.ASTRO_BASE ?? '/',
+
   // Statique par défaut (Astro 5.18+) ; seules les routes marquées
   // `prerender = false` (redirection de langue, API) passent en on-demand.
   adapter: vercel(),

@@ -27,5 +27,8 @@ Thumbs.db
 # Working files (audit captures, local scripts)
 _research/
 
+# Build de déploiement NAS (Web Station) — reconstruit localement
+nas-deploy/
+
 # Images de démo du thème de l'ancien site (non utilisées — restent en local)
 src/assets/uploads/1-1.png
