@@ -1,7 +1,7 @@
-import { RESOURCES } from '../data.js';
-import { TEST_CATALOG } from '../fourc-content.js';
-import { escapeHTML, todayISO } from '../utils.js';
-import { icon } from './icons.js';
+import { RESOURCES } from '../data.js?v=7';
+import { TEST_CATALOG } from '../fourc-content.js?v=7';
+import { escapeHTML, todayISO } from '../utils.js?v=7';
+import { icon } from './icons.js?v=7';
 
 export function sessionSheet(athlete) {
   return {

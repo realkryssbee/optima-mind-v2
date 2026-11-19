@@ -1,34 +1,34 @@
-import { store } from './store.js';
-import { DIMENSIONS, ENTRY_TYPES, getEntryType } from './data.js';
-import { formatScore } from './scoring.js';
-import { clamp, escapeHTML, todayISO } from './utils.js';
-import { icon } from './ui/icons.js';
-import { contextualQuestion } from './ui/carnet.js';
-import { landingView } from './views/landing.js';
-import { quizIntroView, quizQuestionView } from './views/quiz.js';
-import { resultView } from './views/result.js';
-import { todayView } from './views/today.js';
-import { profileView } from './views/profile.js';
-import { resourcesView } from './views/resources.js';
-import { carnetView, entryComposerView, goalView } from './views/carnet.js';
-import { routinesView } from './views/routines.js';
+import { store } from './store.js?v=7';
+import { DIMENSIONS, ENTRY_TYPES, getEntryType } from './data.js?v=7';
+import { formatScore } from './scoring.js?v=7';
+import { clamp, escapeHTML, todayISO } from './utils.js?v=7';
+import { icon } from './ui/icons.js?v=7';
+import { contextualQuestion } from './ui/carnet.js?v=7';
+import { landingView } from './views/landing.js?v=7';
+import { quizIntroView, quizQuestionView } from './views/quiz.js?v=7';
+import { resultView } from './views/result.js?v=7';
+import { todayView } from './views/today.js?v=7';
+import { profileView } from './views/profile.js?v=7';
+import { resourcesView } from './views/resources.js?v=7';
+import { carnetView, entryComposerView, goalView } from './views/carnet.js?v=7';
+import { routinesView } from './views/routines.js?v=7';
 import {
   activitiesView,
   activityComposerView,
   deviceView,
-} from './views/activities.js';
+} from './views/activities.js?v=7';
 import {
   coachAthletesView,
   coachDashboardView,
   coachQuestionnairesView,
   coachResourcesView,
-} from './views/coach.js';
-import { coachAthleteLiteView as coachAthleteView } from './views/coachAthleteLite.js';
-import { setChartPeriod } from './ui/charts.js';
-import { sessionSheet, testCatalogSheet } from './ui/sessionSheets.js';
-import { TEST_CATALOG } from './fourc-content.js';
-import { collectiveView, collectivesView } from './views/collectives.js';
-import * as documents from './documents.js';
+} from './views/coach.js?v=7';
+import { coachAthleteLiteView as coachAthleteView } from './views/coachAthleteLite.js?v=7';
+import { setChartPeriod } from './ui/charts.js?v=7';
+import { sessionSheet, testCatalogSheet } from './ui/sessionSheets.js?v=7';
+import { TEST_CATALOG } from './fourc-content.js?v=7';
+import { collectiveView, collectivesView } from './views/collectives.js?v=7';
+import * as documents from './documents.js?v=7';
 import {
   activityCommentSheet,
   assignRoutineSheet,
@@ -44,7 +44,7 @@ import {
   routineSheet,
   shareSheet,
   unsavedSwitchSheet,
-} from './ui/sheets.js';
+} from './ui/sheets.js?v=7';
 
 const config = window.OMIND_CONFIG ?? {};
 const stage = document.getElementById('stage');

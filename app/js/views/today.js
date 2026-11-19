@@ -1,8 +1,8 @@
-import { STATUS, getResource } from '../data.js';
-import { icon } from '../ui/icons.js';
-import { sharedResourceCard, statusChip, tabbar } from '../ui/components.js';
-import { checkinChart } from '../ui/charts.js';
-import { capitalize, dateTimeNowLabel, escapeHTML, formatDate } from '../utils.js';
+import { STATUS, getResource } from '../data.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { sharedResourceCard, statusChip, tabbar } from '../ui/components.js?v=7';
+import { checkinChart } from '../ui/charts.js?v=7';
+import { capitalize, dateTimeNowLabel, escapeHTML, formatDate } from '../utils.js?v=7';
 
 const SLIDERS = [
   { key: 'mood', label: 'Humeur', hint: 'Ton état émotionnel général' },

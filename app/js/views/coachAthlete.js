@@ -1,17 +1,17 @@
-import { STATUS, getEntryType, getResource } from '../data.js';
-import { averageScore, formatScore } from '../scoring.js';
-import { escapeHTML, formatDate, relativeTime } from '../utils.js';
-import { icon } from '../ui/icons.js';
+import { STATUS, getEntryType, getResource } from '../data.js?v=7';
+import { averageScore, formatScore } from '../scoring.js?v=7';
+import { escapeHTML, formatDate, relativeTime } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
 import {
   avatar,
   coachTabs,
   scoreRows,
   statusChip,
   trackingChart,
-} from '../ui/components.js';
-import { athleteSwitcher } from '../ui/coachSwitcher.js';
-import { pageHead, shell } from './coach.js';
-import { documentsPanel } from './documents.js';
+} from '../ui/components.js?v=7';
+import { athleteSwitcher } from '../ui/coachSwitcher.js?v=7';
+import { pageHead, shell } from './coach.js?v=7';
+import { documentsPanel } from './documents.js?v=7';
 
 function coachNoteCard(athlete, state) {
   const note = state.coachNotes?.[athlete.id] ?? '';

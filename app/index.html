@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
@@ -74,6 +74,12 @@
         <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
 
         <div id="sheet-root"></div>
+
+        <div class="boot-fallback" id="boot-fallback" role="alert" hidden>
+          <p class="boot-fallback__title">La démo n’a pas pu se charger.</p>
+          <p>Recharge la page pour réessayer.</p>
+          <button class="btn btn--primary btn--block" data-boot-reload type="button">Recharger la démo</button>
+        </div>
       </div>
     </div>
 
@@ -83,8 +89,9 @@
       </p>
     </noscript>
 
-    <script src="config.js?v=6"></script>
-    <script type="module" src="js/app.js?v=6"></script>
+    <script src="js/boot.js?v=7"></script>
+    <script src="config.js?v=7"></script>
+    <script type="module" src="js/app.js?v=7"></script>
   </body>
 </html>
 

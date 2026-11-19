@@ -1,7 +1,7 @@
-﻿import { RESOURCES } from '../data.js';
-import { relativeTime } from '../utils.js';
-import { icon } from '../ui/icons.js';
-import { resourceIcon, resourceMeta, tabbar, trackCurves } from '../ui/components.js';
+﻿import { RESOURCES } from '../data.js?v=7';
+import { relativeTime } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { resourceIcon, resourceMeta, tabbar, trackCurves } from '../ui/components.js?v=7';
 
 export function resourcesView({ athlete }) {
   const shared = [...athlete.shared].sort((a, b) => b.sharedAt.localeCompare(a.sharedAt));

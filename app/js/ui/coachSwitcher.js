@@ -1,7 +1,7 @@
-import { escapeHTML } from '../utils.js';
-import { averageScore, formatScore } from '../scoring.js';
-import { icon } from './icons.js';
-import { avatar } from './components.js';
+import { escapeHTML } from '../utils.js?v=7';
+import { averageScore, formatScore } from '../scoring.js?v=7';
+import { icon } from './icons.js?v=7';
+import { avatar } from './components.js?v=7';
 
 export function athleteSwitcher({ state, currentId, tab = 'overview', variant = 'rail' }) {
   const athletes = Object.values(state.athletes);

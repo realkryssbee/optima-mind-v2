@@ -1,11 +1,11 @@
-import { DIMENSIONS, SCALE } from '../data.js';
+import { DIMENSIONS, SCALE } from '../data.js?v=7';
 import {
   buildDetailedReading,
   detailedAnswers,
   formatScore,
-} from '../scoring.js';
-import { escapeHTML } from '../utils.js';
-import { icon } from './icons.js';
+} from '../scoring.js?v=7';
+import { escapeHTML } from '../utils.js?v=7';
+import { icon } from './icons.js?v=7';
 
 const RADAR_ANGLES = [-90, 0, 90, 180];
 

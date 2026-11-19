@@ -8862,3 +8862,42 @@ html {
 .app {
   scroll-padding-bottom: calc(var(--nav-h) + 32px);
 }
+
+/* Écran de secours si le boot JS échoue (cache, réseau, module indisponible). */
+.boot-fallback {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--nav-h) + 20px);
+  z-index: 80;
+  width: min(360px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 34px rgb(11 33 65 / 0.18);
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.boot-fallback[hidden] {
+  display: none;
+}
+
+.boot-fallback__title {
+  margin: 0 0 4px;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: 21px;
+  line-height: 1.05;
+}
+
+.boot-fallback p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.boot-fallback .btn {
+  margin-top: 12px;
+}

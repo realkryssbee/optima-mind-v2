@@ -1,7 +1,7 @@
-import { formatDate } from '../utils.js';
-import { icon } from '../ui/icons.js';
-import { scoreGrid, trackCurves } from '../ui/components.js';
-import { fourCReading } from '../ui/fourcReading.js';
+import { formatDate } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { scoreGrid, trackCurves } from '../ui/components.js?v=7';
+import { fourCReading } from '../ui/fourcReading.js?v=7';
 
 export function resultView({ profile }) {
   const completedAt = profile.completedAt ? formatDate(profile.completedAt, { year: 'numeric' }) : '';

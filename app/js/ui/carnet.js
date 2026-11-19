@@ -1,6 +1,6 @@
-import { getRoutineTemplate } from '../data.js';
-import { formatDate, todayISO } from '../utils.js';
-import { icon } from './icons.js';
+import { getRoutineTemplate } from '../data.js?v=7';
+import { formatDate, todayISO } from '../utils.js?v=7';
+import { icon } from './icons.js?v=7';
 
 export function visibilityPill(visibility) {
   const shared = visibility === 'shared';

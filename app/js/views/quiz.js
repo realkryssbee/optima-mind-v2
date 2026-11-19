@@ -1,6 +1,6 @@
-import { SCALE, getQuestion } from '../data.js';
-import { icon } from '../ui/icons.js';
-import { trackCurves } from '../ui/components.js';
+import { SCALE, getQuestion } from '../data.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { trackCurves } from '../ui/components.js?v=7';
 
 function scaleLine() {
   return `<div class="scale-line" aria-hidden="true">

@@ -1,5 +1,5 @@
-import { formatScore } from '../scoring.js';
-import { formatDate } from '../utils.js';
+import { formatScore } from '../scoring.js?v=7';
+import { formatDate } from '../utils.js?v=7';
 
 const PERIODS = [7, 14, 30];
 let currentPeriod = 14;

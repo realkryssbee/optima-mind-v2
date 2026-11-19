@@ -1,10 +1,10 @@
-import { DIMENSIONS, ROUTINE_FEEDBACK, ROUTINE_LIBRARY, getResource, RESOURCES, getEntryType } from '../data.js';
-import { formatScore } from '../scoring.js';
-import { escapeHTML, formatDate } from '../utils.js';
-import { icon } from './icons.js';
-import { avatar, resourceIcon, resourceOptions } from './components.js';
-import { entryDateLabel, feedbackLabel, routineOrigin } from './carnet.js';
-import { athleteSwitcher } from './coachSwitcher.js';
+import { DIMENSIONS, ROUTINE_FEEDBACK, ROUTINE_LIBRARY, getResource, RESOURCES, getEntryType } from '../data.js?v=7';
+import { formatScore } from '../scoring.js?v=7';
+import { escapeHTML, formatDate } from '../utils.js?v=7';
+import { icon } from './icons.js?v=7';
+import { avatar, resourceIcon, resourceOptions } from './components.js?v=7';
+import { entryDateLabel, feedbackLabel, routineOrigin } from './carnet.js?v=7';
+import { athleteSwitcher } from './coachSwitcher.js?v=7';
 
 function meta(resource) {
   return `${resource.kind} · ${resource.duration} · avec Aga`;

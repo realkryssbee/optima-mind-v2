@@ -1,11 +1,11 @@
-import { STATUS, getResource } from '../data.js';
-import { buildAlert } from '../alerts.js';
-import { escapeHTML, formatDate, relativeTime } from '../utils.js';
-import { icon } from '../ui/icons.js';
-import { coachTabs, scoreRows, statusChip } from '../ui/components.js';
-import { alertSparkline, checkinChart } from '../ui/charts.js';
-import { fourCReading } from '../ui/fourcReading.js';
-import { pageHead, shell } from './coach.js';
+import { STATUS, getResource } from '../data.js?v=7';
+import { buildAlert } from '../alerts.js?v=7';
+import { escapeHTML, formatDate, relativeTime } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { coachTabs, scoreRows, statusChip } from '../ui/components.js?v=7';
+import { alertSparkline, checkinChart } from '../ui/charts.js?v=7';
+import { fourCReading } from '../ui/fourcReading.js?v=7';
+import { pageHead, shell } from './coach.js?v=7';
 
 function lastCheckin(athlete) {
   return [...athlete.checkins].sort((a, b) => b.date.localeCompare(a.date))[0] ?? null;

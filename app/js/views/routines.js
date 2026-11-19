@@ -1,12 +1,12 @@
-import { escapeHTML } from '../utils.js';
-import { icon } from '../ui/icons.js';
+import { escapeHTML } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
 import {
   feedbackLabel,
   feedbackTone,
   routineItems,
   routineMomentLabel,
   routineOrigin,
-} from '../ui/carnet.js';
+} from '../ui/carnet.js?v=7';
 
 function routineCard(routine) {
   return `<article class="routine-card routine-card--full">

@@ -1,6 +1,6 @@
-import { icon } from '../ui/icons.js';
-import { trackCurves } from '../ui/components.js';
-import { escapeHTML } from '../utils.js';
+import { icon } from '../ui/icons.js?v=7';
+import { trackCurves } from '../ui/components.js?v=7';
+import { escapeHTML } from '../utils.js?v=7';
 
 export function landingView({ state }) {
   const config = window.OMIND_CONFIG ?? {};

@@ -1,6 +1,6 @@
-import { listForAthlete, get } from '../documents.js';
-import { escapeHTML, formatDate } from '../utils.js';
-import { icon } from '../ui/icons.js';
+import { listForAthlete, get } from '../documents.js?v=7';
+import { escapeHTML, formatDate } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
 
 function formatSize(bytes) {
   if (!bytes) return '';

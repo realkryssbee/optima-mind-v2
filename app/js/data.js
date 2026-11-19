@@ -4,7 +4,7 @@
  * « O’Mind.docx » (référentiel 4C). Les textes d’interface sont en français.
  */
 
-import { DIMENSION_TEXT } from './fourc-content.js';
+import { DIMENSION_TEXT } from './fourc-content.js?v=7';
 
 export const SCALE = [
   { value: 1, label: 'Pas du tout' },

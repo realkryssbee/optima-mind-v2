@@ -4,9 +4,9 @@ import {
   ROUTINE_LIBRARY,
   getRoutineTemplate,
   getResource,
-} from './data.js';
-import { computeProfile, fixedQuestionOrder } from './scoring.js';
-import { isoDaysAgo, todayISO } from './utils.js';
+} from './data.js?v=7';
+import { computeProfile, fixedQuestionOrder } from './scoring.js?v=7';
+import { isoDaysAgo, todayISO } from './utils.js?v=7';
 
 const STORAGE_KEY = 'omind-demo-lite-v2';
 const ACTOR_KEY = 'omind-actor';

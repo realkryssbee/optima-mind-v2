@@ -1,7 +1,7 @@
-import { DIMENSIONS, STATUS, getResource, RESOURCES } from '../data.js';
-import { formatScore } from '../scoring.js';
-import { escapeHTML, lastSevenDays, dayNumber, formatDate, weekdayShort } from '../utils.js';
-import { icon } from './icons.js';
+import { DIMENSIONS, STATUS, getResource, RESOURCES } from '../data.js?v=7';
+import { formatScore } from '../scoring.js?v=7';
+import { escapeHTML, lastSevenDays, dayNumber, formatDate, weekdayShort } from '../utils.js?v=7';
+import { icon } from './icons.js?v=7';
 
 /** Signature O’MIND : deux fines courbes de piste d’athlétisme. */
 export function trackCurves(className = '') {

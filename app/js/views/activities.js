@@ -1,11 +1,11 @@
-import { ACTIVITY_SOURCES, DEVICE_PROVIDER } from '../data.js';
-import { escapeHTML, formatDate, relativeTime, todayISO } from '../utils.js';
-import { icon } from '../ui/icons.js';
+import { ACTIVITY_SOURCES, DEVICE_PROVIDER } from '../data.js?v=7';
+import { escapeHTML, formatDate, relativeTime, todayISO } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
 import {
   entryDateLabel,
   formatDuration,
   visibilityPill,
-} from '../ui/carnet.js';
+} from '../ui/carnet.js?v=7';
 
 export function activitySourceLabel(source) {
   return ACTIVITY_SOURCES[source]?.label ?? 'Ajout manuel';

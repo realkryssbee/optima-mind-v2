@@ -1,7 +1,7 @@
-import { escapeHTML, formatDate, relativeTime } from '../utils.js';
-import { icon } from '../ui/icons.js';
-import { avatar, statusChip } from '../ui/components.js';
-import { pageHead, shell } from './coach.js';
+import { escapeHTML, formatDate, relativeTime } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { avatar, statusChip } from '../ui/components.js?v=7';
+import { pageHead, shell } from './coach.js?v=7';
 
 function typeLabel(type) {
   return type === 'team' ? 'Équipe' : 'Groupe';

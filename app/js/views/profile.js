@@ -1,7 +1,7 @@
-import { STATUS } from '../data.js';
-import { escapeHTML, formatDate, relativeTime, todayISO } from '../utils.js';
-import { icon } from '../ui/icons.js';
-import { avatar, scoreRows, statusChip, tabbar } from '../ui/components.js';
+import { STATUS } from '../data.js?v=7';
+import { escapeHTML, formatDate, relativeTime, todayISO } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { avatar, scoreRows, statusChip, tabbar } from '../ui/components.js?v=7';
 
 function checkinRow(checkin) {
   const isToday = checkin.date === todayISO();

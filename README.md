@@ -186,6 +186,12 @@ server.mjs            # serveur statique local (port 3000)
 - Les noms des deux autres tests, la définition définitive du Switch et la structure de la note
   de séance (texte libre ou modèle) restent à valider avec Aga.
 
+### Cache et secours
+
+Tous les modules JS sont importés avec `?v=7` pour éviter qu’un navigateur mélange une ancienne
+version en cache et la nouvelle. Si le chargement échoue, un écran de secours propose
+« Recharger la démo » et ajoute un paramètre à l’URL pour repartir sur une version fraîche.
+
 ## Crédits
 
 O’MIND by Optima Mind — Agnieszka « Aga » Orchowska, Wavre, Belgique.

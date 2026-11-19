@@ -1,5 +1,5 @@
-import { DIMENSIONS, QUESTIONS, getDimension, getQuestion } from './data.js';
-import { FIXED_ORDER, PISTES, READING_BY_ID } from './fourc-content.js';
+import { DIMENSIONS, QUESTIONS, getDimension, getQuestion } from './data.js?v=7';
+import { FIXED_ORDER, PISTES, READING_BY_ID } from './fourc-content.js?v=7';
 
 /** PRNG déterministe (mulberry32) : l’ordre du test est stable pour une passation. */
 export function mulberry32(seed) {

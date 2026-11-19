@@ -1,7 +1,7 @@
-import { ENTRY_TYPES, ROUTINE_FEEDBACK, getEntryType } from '../data.js';
-import { escapeHTML, formatDate, todayISO } from '../utils.js';
-import { icon } from '../ui/icons.js';
-import { emptyState, trackCurves } from '../ui/components.js';
+import { ENTRY_TYPES, ROUTINE_FEEDBACK, getEntryType } from '../data.js?v=7';
+import { escapeHTML, formatDate, todayISO } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { emptyState, trackCurves } from '../ui/components.js?v=7';
 import {
   carnetInsights,
   contextualQuestion,
@@ -15,7 +15,7 @@ import {
   routineOrigin,
   unansweredQuestion,
   visibilityPill,
-} from '../ui/carnet.js';
+} from '../ui/carnet.js?v=7';
 
 const GOAL_EXAMPLES = [
   'Revenir vite dans le jeu après une erreur.',

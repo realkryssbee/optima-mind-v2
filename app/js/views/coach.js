@@ -1,11 +1,11 @@
-import { COACH, DIMENSIONS, STATUS, getResource } from '../data.js';
-import { TEST_CATALOG } from '../fourc-content.js';
-import { averageScore, formatScore } from '../scoring.js';
-import { buildAlert } from '../alerts.js';
-import { escapeHTML, formatDate, relativeTime, dateTimeNowLabel } from '../utils.js';
-import { icon } from '../ui/icons.js';
-import { avatar, coachTabs, scoreRows, statusChip } from '../ui/components.js';
-import { alertSparkline } from '../ui/charts.js';
+import { COACH, DIMENSIONS, STATUS, getResource } from '../data.js?v=7';
+import { TEST_CATALOG } from '../fourc-content.js?v=7';
+import { averageScore, formatScore } from '../scoring.js?v=7';
+import { buildAlert } from '../alerts.js?v=7';
+import { escapeHTML, formatDate, relativeTime, dateTimeNowLabel } from '../utils.js?v=7';
+import { icon } from '../ui/icons.js?v=7';
+import { avatar, coachTabs, scoreRows, statusChip } from '../ui/components.js?v=7';
+import { alertSparkline } from '../ui/charts.js?v=7';
 
 const NAV = [
   { key: 'dashboard', href: '#/coach', label: 'Accueil', icon: 'home' },
