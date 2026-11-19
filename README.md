@@ -1,26 +1,26 @@
-# O’MIND — démo interactive
+# O’MIND — démo allégée
 
-Prototype cliquable de l’application de préparation mentale d’Optima Mind, pensé d’abord pour le
-téléphone. Le profil 4C reste le socle ; le sportif est désormais acteur de son accompagnement
-avec **Mon carnet**, ses **routines**, ses **activités** et ses **documents**. Aga dispose d’un
-espace de travail multi-sportifs avec sélecteur de fiche, collectifs et partages.
+Version simple et lisible pour une démonstration rapide : le **profil 4C**, le **bilan du jour**,
+les **ressources** et l’**espace d’Aga**, avec deux sportifs fictifs — **Léa** et **Malik**.
 
 - **Démo en ligne** : <https://dev.kryssbee.com/omind/>
 - **En local** : <http://localhost:3000/>
-- **Réseau local** : l’URL est affichée au démarrage (`http://<IP-du-PC>:3000/`)
+- **Réseau local** : l’URL est affichée au démarrage du serveur.
+
+La version complète (carnet, routines à deux, activités connectées, collectifs, documents PDF,
+Chris / Elise / Coco) est conservée sur la branche Git **`sportifs`**. La démo allégée est sur la
+branche **`demo`**, qui est la version courante et déployée.
 
 ## Comptes de démonstration
 
 | Compte | Profil fictif | Sport |
 | --- | --- | --- |
-| **Chris** | Chris Bee, 16 ans | Football · U16 |
-| **Elise** | Elise Blst, 16 ans | Hockey · U16 |
-| **Coco** | Coco Ela, 16 ans | Tennis · U16 |
+| **Léa** | Léa Dubois, 21 ans | 400 m haies · Wavre Athlétisme |
+| **Malik** | Malik Benali, 24 ans | Basket-ball · meneur · BC Wavre |
 | **Aga** | Agnieszka « Aga » Orchowska | Espace coach |
 
-Le sélecteur de compte est visible sur l’accueil et dans la barre « Démo ». Chaque onglet du
-navigateur peut être connecté à un compte différent ; l’état de démonstration est partagé sur
-l’appareil.
+Le sélecteur de compte est visible sur l’accueil et dans la barre « Démo ». Les deux sportifs ont
+un profil 4C d’exemple et un historique de bilans fictif.
 
 ## Lancer
 
@@ -32,121 +32,52 @@ npm start
 node server.mjs
 ```
 
-## Scénario de validation
+## Parcours de la démo
 
-1. **Chris** ouvre **Mon carnet** depuis Aujourd’hui, formule son objectif, ajoute une séance
-   (ou importe un GPX / synchronise Strava en mode démo), puis ajoute son ressenti.
-2. **Aga** crée le collectif **« Préparation compétition »**, y ajoute Chris, Elise et Coco,
-   puis leur assigne une routine avec une consigne. Le sélecteur de fiche permet de passer de
-   Chris à Elise puis Coco en restant dans l’onglet **Routines**.
-3. Aga dépose un PDF dans chaque fiche. Elle partage celui de **Chris** et de **Coco**, garde
-   celui d’**Elise** en brouillon privé. Chaque dépôt est nommé, daté et rattaché au bon
-   sportif.
-4. Chris ouvre son PDF, essaie la routine et partage son retour avec Aga. Elise voit sa routine
-   et son carnet ; elle ne voit pas le document privé. Coco ouvre son propre PDF. Chaque
-   sportif ne voit que les documents partagés avec lui.
-5. Après rechargement, les profils, carnets, routines, activités, retours et documents restent
-   associés au bon compte. Deux onglets connectés à deux sportifs différents montrent deux
-   espaces distincts.
+1. **Accueil** : « Découvrir mon profil 4C » pour le questionnaire, ou « Explorer la démo » pour
+   ouvrir directement le profil d’exemple de Léa.
+2. **Questionnaire 4C** : 20 affirmations du référentiel, mélangées, une par écran, retour
+   possible avec conservation de la réponse. Le calcul est déterministe (moyenne des cinq
+   réponses, `6 − réponse` pour l’affirmation inversée).
+3. **Résultat** : Calme, Combativité, Concentration, Confiance sur 5, piste à explorer construite
+   à partir des réponses, détail par dimension, « Échanger avec Aga ».
+4. **Aujourd’hui** : check-in humeur / énergie / sommeil, mot facultatif, confirmation et suivi
+   sur 7 jours. Le programme rappelle le questionnaire 4C et la dernière ressource partagée.
+5. **Profil** : identité, profil 4C, derniers bilans, statut du questionnaire, changement de
+   compte Léa / Malik, ouverture de l’espace Aga et réinitialisation.
+6. **Ressources** : ressource partagée par Aga, bibliothèque de trois exemples, aperçus
+   (respiration interactive, routine, vidéo de démonstration).
+7. **Espace Aga** : tableau de bord, liste des deux sportifs, fiche avec profil 4C, dernier
+   bilan, questionnaire et ressources partagées. Attribution du questionnaire et partage d’une
+   ressource sont simulés mais réactifs : le statut et la ressource se retrouvent côté sportif.
 
-## Ce qui est fonctionnel
+## Ce qui est simulé
 
-### Mon carnet (sportif)
+- Comptes, profils, bilans, réponses et partages : **fictifs**, stockés dans le navigateur
+  (`localStorage`).
+- Aucun email, aucune notification, aucun rendez-vous n’est réellement envoyé.
+- La ressource vidéo est un aperçu de démonstration ; l’agenda Cal.com n’est pas connecté.
+- Le questionnaire 4C est une première version du référentiel, **non validée
+  psychométriquement**. Un score plus bas n’est pas un problème, mais une ressource à explorer.
+- Pas de backend ni d’authentification réelle. Aga et les sportifs doivent utiliser le même
+  navigateur pour voir les mêmes données ; deux onglets peuvent être connectés à deux comptes.
+- Palette bleu nuit / cobalt / glacier et lettrage O’MIND à valider ; le seul fichier officiel
+  fourni est le symbole « OM ».
 
-- Première ouverture : invitation à formuler un **objectif dans ses propres mots**, avec des
-  exemples. Objectif modifiable.
-- Entrées de quatre types : **Séance, Compétition, Ressenti, Ce qui m’a aidé**.
-- Brouillon **enregistré automatiquement**, repris depuis le carnet, entrée modifiable et
-  supprimable.
-- **Question contextuelle** proposée après une séance, liée à l’objectif ou à la routine
-  essayée ; réponse courte et facultative (200 caractères). Si elle n’est pas remplie, un rappel
-  apparaît dans le carnet et sur Aujourd’hui.
-- **Privé / partagé** : chaque entrée est privée par défaut ; le sportif choisit de la partager
-  avec Aga, et peut revenir en arrière à tout moment.
-- **Mes appuis** : rapproche l’objectif, les routines essayées, les notes « ce qui m’a aidé » et
-  les réponses. Aucune interprétation automatique, uniquement ce que le sportif a écrit.
-- Activités et routines accessibles depuis le carnet et depuis Aujourd’hui.
+## Version complète (branche `sportifs`)
 
-### Routines utilisables à deux
+La branche `sportifs` contient la version étendue : Mon carnet, routines à deux, activités
+manuelles / GPX / Strava démo, collectifs Équipe et Groupe, documents PDF avec versions, espace
+Aga multi-sportifs avec sélecteur de fiche. Elle n’est **pas** déployée sur l’URL publique
+actuelle.
 
-- Le sportif crée sa **routine courte** (jusqu’à 3 étapes), l’associe à l’entraînement ou à la
-  compétition.
-- Aga assigne une routine de sa **bibliothèque** avec une **consigne personnalisée**, à un
-  sportif ou à un collectif.
-- **Origine affichée** : « Créée par toi » ou « Aga · [collectif / suivi individuel] ».
-- « Je l’ai essayée » puis **Ça m’a aidé / Un peu / Pas cette fois**, commentaire facultatif.
-  Le retour est **privé par défaut** ; Aga voit que la routine a été essayée, le contenu
-  seulement si le sportif le partage.
-- La routine du moment est accessible depuis **Aujourd’hui**, sans repasser par le carnet.
+```powershell
+git switch sportifs
+npm start   # aperçu local de la version complète
+```
 
-### Activités et connexion
-
-- **Ajouter une activité à la main** : activité, date, durée, distance, commentaire, partage.
-  Ce chemin fonctionne toujours.
-- **Importer un fichier GPX** réellement : analyse locale du fichier (activité, date, durée,
-  distance), sélection des données à importer, commentaire, partage.
-- **Connecter un appareil** : parcours **Strava en mode démo** clairement identifié
-  (connexion, dernière synchronisation, sélection des données, synchronisation, échec simulé,
-  déconnexion, reconnexion). Les doublons sont détectés par identifiant d’activité. Une
-  déconnexion ne supprime pas les activités déjà importées.
-- Une activité importée reste dans le carnet et **privée jusqu’à partage**.
-- Aucun état mental n’est déduit des mesures d’un appareil ; seuls l’activité, la durée, la date,
-  la distance et le commentaire du sportif sont affichés.
-
-### Espace Aga
-
-- **Changer de sportif** depuis toutes les fiches : recherche par nom, profils récents, filtre
-  par collectif. Le changement **conserve l’onglet en cours**.
-- Sur ordinateur : liste à gauche, fiche à droite. Sur mobile : même sélecteur dans un panneau
-  de recherche.
-- Si la **note de suivi** est modifiée, un dialogue propose d’enregistrer, continuer sans
-  enregistrer, ou revenir.
-- Le nom du sportif figure dans le titre et dans les confirmations de partage.
-- **Collectifs** : deux types visibles, **Équipe** (collectif qui joue ensemble) et **Groupe**
-  (atelier ou objectif de travail). Un sportif peut appartenir à plusieurs collectifs.
-  Création, modification des membres, assignation d’une routine à tout le collectif ou à
-  certains membres.
-- Avant validation d’une assignation, le **nombre et la liste des destinataires** sont affichés.
-  Chaque sportif reçoit sa propre assignation et répond en privé.
-- La vue collective montre **qui a essayé**, les **retours partagés** et permet d’ouvrir la fiche
-  individuelle. Les retours privés restent signalés comme tels.
-- **Documents PDF** : dépôt par glisser-déposer ou bouton clavier/mobile, aperçu, nom, date,
-  vérification du sportif rattaché, **privé par défaut**, partage explicite « Partager avec
-  [prénom] », versions et historique. Le sportif retrouve le PDF partagé dans **Mon profil →
-  Rédigé par Aga**, peut l’ouvrir et le télécharger.
-- Le **profil 4C**, les bilans, le questionnaire et les ressources partagées restent disponibles.
-
-### Profil 4C
-
-Les 20 affirmations du référentiel, mélangées à chaque passation, calcul déterministe avec
-`6 − réponse` pour l’affirmation inversée, quatre scores sur 5, piste construite à partir des
-réponses, détail par dimension. Le calcul est inchangé depuis la première version de la démo.
-
-## Confidentialité et sessions
-
-- Le compte sportif actif est stocké dans `sessionStorage` : **chaque onglet peut être un
-  sportif différent**. Les données de démonstration sont dans `localStorage`, les PDF dans
-  `IndexedDB` du navigateur.
-- Les entrées, activités et retours de routine sont **privés par défaut**. La vue coach filtre
-  strictement sur ce que le sportif a partagé.
-- **Limite importante sur les PDF** : dans cette démo statique, le contrôle d’accès est appliqué
-  côté interface et par la fonction `canOpen` du module documents. **Ce n’est pas une garantie
-  serveur.** Avant tout usage réel, les fichiers doivent être servis par une API authentifiée
-  qui vérifie à chaque requête l’identité et le partage, y compris lorsqu’un lien direct est
-  utilisé (réponse 401/403), avec stockage privé et URLs non devinables. La démo publique ne
-  contient pas cette API.
-
-## Source connectée
-
-L’intégration choisie pour la suite est **Strava via OAuth web**, compatible avec une
-application web, avec un échange de token côté serveur. La démo simule le parcours et documente
-les étapes dans l’écran « Connecter un appareil ». L’import **GPX** est, lui, réellement
-utilisable sans partenaire.
-
-Pour brancher Strava réellement : créer une application API Strava, configurer l’URL de
-redirection, échanger le code OAuth côté serveur, stocker le refresh token par sportif, importer
-les activités avec le scope `activity:read_all`, dédupliquer par identifiant Strava et prévoir
-les erreurs de token/rate limit. Aucune donnée de mesure ne doit être transformée en état mental.
+Pour la déployer à la place de la démo allégée, reprendre les commandes SSH ci-dessous depuis
+cette branche (le dossier `app/` est autonome).
 
 ## Intégration au site
 
@@ -163,9 +94,6 @@ réinitialise la démo.
 
 ## Déploiement sur le NAS (SSH)
 
-Le dossier `app/` est statique. Il est publié sur le NAS Synology dans
-`/volume1/web/omind` et servi sur <https://dev.kryssbee.com/omind/>.
-
 ```powershell
 tar -czf "$env:TEMP\omind-demo.tar.gz" -C app .
 ssh -i "$env:USERPROFILE\.ssh\id_rsa_nas" kryss@192.168.0.118 "cd /volume1/web/omind && find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +"
@@ -173,24 +101,18 @@ scp -i "$env:USERPROFILE\.ssh\id_rsa_nas" "$env:TEMP\omind-demo.tar.gz" kryss@19
 ssh -i "$env:USERPROFILE\.ssh\id_rsa_nas" kryss@192.168.0.118 "cd /volume1/web/omind && tar -xzf omind-demo.tar.gz && rm omind-demo.tar.gz"
 ```
 
-Le chemin SFTP est `/web/omind` (racine SFTP), le chemin shell est `/volume1/web/omind`.
+Le chemin SFTP est `/web/omind` ; le chemin shell est `/volume1/web/omind`.
 
-## Vérifications effectuées
+## Vérifications
 
-- Création d’objectif, séance manuelle, ressenti, brouillon repris, entrée corrigée.
-- Test 4C complet, retour arrière avec réponse conservée, quatre scores.
-- Import GPX analysé et ajouté ; activité manuelle ; Strava démo : connexion, synchronisation,
-  échec, déconnexion, doublons.
-- Création de routine, « Je l’ai essayée », retour partagé ou privé, retour visible côté Aga
-  uniquement s’il est partagé.
-- Collectif « Préparation compétition » créé avec Chris, Elise et Coco, routine assignée aux
-  trois, changement de fiche en conservant l’onglet Routines, garde-fou de note non enregistrée.
-- Trois PDF déposés/nommés ; partage de Chris et Coco, brouillon d’Elise ; Chris et Coco voient
-  leur document, Elise aucun ; version 2 déposée sans remplacer la version partagée.
-- Rechargement et comptes séparés : données associées au bon sportif.
-- 360 px, 390 px et ordinateur : aucun débordement horizontal.
-- Navigation clavier, focus des panneaux, fermeture Échap, mouvement réduit.
-- Audit axe-core WCAG 2.1/2.2 AA : **0 violation** sur les écrans et feuilles testés.
+- Questionnaire complet, retour arrière, quatre scores ; accès direct au profil d’exemple.
+- Check-in enregistré, confirmation et suivi mis à jour.
+- Changement Léa / Malik et espace Aga.
+- Partage d’une ressource depuis la fiche d’Aga, retrouvée dans les ressources du sportif.
+- Attribution / relance du questionnaire et statut mis à jour.
+- 360 px, 390 px et ordinateur : pas de débordement horizontal.
+- Navigation clavier, focus, fermeture Échap des panneaux, mouvement réduit.
+- Audit axe-core WCAG 2.1/2.2 AA : 0 violation sur les écrans testés.
 
 ## Structure
 
@@ -198,34 +120,21 @@ Le chemin SFTP est `/web/omind` (racine SFTP), le chemin shell est `/volume1/web
 app/
 ├── index.html
 ├── config.js
-├── assets/                 # polices, photos, symbole officiel
-├── styles/                 # tokens.css + app.css
+├── assets/           # polices, photos, symbole officiel
+├── styles/           # tokens.css + app.css
 └── js/
-    ├── data.js             # 4C, routines, sportifs fictifs, sources
-    ├── scoring.js          # mélange, recodage, scores, lecture
-    ├── store.js            # état multi-sportifs, carnet, routines, collectifs
-    ├── documents.js        # PDF, versions, IndexedDB, contrôle d’accès local
-    ├── app.js              # routeur, interactions, feuilles
-    ├── ui/                 # composants, switcher, aperçus, feuilles
-    └── views/              # accueil, test, résultat, carnet, routines,
-                            # activités, profil, ressources, coach, collectifs,
-                            # documents
-server.mjs                  # serveur statique local (port 3000)
+    ├── data.js       # 4C, Léa, Malik, ressources
+    ├── scoring.js    # mélange, recodage, scores, lecture
+    ├── store.js      # comptes, 4C, bilans, ressources
+    ├── app.js        # routeur et interactions
+    ├── ui/           # composants, icônes, feuilles
+    └── views/        # accueil, test, résultat, aujourd’hui, profil,
+                      # ressources, coach
+server.mjs            # serveur statique local (port 3000)
 ```
-
-## Ce qui reste à brancher
-
-- Authentification réelle et API de documents avec contrôle d’accès serveur (voir limite PDF).
-- OAuth Strava réel (client ID/secret, backend, webhooks/rate limits) et éventuellement HealthKit /
-  Google Fit via une app native.
-- Emails, notifications et consentement marketing (aucun email demandé dans la démo).
-- Validation du questionnaire 4C et de ses interprétations par Aga / psychométrie.
-- Validation de la palette bleu nuit/cobalt/glacier et du logotype définitif O’MIND ; le seul
-  fichier officiel fourni est le symbole « OM ».
-- Backend multi-comptes, chiffrement, rétention et suppression des données.
 
 ## Crédits
 
 O’MIND by Optima Mind — Agnieszka « Aga » Orchowska, Wavre, Belgique.
 Photos : Unsplash (licence Unsplash) · Nay Nyo / Pexels · séance Optima Mind.
-Prototype de démonstration : profils, scores, activités et documents sont fictifs.
+Profils, scores et données sont fictifs.

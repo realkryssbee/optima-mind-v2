@@ -6,11 +6,6 @@ import {
   tabbar,
   trackingChart,
 } from '../ui/components.js';
-import {
-  latestRoutine,
-  routineOrigin,
-  unansweredQuestion,
-} from '../ui/carnet.js';
 import { capitalize, dateTimeNowLabel } from '../utils.js';
 
 const SLIDERS = [
@@ -24,56 +19,6 @@ function formatTime(iso) {
   return new Intl.DateTimeFormat('fr-BE', { hour: '2-digit', minute: '2-digit' }).format(
     new Date(iso),
   );
-}
-
-function homeCarnet(athlete) {
-  const goal = athlete.carnet.goal;
-  const question = unansweredQuestion(athlete);
-  return `<section class="home-carnet" aria-labelledby="home-carnet-title">
-    <div class="home-carnet__head">
-      <div>
-        <p class="eyebrow">Mon carnet</p>
-        <h2 class="display display--sm" id="home-carnet-title">${goal ? 'Ton fil rouge' : 'Ton espace à toi'}</h2>
-      </div>
-      <a class="text-link text-link--small" href="#/carnet">Ouvrir ${icon('arrowRight', { size: 14 })}</a>
-    </div>
-    ${goal
-      ? `<p class="home-carnet__goal">« ${goal.text} »</p>
-        <div class="home-carnet__actions">
-          <a class="btn btn--primary btn--small" href="#/carnet/nouveau?type=session&new=1">${icon('plus', { size: 15 })} Ajouter une séance</a>
-          <a class="btn btn--outline btn--small" href="#/carnet">Voir mes entrées</a>
-        </div>`
-      : `<p class="home-carnet__goal home-carnet__goal--empty">Et si on commençait par ton objectif ? Une phrase suffit, et tu pourras la changer.</p>
-        <a class="btn btn--primary btn--block" href="#/carnet">Formuler mon objectif ${icon('arrowRight', { size: 16 })}</a>`}
-    ${question
-      ? `<button class="home-question" data-action="open-question" data-entry="${question.id}" type="button">
-          <span class="home-question__icon">${icon('quote', { size: 16 })}</span>
-          <span><small>Après ta séance</small><strong>${question.question}</strong></span>
-          ${icon('chevronRight', { size: 16 })}
-        </button>`
-      : ''}
-  </section>`;
-}
-
-function homeRoutine(athlete) {
-  const routine = latestRoutine(athlete);
-  if (!routine) {
-    return `<section class="home-routine home-routine--empty">
-      <div><p class="eyebrow">Ta routine</p><h2 class="display display--sm">Aucune routine pour l’instant</h2></div>
-      <a class="text-link text-link--small" href="#/carnet/routines">Créer ${icon('plus', { size: 14 })}</a>
-    </section>`;
-  }
-  return `<section class="home-routine" aria-labelledby="home-routine-title">
-    <div class="home-routine__top">
-      <span class="routine-origin">${routineOrigin(routine)}</span>
-      <span class="fineprint">${routine.steps.length} étapes</span>
-    </div>
-    <h2 class="display display--sm" id="home-routine-title">${routine.title}</h2>
-    <div class="home-routine__actions">
-      <button class="btn btn--primary btn--small" data-action="open-routine" data-kind="${routine.kind}" data-id="${routine.id}" type="button">${icon('play', { size: 14 })} Reprendre</button>
-      <a class="text-link text-link--small" href="#/carnet/routines">Mes routines</a>
-    </div>
-  </section>`;
 }
 
 export function todayView({ athlete, checkin, latestShare }) {
@@ -105,9 +50,6 @@ export function todayView({ athlete, checkin, latestShare }) {
     </section>
 
     <div class="today__body">
-      ${homeCarnet(athlete)}
-      ${homeRoutine(athlete)}
-
       ${isSaved
         ? `<div class="saved-banner" role="status">
             <span class="saved-banner__check">${icon('check', { size: 16 })}</span>

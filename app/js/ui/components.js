@@ -180,9 +180,7 @@ export function coachTabs(active, athleteId = null) {
   const tabs = [
     { key: 'overview', label: 'Aperçu', href: `${base}?tab=overview` },
     { key: 'bilans', label: 'Bilans', href: `${base}?tab=bilans` },
-    { key: 'routines', label: 'Routines', href: `${base}?tab=routines` },
-    { key: 'carnet', label: 'Carnet', href: `${base}?tab=carnet` },
-    { key: 'documents', label: 'Documents', href: `${base}?tab=documents` },
+    { key: 'ressources', label: 'Ressources', href: `${base}?tab=ressources` },
   ];
   return `<div class="coach-tabs" role="tablist" aria-label="Fiche sportive">
     ${tabs

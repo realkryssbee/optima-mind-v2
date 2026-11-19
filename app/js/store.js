@@ -8,7 +8,7 @@ import {
 import { computeProfile, shuffleQuestions } from './scoring.js';
 import { isoDaysAgo, todayISO } from './utils.js';
 
-const STORAGE_KEY = 'omind-demo-v2';
+const STORAGE_KEY = 'omind-demo-lite-v1';
 const ACTOR_KEY = 'omind-actor';
 
 function isoAt(daysAgo) {
@@ -147,14 +147,14 @@ export function seedState() {
 
   return {
     version: 2,
-    activeAthlete: readSessionActor() && athletes[readSessionActor()] ? readSessionActor() : 'chris',
+    activeAthlete: readSessionActor() && athletes[readSessionActor()] ? readSessionActor() : 'lea',
     athletes,
     collectives: collectiveSeed.map(({ daysAgo, ...collective }) => ({
       ...collective,
       createdAt: isoAt(daysAgo),
     })),
     coachNotes,
-    coachRecent: ['chris', 'elise', 'coco'],
+    coachRecent: ['lea', 'malik'],
     documents: [],
     createdAt: nowISO(),
   };
@@ -165,9 +165,8 @@ function isValid(state) {
     state &&
     state.version === 2 &&
     state.athletes &&
-    state.athletes.chris &&
-    state.athletes.elise &&
-    state.athletes.coco &&
+    state.athletes.lea &&
+    state.athletes.malik &&
     Array.isArray(state.collectives)
   );
 }

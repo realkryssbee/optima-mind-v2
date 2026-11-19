@@ -2,7 +2,6 @@ import { STATUS } from '../data.js';
 import { escapeHTML, formatDate, relativeTime, todayISO } from '../utils.js';
 import { icon } from '../ui/icons.js';
 import { avatar, scoreRows, statusChip, tabbar } from '../ui/components.js';
-import { profileDocumentsSection } from './documents.js';
 
 function checkinRow(checkin) {
   const isToday = checkin.date === todayISO();
@@ -25,7 +24,6 @@ export function profileView({ athlete, state }) {
   const assignment = athlete.assignment;
   const assignmentStatus = assignment?.status ?? null;
   const checkins = [...athlete.checkins].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
-  const collectives = (state?.collectives ?? []).filter((collective) => collective.memberIds.includes(athlete.id));
   const config = window.OMIND_CONFIG ?? {};
   const siteUrl = config.siteUrl ?? 'https://www.optima-mind.com';
 
@@ -48,16 +46,9 @@ export function profileView({ athlete, state }) {
             <span class="chip">${athlete.age} ans</span>
             <span class="chip">Suivie depuis ${athlete.since}</span>
             ${athlete.demoAccount ? '<span class="chip chip--demo">Compte démo</span>' : ''}
-            ${collectives.map((collective) => `<span class="chip chip--collective">${collective.type === 'team' ? 'Équipe' : 'Groupe'} · ${collective.name}</span>`).join('')}
           </div>
         </div>
       </section>
-
-      <div class="profile-shortcuts">
-        <a href="#/carnet"><span>${icon('clipboard', { size: 17 })}</span><strong>Mon carnet</strong><small>Objectif, séances, ressentis</small></a>
-        <a href="#/carnet/routines"><span>${icon('target', { size: 17 })}</span><strong>Mes routines</strong><small>Essayer, reprendre, commenter</small></a>
-        <a href="#/carnet/activites"><span>${icon('trend', { size: 17 })}</span><strong>Mes activités</strong><small>Manuel ou appareil connecté</small></a>
-      </div>
 
       <section class="profile-block" aria-labelledby="profile-4c-title">
         <div class="navy-card">
@@ -80,8 +71,6 @@ export function profileView({ athlete, state }) {
               </div>`}
         </div>
       </section>
-
-      ${profileDocumentsSection({ athlete })}
 
       <section class="profile-block" aria-labelledby="bilans-title">
         <div class="section-heading">
@@ -129,7 +118,7 @@ export function profileView({ athlete, state }) {
           <span class="pill pill--demo">Démo</span>
           <h2 id="demo-title">Comptes et données simulés</h2>
         </div>
-        <p>Cette démonstration contient trois comptes sportifs (Chris, Elise, Coco) et un espace coach (Aga). Chaque compte a son carnet, ses routines et ses documents. Les actions sont enregistrées localement sur cet appareil.</p>
+        <p>Cette démonstration contient deux comptes sportifs (Léa et Malik) et un espace coach (Aga). Chaque compte a son profil 4C, ses bilans et ses ressources. Les actions sont enregistrées localement sur cet appareil.</p>
         <div class="demo-zone__actions">
           <a class="btn btn--outline" href="#/coach">Ouvrir l’espace Aga ${icon('arrowRight', { size: 16 })}</a>
           <button class="btn btn--ghost" data-action="reset-demo" type="button">${icon('reset', { size: 16 })} Réinitialiser</button>
@@ -137,9 +126,8 @@ export function profileView({ athlete, state }) {
         <div class="account-switch" role="group" aria-label="Changer de compte sportif">
           <span>Changer de compte</span>
           <div>
-            <a href="#/aujourdhui" data-role-link="chris" class="${athlete.id === 'chris' ? 'is-active' : ''}">Chris</a>
-            <a href="#/aujourdhui" data-role-link="elise" class="${athlete.id === 'elise' ? 'is-active' : ''}">Elise</a>
-            <a href="#/aujourdhui" data-role-link="coco" class="${athlete.id === 'coco' ? 'is-active' : ''}">Coco</a>
+            <a href="#/aujourdhui" data-role-link="lea" class="${athlete.id === 'lea' ? 'is-active' : ''}">Léa</a>
+            <a href="#/aujourdhui" data-role-link="malik" class="${athlete.id === 'malik' ? 'is-active' : ''}">Malik</a>
           </div>
         </div>
         <a class="site-link site-link--footer" href="${siteUrl}" target="_blank" rel="noopener noreferrer">Retour à optima-mind.com ${icon('external', { size: 13 })}</a>

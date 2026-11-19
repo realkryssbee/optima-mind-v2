@@ -13,7 +13,6 @@ import {
 const NAV = [
   { key: 'dashboard', href: '#/coach', label: 'Accueil', icon: 'home' },
   { key: 'athletes', href: '#/coach/sportifs', label: 'Sportifs', icon: 'users' },
-  { key: 'collectives', href: '#/coach/collectifs', label: 'Collectifs', icon: 'layers' },
   { key: 'questionnaires', href: '#/coach/questionnaires', label: 'Questionnaires', icon: 'clipboard' },
   { key: 'resources', href: '#/coach/ressources', label: 'Ressources', icon: 'layers' },
 ];
@@ -236,7 +235,7 @@ export function coachDashboardView({ state }) {
         ${['respiration', 'recentrage', 'video']
           .map((id) => {
             const resource = getResource(id);
-            return `<button class="resource-mini" data-action="open-share" data-athlete="chris" data-resource="${id}" type="button">
+            return `<button class="resource-mini" data-action="open-share" data-athlete="lea" data-resource="${id}" type="button">
               <span class="resource-mini__icon">${icon(id === 'respiration' ? 'wind' : id === 'video' ? 'video' : 'target', { size: 20 })}</span>
               <span class="resource-mini__copy">
                 <strong>${resource.title}</strong>
@@ -423,7 +422,7 @@ export function coachResourcesView({ state }) {
       eyebrow: 'Bibliothèque',
       title: 'Ressources',
       subtitle: 'Ce que tu peux partager après une séance · 3 contenus de démonstration',
-      action: `<button class="btn btn--primary" data-action="open-share" data-athlete="chris" type="button">${icon('send', { size: 16 })} Partager à Chris</button>`,
+      action: `<button class="btn btn--primary" data-action="open-share" data-athlete="lea" type="button">${icon('send', { size: 16 })} Partager à Léa</button>`,
     })}
 
     <div class="library-grid">
@@ -442,7 +441,7 @@ export function coachResourcesView({ state }) {
             <p>${resource.pitch}</p>
             <div class="library-card__foot">
               <span class="library-card__count">${shares.length ? `Partagée à ${shares.map((row) => row.athlete.firstName).join(', ')}` : 'Pas encore partagée'}</span>
-              <button class="btn btn--outline btn--small" data-action="open-share" data-athlete="chris" data-resource="${id}" type="button">Partager</button>
+              <button class="btn btn--outline btn--small" data-action="open-share" data-athlete="lea" data-resource="${id}" type="button">Partager</button>
             </div>
           </article>`;
         })

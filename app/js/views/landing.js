@@ -5,7 +5,7 @@ import { escapeHTML } from '../utils.js';
 export function landingView({ state }) {
   const config = window.OMIND_CONFIG ?? {};
   const siteUrl = config.siteUrl ?? 'https://www.optima-mind.com';
-  const active = state.athletes[state.activeAthlete] ?? state.athletes.chris;
+  const active = state.athletes[state.activeAthlete] ?? state.athletes.lea;
   const test = active.test;
   const profile = active.profile;
   const hasOwnResult = Boolean(profile && !profile.sample);

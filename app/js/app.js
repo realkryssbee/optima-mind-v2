@@ -23,7 +23,7 @@ import {
   coachQuestionnairesView,
   coachResourcesView,
 } from './views/coach.js';
-import { coachAthleteView } from './views/coachAthlete.js';
+import { coachAthleteLiteView as coachAthleteView } from './views/coachAthleteLite.js';
 import { collectiveView, collectivesView } from './views/collectives.js';
 import * as documents from './documents.js';
 import {
@@ -75,22 +75,12 @@ function currentRoute() {
   if (segments[0] === 'test') name = 'quiz';
   else if (segments[0] === 'resultat') name = 'result';
   else if (segments[0] === 'aujourdhui') name = 'today';
-  else if (segments[0] === 'carnet') {
-    if (segments[1] === 'objectif') name = 'carnet-goal';
-    else if (segments[1] === 'nouveau' || (segments[1] === 'entree' && segments[2])) name = 'carnet-entry';
-    else if (segments[1] === 'routines') name = 'carnet-routines';
-    else if (segments[1] === 'activites' && segments[2] === 'nouvelle') name = 'carnet-activity-new';
-    else if (segments[1] === 'activites') name = 'carnet-activities';
-    else if (segments[1] === 'connexion') name = 'carnet-device';
-    else name = 'carnet';
-  } else if (segments[0] === 'espace' && segments[1] === 'profil') name = 'profile';
+  else if (segments[0] === 'espace' && segments[1] === 'profil') name = 'profile';
   else if (segments[0] === 'espace' && segments[1] === 'ressources') name = 'resources';
   else if (isCoach) {
     if (segments.length === 1) name = 'coach-dashboard';
     else if (segments[1] === 'sportifs' && segments[2]) name = 'coach-athlete';
     else if (segments[1] === 'sportifs') name = 'coach-athletes';
-    else if (segments[1] === 'collectifs' && segments[2]) name = 'coach-collective';
-    else if (segments[1] === 'collectifs') name = 'coach-collectives';
     else if (segments[1] === 'questionnaires') name = 'coach-questionnaires';
     else if (segments[1] === 'ressources') name = 'coach-resources';
     else name = 'coach-dashboard';
@@ -162,39 +152,6 @@ function render({ preserveScroll = false, focus = true } = {}) {
     html = profileView({ athlete: store.sportif(), state: store.state });
   } else if (route.name === 'resources') {
     html = resourcesView({ athlete: store.sportif() });
-  } else if (route.name === 'carnet') {
-    html = carnetView({
-      athlete: store.sportif(),
-      filter: route.params.get('f') ?? 'all',
-    });
-  } else if (route.name === 'carnet-goal') {
-    html = goalView({ athlete: store.sportif(), edit: Boolean(store.sportif().carnet.goal) });
-  } else if (route.name === 'carnet-entry') {
-    const athlete = store.sportif();
-    const entry = route.entryId
-      ? athlete.carnet.entries.find((item) => item.id === route.entryId)
-      : null;
-    if (route.entryId && !entry) {
-      history.replaceState(null, '', '#/carnet');
-      render({ focus });
-      return;
-    }
-    const fresh = route.params.get('new') === '1';
-    const draft = !entry && !fresh ? athlete.carnet.draft : null;
-    const requestedType =
-      route.params.get('type') ?? entry?.type ?? draft?.type ?? 'session';
-    html = entryComposerView({ athlete, entry, draft, requestedType });
-  } else if (route.name === 'carnet-routines') {
-    html = routinesView({ athlete: store.sportif() });
-  } else if (route.name === 'carnet-activities') {
-    html = activitiesView({ athlete: store.sportif() });
-  } else if (route.name === 'carnet-activity-new') {
-    html = activityComposerView({
-      athlete: store.sportif(),
-      source: route.params.get('source') === 'gpx' ? 'gpx' : 'manual',
-    });
-  } else if (route.name === 'carnet-device') {
-    html = deviceView({ athlete: store.sportif() });
   } else if (route.name.startsWith('coach')) {
     if (route.name === 'coach-athlete') {
       const athlete = store.athlete(route.athleteId);
@@ -207,16 +164,6 @@ function render({ preserveScroll = false, focus = true } = {}) {
       html = coachAthleteView({ state: store.state, athlete, tab: route.tab });
     } else if (route.name === 'coach-athletes') {
       html = coachAthletesView({ state: store.state });
-    } else if (route.name === 'coach-collectives') {
-      html = collectivesView({ state: store.state });
-    } else if (route.name === 'coach-collective') {
-      const collective = store.state.collectives.find((item) => item.id === route.collectiveId);
-      if (!collective) {
-        history.replaceState(null, '', '#/coach/collectifs');
-        render({ focus });
-        return;
-      }
-      html = collectiveView({ state: store.state, collective });
     } else if (route.name === 'coach-questionnaires') {
       html = coachQuestionnairesView({ state: store.state });
     } else if (route.name === 'coach-resources') {

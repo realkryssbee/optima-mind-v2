@@ -7691,7 +7691,7 @@ a.athlete-row:hover {
 
 @media (max-width: 899px) {
   .coach__nav-list {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .coach__nav-item {
@@ -7795,5 +7795,30 @@ a.athlete-row:hover {
     display: inline-grid;
     place-items: center;
   }
+}
+
+
+/* Demo allégée — deux sportifs */
+.roleswitch--three {
+  grid-template-columns: 1fr 1fr;
+}
+
+.roleswitch--three a:last-child {
+  grid-column: span 2;
+  background: #e7ecff;
+  color: var(--cobalt);
+}
+
+.roleswitch--three a:last-child.is-active {
+  background: var(--cobalt);
+  color: #fff;
+}
+
+.account-switch > div {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.coach-tabpanel-wrap {
+  min-width: 0;
 }
 

@@ -14,7 +14,7 @@ function scaleLine() {
 }
 
 export function quizIntroView({ state }) {
-  const active = state.athletes[state.activeAthlete] ?? state.athletes.chris;
+  const active = state.athletes[state.activeAthlete] ?? state.athletes.lea;
   const test = active.test;
   const inProgress = test?.status === 'in_progress';
   const answered = inProgress ? Object.keys(test.answers).length : 0;
