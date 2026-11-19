@@ -179,8 +179,7 @@ server.mjs            # serveur statique local (port 3000)
 
 ### Écarts et points ouverts
 
-- Le libellé demandé « À traiter » contient le mot interdit « traiter » ; il est remplacé par
-  **À regarder**. Le reste du texte de l’alerte est conservé.
+- Le libellé demandé pour la carte contenait un verbe de la liste de vocabulaire interdite ; la carte s’appelle donc **À regarder**. Le reste du texte de l’alerte est conservé.
 - Le seuil de 2 points est global ; il pourra devenir un réglage par sportif avec Aga.
 - Seule l’énergie franchit le seuil de 2 points dans les données de Malik ; le sommeil et
   l’humeur baissent aussi visuellement mais ne sont pas cités dans la phrase d’alerte.
