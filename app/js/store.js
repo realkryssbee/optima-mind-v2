@@ -5,10 +5,10 @@ import {
   getRoutineTemplate,
   getResource,
 } from './data.js';
-import { computeProfile, shuffleQuestions } from './scoring.js';
+import { computeProfile, fixedQuestionOrder } from './scoring.js';
 import { isoDaysAgo, todayISO } from './utils.js';
 
-const STORAGE_KEY = 'omind-demo-lite-v1';
+const STORAGE_KEY = 'omind-demo-lite-v2';
 const ACTOR_KEY = 'omind-actor';
 
 function isoAt(daysAgo) {
@@ -98,14 +98,17 @@ export function seedState() {
       assignment: seed.assignment
         ? {
             status: seed.assignment.status,
+            testId: seed.assignment.testId ?? '4c',
+            testName: seed.assignment.testName ?? 'Profil 4C',
             assignedAt: isoAt((seed.assignment.daysAgo ?? 0) + 1),
             sentAt: isoAt(seed.assignment.daysAgo ?? 0),
             completedAt:
               seed.assignment.status === 'completed' ? isoAt(seed.assignment.daysAgo ?? 0) : null,
-            message: null,
+            message: seed.assignment.message ?? null,
           }
         : null,
       test: null,
+      sessions: (seed.sessions ?? []).map((session) => ({ ...session })),
       checkins: seed.checkins
         .map(({ daysAgo, ...checkin }) => ({ ...checkin, date: isoDaysAgo(daysAgo) }))
         .sort((a, b) => a.date.localeCompare(b.date)),
@@ -155,6 +158,7 @@ export function seedState() {
     })),
     coachNotes,
     coachRecent: ['lea', 'malik'],
+    alertsSeen: {},
     documents: [],
     createdAt: nowISO(),
   };
@@ -245,7 +249,7 @@ export const store = {
   startTest(seed = Math.floor(Math.random() * 2 ** 31)) {
     this.sportif().test = {
       seed,
-      order: shuffleQuestions(seed),
+      order: fixedQuestionOrder(),
       answers: {},
       index: 0,
       startedAt: nowISO(),
@@ -304,17 +308,69 @@ export const store = {
     return this.persist();
   },
 
+  /* ---------------------------- Séances ------------------------- */
+
+  latestSession(athleteId = this.state.activeAthlete) {
+    const athlete = this.athlete(athleteId);
+    if (!athlete?.sessions?.length) return null;
+    return [...athlete.sessions].sort(
+      (a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt),
+    )[0];
+  },
+
+  createSession(athleteId, { date, privateNote = '', nextSteps = '', resourceIds = [] }) {
+    const athlete = this.athlete(athleteId);
+    if (!athlete) return this.state;
+    const sessionDate = date || todayISO();
+    const session = {
+      id: uid('session'),
+      date: sessionDate,
+      privateNote: privateNote.trim(),
+      nextSteps: nextSteps.trim(),
+      resourceIds: [...new Set(resourceIds)],
+      createdAt: nowISO(),
+    };
+    athlete.sessions = [session, ...(athlete.sessions ?? [])];
+    const dateLabel = new Intl.DateTimeFormat('fr-BE', {
+      day: 'numeric',
+      month: 'long',
+    }).format(new Date(`${sessionDate}T12:00:00`));
+    for (const resourceId of session.resourceIds) {
+      if (!getResource(resourceId)) continue;
+      athlete.shared = athlete.shared.filter((share) => share.resourceId !== resourceId);
+      athlete.shared.unshift({
+        resourceId,
+        sharedAt: nowISO(),
+        message: `Après ta séance du ${dateLabel}`,
+        source: 'session',
+        sessionId: session.id,
+      });
+    }
+    return this.persist();
+  },
+
+  markAlertSeen(athleteId) {
+    if (!this.athlete(athleteId)) return this.state;
+    this.state.alertsSeen = {
+      ...(this.state.alertsSeen ?? {}),
+      [athleteId]: { seenAt: nowISO() },
+    };
+    return this.persist();
+  },
+
   /* ------------------------- Questionnaire ---------------------- */
 
-  assignQuestionnaire(athleteId) {
+  assignQuestionnaire(athleteId, options = {}) {
     const athlete = this.athlete(athleteId);
     if (!athlete) return this.state;
     athlete.assignment = {
       status: 'todo',
+      testId: options.testId ?? '4c',
+      testName: options.testName ?? 'Profil 4C',
       assignedAt: nowISO(),
       sentAt: null,
       completedAt: null,
-      message: null,
+      message: options.message?.trim() ? options.message.trim().slice(0, 220) : null,
     };
     return this.persist();
   },

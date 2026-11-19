@@ -1,4 +1,5 @@
 import { DIMENSIONS, QUESTIONS, getDimension, getQuestion } from './data.js';
+import { FIXED_ORDER, PISTES, READING_BY_ID } from './fourc-content.js';
 
 /** PRNG déterministe (mulberry32) : l’ordre du test est stable pour une passation. */
 export function mulberry32(seed) {
@@ -116,7 +117,7 @@ export function buildInsight(profile) {
 
   let intro;
   if (read.favorable) {
-    intro = `Tes réponses dessinent une base solide sur les quatre dimensions. La dimension la moins élevée reste le ${lowest.dimension.name.toLowerCase()}, avec ${formatScore(lowest.score)} sur 5. ${read.summary}`;
+    intro = `Tes réponses dessinent une base solide sur les quatre dimensions. La dimension la moins élevée reste le ${lowest.dimension.name.toLowerCase()}, avec ${formatScore(lowest.score)}/5. ${read.summary}`;
   } else {
     intro = `Tes réponses suggèrent que ${read.strongest?.question.high ?? strongestRead.appui}. En revanche, ${read.weakest?.question.low ?? read.explore}. ${lowest.dimension.closing}`;
   }
@@ -133,6 +134,68 @@ export function buildInsight(profile) {
     question: lowest.dimension.question,
     detail: read.summary,
   };
+}
+
+/** Ordre mélangé fixe fourni par le référentiel. */
+export function fixedQuestionOrder() {
+  return [...FIXED_ORDER];
+}
+
+/**
+ * Lecture détaillée exacte : points d'appui (>= 4), situations (<= 3),
+ * pistes des seules situations affichées, question de la première situation.
+ */
+export function buildDetailedReading(profile) {
+  const dimensions = DIMENSIONS.map((dimension) => {
+    const rows = (profile.items?.[dimension.key] ?? []).map((item) => {
+      const question = getQuestion(item.id);
+      const reading = READING_BY_ID[item.id];
+      return { ...item, question, reading };
+    });
+    const support = rows
+      .filter((row) => row.recoded >= 4)
+      .sort((a, b) => b.recoded - a.recoded)
+      .slice(0, 2);
+    const explore = rows
+      .filter((row) => row.recoded <= 3)
+      .sort((a, b) => a.recoded - b.recoded)
+      .slice(0, 2);
+    const pistes = [];
+    for (const row of explore) {
+      for (const id of row.reading?.pistes ?? []) {
+        if (!pistes.includes(id)) pistes.push(id);
+      }
+    }
+    const question =
+      explore[0]?.reading?.question ?? dimension.emptyQuestion ?? dimension.question;
+    return {
+      dimension,
+      score: profile.scores[dimension.key],
+      support,
+      explore,
+      pistes: pistes.slice(0, 3).map((id) => ({ id, ...PISTES[id] })),
+      question,
+      central: dimension.centralMessage ?? dimension.closing,
+    };
+  });
+  return { dimensions };
+}
+
+/** Détail des 20 réponses pour la coach : valeur donnée et valeur recodée. */
+export function detailedAnswers(profile) {
+  return FIXED_ORDER.map((id) => {
+    const question = getQuestion(id);
+    const raw = profile.responses?.[id];
+    return {
+      id,
+      dimension: question.dimension,
+      dimensionName: getDimension(question.dimension).name,
+      text: question.text,
+      raw,
+      recoded: question.reversed ? 6 - raw : raw,
+      reversed: question.reversed,
+    };
+  });
 }
 
 export function formatScore(value) {

@@ -44,7 +44,7 @@ export function scoreRows(profile) {
     ${DIMENSIONS.map(
       (dimension) => `<li>
         <span>${dimension.name}</span>
-        <strong>${formatScore(profile.scores[dimension.key])} <small>/ 5</small></strong>
+        <strong>${formatScore(profile.scores[dimension.key])}<small>/5</small></strong>
       </li>`,
     ).join('')}
   </ul>`;
@@ -180,6 +180,8 @@ export function coachTabs(active, athleteId = null) {
   const tabs = [
     { key: 'overview', label: 'Aperçu', href: `${base}?tab=overview` },
     { key: 'bilans', label: 'Bilans', href: `${base}?tab=bilans` },
+    { key: 'profil', label: 'Profil 4C', href: `${base}?tab=profil` },
+    { key: 'seances', label: 'Séances', href: `${base}?tab=seances` },
     { key: 'ressources', label: 'Ressources', href: `${base}?tab=ressources` },
   ];
   return `<div class="coach-tabs" role="tablist" aria-label="Fiche sportive">

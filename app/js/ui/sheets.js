@@ -143,8 +143,8 @@ export function exchangeSheet(profile) {
             </a>`
           : `<div class="contact-option is-disabled">
               <span class="contact-option__icon">${icon('calendar', { size: 19 })}</span>
-              <span class="contact-option__copy"><strong>Réserver un créneau</strong><small>Agenda non connecté dans cette démo</small></span>
-              <span class="pill pill--outline">À connecter</span>
+              <span class="contact-option__copy"><strong>Réserver un créneau</strong><small>Agenda bientôt disponible dans cette démo</small></span>
+              <span class="pill pill--soon">Bientôt</span>
             </div>`}
       </div>
       <button class="btn btn--outline btn--block" data-action="copy-summary" type="button">

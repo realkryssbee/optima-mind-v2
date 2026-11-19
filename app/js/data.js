@@ -1,8 +1,10 @@
-﻿/**
+/**
  * O’MIND — contenu de démonstration
  * Source des 20 affirmations, du calcul et des pistes : cahier des charges
  * « O’Mind.docx » (référentiel 4C). Les textes d’interface sont en français.
  */
+
+import { DIMENSION_TEXT } from './fourc-content.js';
 
 export const SCALE = [
   { value: 1, label: 'Pas du tout' },
@@ -69,7 +71,7 @@ export const DIMENSIONS = [
       'La confiance n’est pas être certain de réussir : c’est croire en sa capacité à mobiliser ses ressources, même quand l’issue est incertaine.',
     pistes: ['Imagerie mentale', 'Discours interne', 'Routine de performance'],
   },
-];
+].map((dimension) => ({ ...dimension, ...DIMENSION_TEXT[dimension.key] }));
 
 /** Les 20 affirmations du référentiel, avec leur lecture favorable / à explorer. */
 export const QUESTIONS = [
@@ -121,7 +123,7 @@ export const QUESTIONS = [
   {
     id: 'COM_01',
     dimension: 'combativite',
-    text: 'Je reste engagé·e, même lorsque la situation devient difficile.',
+    text: 'Je reste engagé(e), même lorsque la situation devient difficile.',
     reversed: false,
     high: 'tu restes engagé·e quand la situation devient difficile',
     low: 'maintenir ton engagement peut devenir plus exigeant quand la situation se complique',
@@ -184,7 +186,7 @@ export const QUESTIONS = [
   {
     id: 'CON_03',
     dimension: 'concentration',
-    text: 'Je parviens à rester concentré·e même lorsqu’il y a des distractions autour de moi.',
+    text: 'Je parviens à rester concentré(e) même lorsqu’il y a des distractions autour de moi.',
     reversed: false,
     high: 'les distractions autour de toi ne t’empêchent pas de rester concentré·e',
     low: 'les distractions peuvent encore interrompre ta concentration',
@@ -456,6 +458,50 @@ export const COCO_RESPONSES = {
 };
 
 
+/** 35 jours d'historique simulé : 30 jours affichables + 5 jours pour la comparaison. */
+function leaCheckins() {
+  const pattern = [
+    [7, 6, 8], [7, 7, 7], [6, 7, 7], [8, 7, 8], [7, 6, 7], [7, 8, 8], [6, 6, 7],
+    [7, 7, 8], [7, 6, 7], [8, 7, 7], [7, 7, 8], [6, 7, 6], [7, 8, 8], [7, 7, 7],
+    [6, 6, 7], [8, 7, 8], [7, 7, 7], [7, 6, 8], [6, 7, 7], [8, 8, 8], [7, 7, 7],
+    [6, 6, 7], [7, 7, 8], [8, 7, 7], [7, 8, 8], [7, 7, 7], [6, 7, 7], [8, 7, 8],
+    [7, 6, 7], [7, 7, 8], [6, 6, 7], [7, 8, 7], [8, 7, 8], [7, 7, 7], [7, 8, 8],
+  ];
+  return pattern.map(([mood, energy, sleep], index) => ({
+    daysAgo: 35 - index,
+    mood,
+    energy,
+    sleep,
+    word: index === 34 ? 'Sereine' : null,
+    sample: true,
+  }));
+}
+
+function malikCheckins() {
+  const recent = {
+    5: { mood: 7, energy: 7, sleep: 7 },
+    4: { mood: 7, energy: 6, sleep: 6 },
+    3: { mood: 6, energy: 5, sleep: 6 },
+    2: { mood: 5, energy: 4, sleep: 5 },
+    1: { mood: 5, energy: 4, sleep: 5, word: 'fatigué' },
+  };
+  return Array.from({ length: 35 }, (_, index) => {
+    const daysAgo = 35 - index;
+    if (recent[daysAgo]) {
+      return { daysAgo, ...recent[daysAgo], sample: true };
+    }
+    const variation = daysAgo % 3 === 0 ? 1 : 0;
+    return {
+      daysAgo,
+      mood: 7,
+      energy: 7 + variation,
+      sleep: 7,
+      word: null,
+      sample: true,
+    };
+  });
+}
+
 export const ATHLETES = [
   {
     id: 'lea',
@@ -479,14 +525,7 @@ export const ATHLETES = [
         message: 'À tester avant ta prochaine compétition.',
       },
     ],
-    checkins: [
-      { daysAgo: 6, mood: 6, energy: 5, sleep: 6, word: null, sample: true },
-      { daysAgo: 5, mood: 7, energy: 6, sleep: 7, word: 'Régulière', sample: true },
-      { daysAgo: 4, mood: 6, energy: 5, sleep: 7, word: null, sample: true },
-      { daysAgo: 3, mood: 8, energy: 7, sleep: 8, word: 'En forme', sample: true },
-      { daysAgo: 2, mood: 7, energy: 6, sleep: 7, word: null, sample: true },
-      { daysAgo: 1, mood: 7, energy: 7, sleep: 8, word: 'Sereine', sample: true },
-    ],
+    checkins: leaCheckins(),
     carnet: { goal: null, entries: [], draft: null },
     customRoutines: [],
     routineAssignments: [],
@@ -515,10 +554,7 @@ export const ATHLETES = [
     profileDaysAgo: 3,
     assignment: { status: 'completed', daysAgo: 3 },
     shared: [],
-    checkins: [
-      { daysAgo: 2, mood: 5, energy: 5, sleep: 6, word: 'Fatigué', sample: true },
-      { daysAgo: 1, mood: 6, energy: 6, sleep: 6, word: null, sample: true },
-    ],
+    checkins: malikCheckins(),
     carnet: { goal: null, entries: [], draft: null },
     customRoutines: [],
     routineAssignments: [],
@@ -675,7 +711,7 @@ export const COACH = {
 
 export const STATUS = {
   todo: { label: 'À faire', tone: 'warn' },
-  in_progress: { label: 'En cours', tone: 'info' },
+  in_progress: { label: 'Envoyé', tone: 'info' },
   completed: { label: 'Complété', tone: 'success' },
 };
 

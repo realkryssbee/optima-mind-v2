@@ -1,12 +1,8 @@
 import { STATUS, getResource } from '../data.js';
 import { icon } from '../ui/icons.js';
-import {
-  sharedResourceCard,
-  statusChip,
-  tabbar,
-  trackingChart,
-} from '../ui/components.js';
-import { capitalize, dateTimeNowLabel } from '../utils.js';
+import { sharedResourceCard, statusChip, tabbar } from '../ui/components.js';
+import { checkinChart } from '../ui/charts.js';
+import { capitalize, dateTimeNowLabel, escapeHTML, formatDate } from '../utils.js';
 
 const SLIDERS = [
   { key: 'mood', label: 'Humeur', hint: 'Ton état émotionnel général' },
@@ -33,6 +29,10 @@ export function todayView({ athlete, checkin, latestShare }) {
   const isSaved = Boolean(checkin);
   const assignmentStatus = assignment?.status ?? null;
   const shared = latestShare ? getResource(latestShare.resourceId) : null;
+  const session = [...(athlete.sessions ?? [])].sort(
+    (a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt),
+  )[0] ?? null;
+  const sessionResources = (session?.resourceIds ?? []).map(getResource).filter(Boolean);
 
   return `<div class="today">
     <section class="today-hero" aria-labelledby="view-title">
@@ -58,6 +58,30 @@ export function todayView({ athlete, checkin, latestShare }) {
               <small>Ton suivi a été mis à jour ci-dessous.</small>
             </div>
           </div>`
+        : ''}
+
+      ${session
+        ? `<section class="session-recap" aria-labelledby="session-recap-title">
+            <div class="session-recap__head">
+              <p class="eyebrow">Après ta séance</p>
+              <span class="pill pill--soft">Partagé par Aga</span>
+            </div>
+            <h2 class="display display--sm" id="session-recap-title">Après ta séance du ${formatDate(session.date, { day: 'numeric', month: 'long' })}</h2>
+            ${session.nextSteps ? `<p class="session-recap__steps">${escapeHTML(session.nextSteps)}</p>` : ''}
+            ${sessionResources.length
+              ? `<div class="session-recap__resources">
+                  ${sessionResources
+                    .map(
+                      (resource) => `<button class="session-resource" type="button" data-action="open-resource" data-resource="${resource.id}">
+                        <span class="session-resource__icon">${icon(resource.category === 'Vidéo' ? 'video' : resource.category === 'Respiration' ? 'wind' : 'target', { size: 17 })}</span>
+                        <span><strong>${escapeHTML(resource.title)}</strong><small>${escapeHTML(resource.kind)}</small></span>
+                        ${icon('chevronRight', { size: 15 })}
+                      </button>`,
+                    )
+                    .join('')}
+                </div>`
+              : ''}
+          </section>`
         : ''}
 
       <section class="checkin" aria-labelledby="checkin-title">
@@ -98,13 +122,12 @@ export function todayView({ athlete, checkin, latestShare }) {
       <section class="tracking" aria-labelledby="tracking-title">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">7 derniers jours</p>
+            <p class="eyebrow">Suivi quotidien</p>
             <h2 class="display display--sm" id="tracking-title">Ton suivi</h2>
           </div>
-          <span class="pill pill--outline">Historique fictif</span>
+          <span class="pill pill--outline">Fictif</span>
         </div>
-        ${trackingChart(athlete.checkins)}
-        <p class="fineprint">Les six jours précédents sont simulés. Ton bilan du jour est ajouté localement dès l’enregistrement.</p>
+        ${checkinChart(athlete.checkins)}
       </section>
 
       <section class="program" aria-labelledby="program-title">
@@ -118,9 +141,14 @@ export function todayView({ athlete, checkin, latestShare }) {
         <div class="program-card">
           <span class="program-card__icon">${icon('clipboard', { size: 20 })}</span>
           <div class="program-card__copy">
-            <span class="program-card__eyebrow">Questionnaire 4C</span>
+            <span class="program-card__eyebrow">${assignment?.testName ?? 'Questionnaire 4C'}</span>
             <strong>${assignment ? STATUS[assignmentStatus]?.label ?? 'Attribué' : 'À découvrir'}</strong>
-            <small>${assignment ? 'Attribué par Aga' : 'Aucun questionnaire attribué pour le moment'}</small>
+            <small>${assignment
+              ? assignment.message
+                ? `« ${escapeHTML(assignment.message)} »`
+                : 'Attribué par Aga'
+              : 'Aucun questionnaire attribué pour le moment'}</small>
+            ${assignment?.message ? '<span class="program-card__from">Mot d’Aga</span>' : ''}
           </div>
           ${assignmentStatus === 'completed' && profile
             ? `<a class="program-card__action" href="#/resultat">Voir mon profil</a>`

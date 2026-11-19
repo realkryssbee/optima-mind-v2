@@ -112,7 +112,9 @@ Le chemin SFTP est `/web/omind` ; le chemin shell est `/volume1/web/omind`.
 - Attribution / relance du questionnaire et statut mis à jour.
 - 360 px, 390 px et ordinateur : pas de débordement horizontal.
 - Navigation clavier, focus, fermeture Échap des panneaux, mouvement réduit.
-- Audit axe-core WCAG 2.1/2.2 AA : 0 violation sur les écrans testés.
+- Audit axe-core WCAG 2.1/2.2 AA : 0 violation sur les écrans testés. Le bouton
+  « Enregistrer mon bilan » est à 54 px mais se trouve partiellement sous la barre d’onglets
+  collante au premier écran ; le laisser visible en entier reste à arbitrer.
 
 ## Structure
 
@@ -123,15 +125,67 @@ app/
 ├── assets/           # polices, photos, symbole officiel
 ├── styles/           # tokens.css + app.css
 └── js/
-    ├── data.js       # 4C, Léa, Malik, ressources
-    ├── scoring.js    # mélange, recodage, scores, lecture
-    ├── store.js      # comptes, 4C, bilans, ressources
+    ├── data.js       # 4C, Léa, Malik, ressources, 35 jours de bilans
+    ├── fourc-content.js # textes exacts de lecture, pistes, catalogue
+    ├── scoring.js    # ordre fixe, recodage, scores, lecture détaillée
+    ├── alerts.js     # seuil et calcul de l’alerte coach
+    ├── store.js      # comptes, 4C, bilans, séances, ressources
     ├── app.js        # routeur et interactions
-    ├── ui/           # composants, icônes, feuilles
+    ├── ui/           # composants, graphiques, lecture 4C, feuilles
     └── views/        # accueil, test, résultat, aujourd’hui, profil,
                       # ressources, coach
 server.mjs            # serveur statique local (port 3000)
 ```
+
+## Ajouts de la démonstration (novembre 2026)
+
+- **Suivi 7 / 14 / 30 jours** : trois courbes SVG (Sommeil, Énergie, Humeur), moyennes sur 10,
+  sélecteur de période (14 j par défaut), ajout immédiat du check-in du jour. 35 jours sont
+  générés pour permettre la comparaison de l’alerte avec les 28 jours précédents ; 30 jours
+  maximum sont affichés.
+- **Point à regarder côté coach** : Malik présente une baisse d’énergie sur ses 5 derniers
+  check-ins par rapport à ses 28 jours précédents. Le seuil est la constante
+  `ALERT_DROP_THRESHOLD` dans `app/js/alerts.js`. L’alerte est cliquable, met les 5 derniers
+  jours en évidence sur le graphique et peut être marquée comme vue ; elle reste dans
+  l’historique de la fiche. Léa n’a pas d’alerte. Le sportif ne voit ni alerte ni seuil.
+- **Lecture 4C détaillée** : radar à 4 axes, une carte par dimension, points d’appui,
+  situations à explorer, pistes dépliables, question de réflexion, invitation et limites.
+  Les 20 réponses et les valeurs recodées sont disponibles dans l’onglet coach **Profil 4C**.
+  L’ordre des 20 affirmations est celui fourni dans le brief (fixe).
+- **Clôture de séance** : date, note privée, prochaines étapes visibles par le sportif et
+  ressources jointes. Le sportif voit « Après ta séance du … » dans Aujourd’hui et les
+  ressources dans son espace. L’onglet coach **Séances** garde l’historique avec la note
+  privée. « Ajouter un fichier » est marqué **Bientôt** et désactivé.
+- **Catalogue de tests** : Profil 4C disponible ; « Gestion de la pression en compétition » et
+  « Routine et préparation » marqués **Bientôt**, désactivés avec explication. Attribution avec
+  un mot facultatif d’Aga, visible tel quel côté sportif. Statut : à faire → envoyé → complété.
+
+### Tests manuels
+
+1. `#/aujourdhui` avec Léa : changer 7 j / 14 j / 30 j, vérifier les moyennes et le nombre de
+   points, enregistrer le check-in et vérifier que le jour apparaît sans rechargement.
+2. `#/coach` avec Aga : la carte **À regarder** affiche « 1 sportif à regarder » et la ligne
+   Malik ; cliquer ouvre `?tab=bilans&focus=alert`, marquer comme vu, vérifier la disparition
+   du tableau de bord et la présence dans l’historique de la fiche.
+3. `#/resultat` ou fin du questionnaire : radar, 4 cartes, 4 limites ; ouvrir une piste, puis
+   « Échanger sur mon profil ». Dans la fiche coach, onglet **Profil 4C**, ouvrir les 20
+   réponses et vérifier les valeurs recodées.
+4. Fiche coach de Léa : clôturer une séance avec une note privée, des prochaines étapes et une
+   ressource. Vérifier la carte côté Léa, l’absence de la note privée, les ressources partagées
+   et l’onglet **Séances**.
+5. `#/coach/questionnaires` : attribuer le Profil 4C à Malik avec un mot, vérifier le statut
+   dans la fiche et le mot dans « Ce qu’Aga te propose », puis envoyer et simuler la réponse.
+6. Réinitialiser la démo : l’alerte de Malik réapparaît et les séances disparaissent.
+
+### Écarts et points ouverts
+
+- Le libellé demandé « À traiter » contient le mot interdit « traiter » ; il est remplacé par
+  **À regarder**. Le reste du texte de l’alerte est conservé.
+- Le seuil de 2 points est global ; il pourra devenir un réglage par sportif avec Aga.
+- Seule l’énergie franchit le seuil de 2 points dans les données de Malik ; le sommeil et
+  l’humeur baissent aussi visuellement mais ne sont pas cités dans la phrase d’alerte.
+- Les noms des deux autres tests, la définition définitive du Switch et la structure de la note
+  de séance (texte libre ou modèle) restent à valider avec Aga.
 
 ## Crédits
 

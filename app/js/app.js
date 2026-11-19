@@ -24,6 +24,9 @@ import {
   coachResourcesView,
 } from './views/coach.js';
 import { coachAthleteLiteView as coachAthleteView } from './views/coachAthleteLite.js';
+import { setChartPeriod } from './ui/charts.js';
+import { sessionSheet, testCatalogSheet } from './ui/sessionSheets.js';
+import { TEST_CATALOG } from './fourc-content.js';
 import { collectiveView, collectivesView } from './views/collectives.js';
 import * as documents from './documents.js';
 import {
@@ -161,7 +164,12 @@ function render({ preserveScroll = false, focus = true } = {}) {
         return;
       }
       store.markRecent(athlete.id);
-      html = coachAthleteView({ state: store.state, athlete, tab: route.tab });
+      html = coachAthleteView({
+        state: store.state,
+        athlete,
+        tab: route.tab,
+        focus: route.params.get('focus'),
+      });
     } else if (route.name === 'coach-athletes') {
       html = coachAthletesView({ state: store.state });
     } else if (route.name === 'coach-questionnaires') {
@@ -325,6 +333,10 @@ document.addEventListener('click', (event) => {
     case 'save-checkin':
       saveCheckin();
       break;
+    case 'chart-period':
+      setChartPeriod(trigger.dataset.period);
+      render({ preserveScroll: true, focus: false });
+      break;
     case 'open-resource':
       openSheet('resource', { resource: trigger.dataset.resource });
       break;
@@ -357,6 +369,17 @@ document.addEventListener('click', (event) => {
       break;
     case 'simulate-questionnaire':
       simulateQuestionnaire(trigger.dataset.athlete);
+      break;
+    case 'mark-alert-seen':
+      store.markAlertSeen(trigger.dataset.athlete);
+      render({ preserveScroll: true, focus: false });
+      showToast('Alerte marquée comme vue');
+      break;
+    case 'open-session':
+      openSheet('session', { athlete: trigger.dataset.athlete });
+      break;
+    case 'open-test-catalog':
+      openSheet('test-catalog', { athlete: trigger.dataset.athlete });
       break;
     case 'reset-demo':
       openSheet('reset');
@@ -624,6 +647,50 @@ document.addEventListener('submit', (event) => {
   if (form.matches('[data-assign-routine-form]')) {
     event.preventDefault();
     handleAssignRoutineSubmit(form);
+    return;
+  }
+  if (form.matches('[data-session-form]')) {
+    event.preventDefault();
+    const data = new FormData(form);
+    const athleteId = form.dataset.athlete;
+    const athlete = store.athlete(athleteId);
+    const nextSteps = String(data.get('nextSteps') ?? '').trim();
+    if (!nextSteps) {
+      showToast('Écris les prochaines étapes pour le sportif');
+      form.querySelector('[name="nextSteps"]')?.focus();
+      return;
+    }
+    store.createSession(athleteId, {
+      date: String(data.get('date') ?? ''),
+      privateNote: String(data.get('privateNote') ?? ''),
+      nextSteps,
+      resourceIds: data.getAll('resources').map(String),
+    });
+    closeSheet({ restoreFocus: false });
+    render({ preserveScroll: true, focus: true });
+    showToast(`Séance clôturée pour ${athlete.firstName}`);
+    return;
+  }
+  if (form.matches('[data-test-form]')) {
+    event.preventDefault();
+    const data = new FormData(form);
+    const athleteId = String(data.get('athlete') ?? '');
+    const testId = String(data.get('test') ?? '');
+    const test = TEST_CATALOG.find((item) => item.id === testId);
+    const athlete = store.athlete(athleteId);
+    if (!athlete || !test) return;
+    if (!test.available) {
+      showToast('Ce test arrivera bientôt');
+      return;
+    }
+    store.assignQuestionnaire(athleteId, {
+      testId: test.id,
+      testName: test.name,
+      message: String(data.get('message') ?? ''),
+    });
+    closeSheet({ restoreFocus: false });
+    render({ preserveScroll: true, focus: true });
+    showToast(`Test attribué à ${athlete.firstName}`);
   }
 });
 
@@ -1163,6 +1230,16 @@ function buildSheet(name, context = {}) {
     return target ? shareSheet(target, context.resource ?? null) : null;
   }
   if (name === 'reset') return resetSheet();
+  if (name === 'session') {
+    const athlete = store.athlete(context.athlete ?? store.state.activeAthlete);
+    return athlete ? sessionSheet(athlete) : null;
+  }
+  if (name === 'test-catalog') {
+    return testCatalogSheet({
+      state: store.state,
+      athleteId: context.athlete ?? store.state.activeAthlete,
+    });
+  }
   if (name === 'routine') {
     return routineSheet({ athlete, kind: context.kind, id: context.id });
   }

@@ -1,14 +1,11 @@
 import { COACH, DIMENSIONS, STATUS, getResource } from '../data.js';
+import { TEST_CATALOG } from '../fourc-content.js';
 import { averageScore, formatScore } from '../scoring.js';
+import { buildAlert } from '../alerts.js';
 import { escapeHTML, formatDate, relativeTime, dateTimeNowLabel } from '../utils.js';
 import { icon } from '../ui/icons.js';
-import {
-  avatar,
-  coachTabs,
-  scoreRows,
-  statusChip,
-  trackingChart,
-} from '../ui/components.js';
+import { avatar, coachTabs, scoreRows, statusChip } from '../ui/components.js';
+import { alertSparkline } from '../ui/charts.js';
 
 const NAV = [
   { key: 'dashboard', href: '#/coach', label: 'Accueil', icon: 'home' },
@@ -92,7 +89,7 @@ function lastCheckin(athlete) {
 function assignmentAction(athlete, { compact = false } = {}) {
   const status = athlete.assignment?.status ?? null;
   if (!status) {
-    return `<button class="btn btn--primary ${compact ? 'btn--small' : ''}" data-action="assign-questionnaire" data-athlete="${athlete.id}" type="button" aria-label="Attribuer le questionnaire 4C à ${escapeHTML(athlete.firstName)}">Attribuer le questionnaire${compact ? '' : ' 4C'}</button>`;
+    return `<button class="btn btn--primary ${compact ? 'btn--small' : ''}" data-action="open-test-catalog" data-athlete="${athlete.id}" type="button" aria-label="Attribuer un test à ${escapeHTML(athlete.firstName)}">Attribuer un test</button>`;
   }
   if (status === 'todo') {
     return `<button class="btn btn--primary ${compact ? 'btn--small' : ''}" data-action="send-questionnaire" data-athlete="${athlete.id}" type="button" aria-label="Marquer le questionnaire comme envoyé à ${escapeHTML(athlete.firstName)}">Marquer comme envoyé</button>`;
@@ -100,7 +97,7 @@ function assignmentAction(athlete, { compact = false } = {}) {
   if (status === 'in_progress') {
     return `<button class="btn btn--primary ${compact ? 'btn--small' : ''}" data-action="simulate-questionnaire" data-athlete="${athlete.id}" type="button" aria-label="Simuler la réponse de ${escapeHTML(athlete.firstName)} au questionnaire">Simuler la réponse</button>`;
   }
-  return `<button class="btn btn--outline ${compact ? 'btn--small' : ''}" data-action="assign-questionnaire" data-athlete="${athlete.id}" type="button" aria-label="Relancer le questionnaire de ${escapeHTML(athlete.firstName)}">Relancer le questionnaire</button>`;
+  return `<button class="btn btn--outline ${compact ? 'btn--small' : ''}" data-action="open-test-catalog" data-athlete="${athlete.id}" type="button" aria-label="Attribuer un nouveau test à ${escapeHTML(athlete.firstName)}">Attribuer un test</button>`;
 }
 
 export function coachDashboardView({ state }) {
@@ -109,6 +106,15 @@ export function coachDashboardView({ state }) {
     (athlete) => athlete.assignment && athlete.assignment.status !== 'completed',
   );
   const withoutAssignment = athletes.filter((athlete) => !athlete.assignment);
+  const alertRows = athletes
+    .map((athlete) => ({ athlete, alert: buildAlert(athlete) }))
+    .filter((row) => row.alert && !state.alertsSeen?.[row.athlete.id]);
+  const attentionIds = new Set([
+    ...pending.map((athlete) => athlete.id),
+    ...withoutAssignment.map((athlete) => athlete.id),
+    ...alertRows.map((row) => row.athlete.id),
+  ]);
+  const attentionCount = attentionIds.size;
   const sharedCount = athletes.reduce((total, athlete) => total + athlete.shared.length, 0);
   const latestCheckins = athletes
     .map((athlete) => ({ athlete, checkin: lastCheckin(athlete) }))
@@ -122,6 +128,16 @@ export function coachDashboardView({ state }) {
   }).format(new Date());
 
   const tasks = [];
+  alertRows.forEach(({ athlete, alert }) => {
+    tasks.push({
+      title: alert.text,
+      meta: '5 derniers jours · à regarder',
+      href: `#/coach/sportifs/${athlete.id}?tab=bilans&focus=alert`,
+      athlete,
+      tone: 'alert',
+      spark: alertSparkline(athlete.checkins, alert.measures[0].key),
+    });
+  });
   pending.forEach((athlete) => {
     tasks.push({
       title: `Questionnaire 4C · ${athlete.name}`,
@@ -156,9 +172,9 @@ export function coachDashboardView({ state }) {
         <small>${athletes.map((athlete) => athlete.firstName).join(' · ')}</small>
       </article>
       <article class="stat">
-        <span class="stat__label">À traiter</span>
-        <strong>${pending.length + withoutAssignment.length}</strong>
-        <small>questionnaire${pending.length + withoutAssignment.length > 1 ? 's' : ''} en attente</small>
+        <span class="stat__label">À regarder</span>
+        <strong>${attentionCount}</strong>
+        <small>${attentionCount === 0 ? 'Aucun sportif pour l’instant' : attentionCount === 1 ? '1 sportif à regarder' : `${attentionCount} sportifs à regarder`}</small>
       </article>
       <article class="stat">
         <span class="stat__label">Ressources partagées</span>
@@ -170,7 +186,10 @@ export function coachDashboardView({ state }) {
     <div class="coach-grid">
       <section class="card">
         <header class="card__head">
-          <h2>À traiter</h2>
+          <div>
+            <h2>À regarder</h2>
+            <p class="attention-summary">${attentionCount === 0 ? 'Aucun sportif à regarder' : attentionCount === 1 ? '1 sportif à regarder' : `${attentionCount} sportifs à regarder`}</p>
+          </div>
           <a class="text-link text-link--small" href="#/coach/questionnaires">Tout voir ${icon('arrowRight', { size: 13 })}</a>
         </header>
         ${tasks.length
@@ -178,12 +197,13 @@ export function coachDashboardView({ state }) {
               ${tasks
                 .map(
                   (task) => `<li>
-                    <a class="task" href="${task.href}">
+                    <a class="task ${task.tone === 'alert' ? 'task--alert' : ''}" href="${task.href}">
                       ${avatar(task.athlete, { size: 'sm' })}
                       <span class="task__copy">
                         <strong>${task.title}</strong>
                         <small>${task.meta}</small>
                       </span>
+                      ${task.spark ? `<span class="task__spark">${task.spark}</span>` : ''}
                       <span class="task__dot task__dot--${task.tone}"></span>
                       ${icon('chevronRight', { size: 17 })}
                     </a>
@@ -282,7 +302,7 @@ export function coachAthletesView({ state }) {
                 ? `dernier bilan ${relativeTime(`${checkin.date}T12:00:00`)}, humeur ${checkin.mood}, énergie ${checkin.energy}, sommeil ${checkin.sleep}`
                 : 'aucun bilan',
               profile
-                ? `profil 4C ${formatScore(averageScore(profile))} sur 5`
+                ? `profil 4C ${formatScore(averageScore(profile))}/5`
                 : 'profil 4C en attente',
               athlete.assignment
                 ? `questionnaire ${STATUS[athlete.assignment.status].label.toLowerCase()}`
@@ -384,7 +404,10 @@ export function coachQuestionnairesView({ state }) {
       eyebrow: 'Suivi',
       title: 'Questionnaires',
       subtitle: `${pending} en attente · ${completed} complété${completed > 1 ? 's' : ''} · données simulées`,
-      action: `<span class="pill pill--outline">${icon('clipboard', { size: 14 })} 4C · 20 affirmations</span>`,
+      action: `<div class="head-actions">
+        <span class="pill pill--outline">${icon('clipboard', { size: 14 })} 4C · 20 affirmations</span>
+        <button class="btn btn--primary btn--small" data-action="open-test-catalog" type="button">Attribuer un test</button>
+      </div>`,
     })}
 
     <section class="card card--flush">
@@ -408,6 +431,27 @@ export function coachQuestionnairesView({ state }) {
             </div>`,
           )
           .join('')}
+      </div>
+    </section>
+
+    <section class="card">
+      <header class="card__head">
+        <div><p class="eyebrow">Catalogue</p><h2>Tests disponibles</h2></div>
+        <span class="pill pill--outline">${TEST_CATALOG.length} tests</span>
+      </header>
+      <div class="test-catalog-grid">
+        ${TEST_CATALOG.map(
+          (test) => `<article class="test-catalog-item ${test.available ? '' : 'is-soon'}">
+            <div class="test-catalog-item__top">
+              <h3>${escapeHTML(test.name)}</h3>
+              ${test.available ? '<span class="status status--success">Disponible</span>' : '<span class="pill pill--soon">Bientôt</span>'}
+            </div>
+            <p>${escapeHTML(test.description)}</p>
+            ${test.available
+              ? `<button class="btn btn--outline btn--small" data-action="open-test-catalog" type="button">Attribuer</button>`
+              : `<button class="btn btn--outline btn--small" type="button" disabled>Bientôt</button><p class="fineprint">Ce test n’est pas encore disponible. Son contenu est en préparation avec Aga.</p>`}
+          </article>`,
+        ).join('')}
       </div>
     </section>
 
