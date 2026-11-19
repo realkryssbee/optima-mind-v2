@@ -1,0 +1,102 @@
+/* ============================================================
+   O’MIND — design tokens
+   Palette de travail (à valider avec Aga) :
+   bleu nuit #0B2141 · cobalt #174CE0 · glacier #D8F2FF · papier #F8FAFD
+   ============================================================ */
+
+@font-face {
+  font-family: 'Archivo';
+  src: url('../assets/fonts/archivo-var.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Archivo';
+  src: url('../assets/fonts/archivo-var-italic.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/inter-var.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --navy: #0b2141;
+  --navy-deep: #071730;
+  --navy-soft: #14305a;
+  --cobalt: #174ce0;
+  --cobalt-dark: #123cb8;
+  --cobalt-soft: #e7ecff;
+  --ice: #d8f2ff;
+  --ice-soft: #edf9ff;
+  --paper: #f8fafd;
+  --white: #ffffff;
+  --ink: #0b2141;
+  --ink-soft: #33445f;
+  --muted: #5a6880;
+  --muted-light: #65738a;
+  --line: #dce4f0;
+  --line-strong: #c4d0e2;
+  --line-dark: rgb(255 255 255 / 0.16);
+  --success: #0f6b4f;
+  --success-soft: #e2f5ec;
+  --warn: #8a5200;
+  --warn-soft: #fdf1df;
+  --info: #174ce0;
+  --info-soft: #e7ecff;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+
+  --font-display: 'Archivo', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --shadow-phone: 0 40px 90px -30px rgb(9 24 48 / 0.55), 0 0 0 1px rgb(11 33 65 / 0.05);
+  --shadow-card: 0 1px 2px rgb(11 33 65 / 0.04), 0 12px 34px -22px rgb(11 33 65 / 0.28);
+  --shadow-sheet: 0 -20px 60px -20px rgb(7 23 48 / 0.35);
+  --shadow-panel: -24px 0 60px -30px rgb(7 23 48 / 0.45);
+
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+
+  --ease: cubic-bezier(0.22, 0.7, 0.3, 1);
+  --dur: 220ms;
+  --dur-fast: 140ms;
+  --dur-slow: 420ms;
+
+  --focus: #0b57ff;
+  --focus-ice: #9ddcff;
+  --touch: 44px;
+
+  --nav-h: 66px;
+  --demobar-h: 34px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur: 1ms;
+    --dur-fast: 1ms;
+    --dur-slow: 1ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

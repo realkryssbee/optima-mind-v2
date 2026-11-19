@@ -1,0 +1,92 @@
+﻿<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>O’MIND — Le mental fait la différence</title>
+    <meta
+      name="description"
+      content="Démo interactive O’MIND : questionnaire 4C, profil, bilan du jour et espace coach. Comptes et données simulés."
+    />
+    <meta name="theme-color" content="#0B2141" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="apple-touch-icon" href="favicon.png" />
+    <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/archivo-var-italic.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="styles/tokens.css?v=4" />
+    <link rel="stylesheet" href="styles/app.css?v=4" />
+  </head>
+  <body data-view="sportif">
+    <a class="skip-link" href="#app">Aller au contenu</a>
+
+    <div class="stage" id="stage" data-mode="sportif">
+      <aside class="brandrail" aria-label="À propos de cette démonstration">
+        <div>
+          <p class="brandrail__kicker">Démo interactive</p>
+          <p class="brandrail__title">Le mental<br />fait la<br /><em>différence.</em></p>
+          <p class="brandrail__text">
+            Prototype cliquable de l’application de préparation mentale d’Optima Mind. Un profil
+            4C, un bilan quotidien, des ressources — et l’espace d’Aga, relié aux mêmes données.
+          </p>
+        </div>
+
+        <div class="brandrail__controls">
+          <p class="brandrail__label">Explorer en tant que</p>
+          <div class="roleswitch roleswitch--four" role="group" aria-label="Choisir le compte de démonstration">
+            <a href="#/aujourdhui" data-role-link="chris">Chris</a>
+            <a href="#/aujourdhui" data-role-link="elise">Elise</a>
+            <a href="#/aujourdhui" data-role-link="coco">Coco</a>
+            <a href="#/coach" data-role-link="coach">Espace Aga</a>
+          </div>
+          <div class="brandrail__links">
+            <button class="brandrail__link" data-action="reset-demo" type="button">
+              Réinitialiser la démo
+            </button>
+            <a class="brandrail__link" data-site-link href="https://www.optima-mind.com" target="_blank" rel="noopener noreferrer">
+              Retour à optima-mind.com
+            </a>
+          </div>
+        </div>
+
+        <div class="brandrail__foot">
+          <span><strong>3 sportifs</strong> · 1 coach · 1 démo</span>
+          <span>Chaque compte a son carnet, ses routines et ses documents.</span>
+          <span>O’MIND by Optima Mind · Wavre, Belgique</span>
+        </div>
+      </aside>
+
+      <div class="viewport" id="viewport">
+        <div class="demobar" role="group" aria-label="Mode démonstration">
+          <span class="demobar__label">Démo</span>
+          <div class="demobar__roles">
+            <a href="#/aujourdhui" data-role-link="chris">Chris</a>
+            <a href="#/aujourdhui" data-role-link="elise">Elise</a>
+            <a href="#/aujourdhui" data-role-link="coco">Coco</a>
+            <a href="#/coach" data-role-link="coach">Aga</a>
+          </div>
+          <button class="demobar__reset" data-action="reset-demo" type="button" aria-label="Réinitialiser la démo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.2v5.2h5.2"/></svg>
+          </button>
+        </div>
+
+        <main class="app" id="app" tabindex="-1"></main>
+
+        <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+
+        <div id="sheet-root"></div>
+      </div>
+    </div>
+
+    <noscript>
+      <p style="padding: 20px; font-family: sans-serif">
+        Cette démo a besoin de JavaScript pour fonctionner. Active-le puis recharge la page.
+      </p>
+    </noscript>
+
+    <script src="config.js?v=4"></script>
+    <script type="module" src="js/app.js?v=4"></script>
+  </body>
+</html>
+

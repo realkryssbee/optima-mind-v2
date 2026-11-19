@@ -1,36 +1,4 @@
-# Dependencies
 node_modules/
-
-# Build output
-dist/
-.astro/
-
-# Environment (never commit secrets)
-.env
-.env.*
-!.env.example
-# Identifiants NAS (jamais commités)
-scripts/nas-credentials.json
-
-# Tests
-test-results/
-playwright-report/
-.lhci/
-.lighthouseci/
-
-# Vercel
-.vercel/
-
-# Logs & OS
-*.log
 .DS_Store
 Thumbs.db
-
-# Working files (audit captures, local scripts)
-_research/
-
-# Build de déploiement NAS (Web Station) — reconstruit localement
-nas-deploy/
-
-# Images de démo du thème de l'ancien site (non utilisées — restent en local)
-src/assets/uploads/1-1.png
+*.log
